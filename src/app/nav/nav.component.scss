@@ -1,9 +1,40 @@
+@import 'src/styles/colors';
+
 .sidenav-container {
   height: 100%;
+  background: map-get($background, 100);
 }
 
 .sidenav {
   width: 200px;
+
+  .link{
+    height: 75px;
+    width: 100%;
+    mat-icon{
+      position: absolute;
+    }
+    .icon{
+      color: map-get($background, 700);
+    }
+    .circle{
+      color: map-get($background, 300);
+      transform: scale(1.7);
+    }
+    .icon-text{
+      margin-left: 2.5rem;
+      color: map-get($background, 900);
+    }
+  }
+  .active-link {
+    background-color: map-get($background, 300); /* Note: You could also use a custom theme */
+    .icon{
+      color: white;
+    }
+    .circle{
+      color: map-get($primary, 500);
+    }
+  }
 }
 
 .sidenav .mat-toolbar {

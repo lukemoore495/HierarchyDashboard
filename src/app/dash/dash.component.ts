@@ -24,8 +24,8 @@ export class DashComponent {
       }
 
       return [
-        { title: this.card1, cols: 2, rows: 1 },
-        { title: this.card2, cols: 1, rows: 1.5 },
+        { title: this.card1, cols: 2, rows: 2},
+        { title: this.card2, cols: 1, rows: 1.5},
         { title: this.card3, cols: 1, rows: 2 },
       ];
     })

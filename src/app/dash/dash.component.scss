@@ -1,3 +1,5 @@
+@import 'src/styles/colors';
+
 .grid-container {
   margin: 20px;
 }
@@ -8,7 +10,11 @@
   left: 15px;
   right: 15px;
   bottom: 15px;
-  overflow: auto;
+  border: 2px solid map-get($accent, 700);
+
+  &.scroll {
+    overflow: auto;
+  }
 }
 
 .more-button {
@@ -21,7 +27,19 @@
   text-align: center;
 }
 
-app-value-measurement-chart{
-  height: auto
+.rank{
+  display: flex;
+  align-items: stretch;
+  flex-direction: stretch;
+  padding-top: 2rem;
+  app-rank-chart{
+    flex: 1;
+  }
+}
+
+.value-measurement{
+  height: 75%;
+  width: 75%;
+  padding-left: 10%;
 }
 

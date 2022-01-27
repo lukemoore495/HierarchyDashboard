@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ChartConfiguration, ChartType } from 'chart.js';
 
 @Component({
@@ -7,6 +7,9 @@ import { ChartConfiguration, ChartType } from 'chart.js';
   styleUrls: ['./value-measurement-chart.component.scss']
 })
 export class ValueMeasurementChartComponent {
+  @Input() height: string | undefined;
+  @Input() width: string | undefined;
+
   public lineChartData: ChartConfiguration['data'] = {
     datasets: [
       {
@@ -25,6 +28,8 @@ export class ValueMeasurementChartComponent {
   };
 
   public lineChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
     elements: {
       line: {
         tension: 0.5

@@ -5,8 +5,14 @@
       [opened]="(isHandset$ | async) === false">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a mat-list-item *ngFor="let item of menuItems" [routerLink]="'/'+item.route">
-         {{item.title | titlecase}}
+      <a class="link" mat-list-item *ngFor="let item of menuItems" [routerLink]="'/'+item.route" routerLinkActive="active-link">
+        <span class="icon">
+          <mat-icon class="circle">circle</mat-icon>
+          <mat-icon>{{item.icon}}</mat-icon>
+          <div class="icon-text">
+            {{item.title | titlecase}}
+          </div>
+        </span>
       </a>
     </mat-nav-list>
   </mat-sidenav>
@@ -17,7 +23,7 @@
         aria-label="Toggle sidenav"
         mat-icon-button
         (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
+        *ngIf="!(isHandset$ | async)">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>Hierarchy Dashboard</span>
