@@ -1,0 +1,77 @@
+{
+    "id": "string",
+    "name": "string",
+    "description": "string",
+    "nodes": [
+        {
+            "name": "string",
+            "weight": 0.75,
+            "icon": "security",
+            "children":[
+                {
+                    "name": "string",
+                    "weight": 0.75,
+                    "measurements": [
+                        {
+                            "measurementName": "string",
+                            "measurementType": "string",
+                            "valueFunction": {
+                                "upperBound": 50,
+                                "lowerBound": 0,
+                                "type": "Increasing"
+                            }
+                        }
+                    ],
+                    "children":[]
+                }
+            ]
+        },
+        {
+            "name": "string",
+            "weight": 0.75,
+            "measurements": [
+                {
+                    "measurementName": "string",
+                    "measurementType": "string",
+                    "icon": "warning",
+                    "valueFunction": {
+                        "rowCategories": [
+                            {
+                                "Name": "First",
+                                "Value": 0.2
+                            }
+                        ],
+                        "columnCategories": [],
+                        "type": "OneDimension"
+                    }
+                }
+            ],
+            "children":[]
+        }
+    ],
+    "alternatives": [
+        {
+            "name": "string",
+            "rank": 1,
+            "measurements":[
+                {
+                    "measure": 55,
+                    "value": 3.2,
+                    "leafNode": {
+                        "name": "string",
+                        "weight": 0.75,
+                        "measurementName": "string",
+                        "measurementType": "string",
+                        "icon": "warning",
+                        "valueFunction": {
+                            "upperBound": 50,
+                            "lowerBound": 0,
+                            "type": "Decreasing"
+                        },
+                        "children":[]
+                    }
+                }
+            ]
+        }
+    ]
+}
