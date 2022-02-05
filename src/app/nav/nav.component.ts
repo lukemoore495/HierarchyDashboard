@@ -11,9 +11,9 @@ import { map, shareReplay } from 'rxjs/operators';
 export class NavComponent {
 
 menuItems = [
-  {title: 'Dashboard', route: 'dashboard'},
-  {title: 'Importance Value', route: 'importanceValue'}, 
-  {title: 'Hierarchical View', route: 'hierarchicalView'}];
+  {title: 'Dashboard', route: 'dashboard', icon: 'view_quilt'},
+  {title: 'Importance Value', route: 'importanceValue', icon: 'grid_on'}, 
+  {title: 'Hierarchical View', route: 'hierarchicalView', icon: 'pageview'}];
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(

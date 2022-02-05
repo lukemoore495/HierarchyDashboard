@@ -7,7 +7,9 @@ import { ImportanceValueComponent } from './importance-value/importance-value.co
 const routes: Routes = [
   { path: 'dashboard', component: DashComponent },
   { path: 'importanceValue', component: ImportanceValueComponent },
-  { path: 'hierarchicalView', component: HierarchicalViewComponent }];
+  { path: 'hierarchicalView', component: HierarchicalViewComponent },
+  { path: '**', redirectTo: 'dashboard'}
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -1,11 +1,14 @@
+<div #primary class="mat-primary" style="display:none"></div>
+<div #accent class="mat-accent" style="display:none"></div>
+<div #hover class="mat-hover" style="display:none"></div>
 <div>
-    <div>
-      <div style="display: block">
-        <canvas baseChart
-          [data]="barChartData"
-          [options]="barChartOptions"
-          [type]="barChartType">
-        </canvas>
-      </div>
+  <div>
+    <div #rankChart class="chart">
+      <canvas class="rank" baseChart [width]="width" [height]="height"
+        [data]="barChartData"
+        [options]="barChartOptions"
+        [type]="barChartType">
+      </canvas>
     </div>
   </div>
+</div>
