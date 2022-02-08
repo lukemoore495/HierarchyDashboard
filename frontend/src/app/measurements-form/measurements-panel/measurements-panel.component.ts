@@ -24,10 +24,6 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         let nodes : Node[] = Object.assign([], this.measurementNode?.children);
-        if(this.measurementNode && this.hasDirectMeasurements(this.measurementNode)){
-            nodes.push(this.measurementNode);
-        }
-
         for(let node of nodes) {
             let measurements = node?.measurements ?? [];
             for(let measurement of measurements) {
@@ -104,10 +100,6 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
 
     isBooleanMeasurement(measurement : MeasurementDefinition){
         return measurement.measurementType === MeasurementType.Boolean;
-    }
-
-    hasDirectMeasurements(node: Node): boolean{
-        return (!(node?.children?.length) && node?.measurements) as boolean;
     }
 
 }
