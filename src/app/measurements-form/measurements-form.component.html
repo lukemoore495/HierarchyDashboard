@@ -1,0 +1,13 @@
+<form>
+    <mat-accordion *ngIf="measurementNodes">
+        <div *ngFor="let node of measurementNodes">
+            <app-measurements-panel *ngIf="node?.children" [measurementNode]="node" (measurementResultEvent)="saveMeasurements($event)"></app-measurements-panel>
+            <div *ngIf="hasDirectMeasurements(node)">
+                <mat-form-field *ngFor="let measurement of node.measurements" class="full-width" appearance="fill">
+                    <mat-label>{{node.name}}</mat-label>
+                    <input matInput [placeholder]="measurement.measurementName">
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-accordion>
+</form>

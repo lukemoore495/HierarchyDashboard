@@ -1,0 +1,45 @@
+@import 'src/styles/colors';
+
+.full-width {
+    width: 100%;
+    padding: none;
+    margin: none;
+}
+
+.checkbox{
+  background-color: map-get($background, 100);
+  text-align: left;
+  padding: 1rem;
+
+  mat-label{
+    margin: 1rem !important;
+    font-weight: 300;
+    color: map-get($background, 800);
+  }
+}
+
+.slider{
+  background-color: map-get($background, 100);
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  text-align: left;
+  mat-label{
+    margin-left: 1rem;
+    flex: 1.25;
+    font-weight: 300;
+    color: map-get($background, 800);
+  }
+  mat-slider{
+    flex: 1.5;
+  }
+}
+
+.panel-icon{
+  margin-right: 5%;
+}
+
+.field-title{
+  text-align: left;
+  margin-top: 1rem;
+}

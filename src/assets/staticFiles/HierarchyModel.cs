@@ -19,6 +19,7 @@ namespace Models
 
   public class LeafNode: Node
     {
+        public string Id { get; set; }
         public string MeasurementName { get; set; }
         public MeasurementType MeasurementType { get; set; }
         public ValueFunction ValueFunction { get; set; }
@@ -33,7 +34,7 @@ namespace Models
 
     public class Measurement
     {
-        public LeafNode LeafNode { get; set; }
+        public string LeafNodeId { get; set; }
         public double Measure { get; set; }
         public double Value { get; set; }
     }

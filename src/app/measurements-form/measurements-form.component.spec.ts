@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ValueSetFormComponent } from './value-set-form.component';
+import { MeasurementsFormComponent } from './measurements-form.component';
 
-describe('ValueSetFormComponent', () => {
-  let component: ValueSetFormComponent;
-  let fixture: ComponentFixture<ValueSetFormComponent>;
+describe('MeasurementsFormComponent', () => {
+  let component: MeasurementsFormComponent;
+  let fixture: ComponentFixture<MeasurementsFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ValueSetFormComponent ]
+      declarations: [ MeasurementsFormComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ValueSetFormComponent);
+    fixture = TestBed.createComponent(MeasurementsFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

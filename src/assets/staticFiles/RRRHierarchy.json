@@ -18,6 +18,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "1",
                                     "measurementName": "Number of Terrorist Attacks",
                                     "measurementType": "Number"
                                 }
@@ -29,6 +30,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "2",
                                     "measurementName": "Percentage of People",
                                     "measurementType": "Percentage"
                                 }
@@ -40,6 +42,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "3",
                                     "measurementName": "Women Vote",
                                     "measurementType": "Boolean"
                                 }
@@ -58,6 +61,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "4",
                                     "measurementName": "Number of People",
                                     "measurementType": "Number"
                                 }
@@ -69,6 +73,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "5",
                                     "measurementName": "Percentage of Support",
                                     "measurementType": "Percentage"
                                 }
@@ -80,6 +85,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "6",
                                     "measurementName": "Optimistic Outlook",
                                     "measurementType": "Boolean"
                                 }
@@ -98,6 +104,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "7",
                                     "measurementName": "International Trainers",
                                     "measurementType": "Number"
                                 }
@@ -109,6 +116,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "8",
                                     "measurementName": "Spending Budget",
                                     "measurementType": "Number"
                                 }
@@ -120,6 +128,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "9",
                                     "measurementName": "Badal",
                                     "measurementType": "Boolean"
                                 }
@@ -144,6 +153,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "10",
                                     "measurementName": "Constitution",
                                     "measurementType": "Number"
                                 }
@@ -155,6 +165,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "11",
                                     "measurementName": "Faith in Courts",
                                     "measurementType": "Percentage"
                                 }
@@ -166,6 +177,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "12",
                                     "measurementName": "Resolution Time",
                                     "measurementType": "Number"
                                 }
@@ -184,6 +196,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "13",
                                     "measurementName": "Comprehensive Plan",
                                     "measurementType": "Boolean"
                                 }
@@ -195,6 +208,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "14",
                                     "measurementName": "Opinion Poll",
                                     "measurementType": "Percentage"
                                 }
@@ -206,6 +220,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "15",
                                     "measurementName": "Crime Rate",
                                     "measurementType": "Number"
                                 }
@@ -224,6 +239,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "16",
                                     "measurementName": "Prison Capacity",
                                     "measurementType": "Number"
                                 }
@@ -235,6 +251,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "17",
                                     "measurementName": "Manning Level",
                                     "measurementType": "Number"
                                 }
@@ -253,6 +270,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "18",
                                     "measurementName": "Accountability Laws",
                                     "measurementType": "Number"
                                 }
@@ -264,6 +282,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "19",
                                     "measurementName": "Accountabilty Courts",
                                     "measurementType": "Number"
                                 }
@@ -288,6 +307,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "20",
                                     "measurementName": "Official Policy",
                                     "measurementType": "Number"
                                 }
@@ -304,6 +324,7 @@
                                     "children":[],
                                     "measurements": [
                                         {
+                                            "id": "21",
                                             "measurementName": "Fertilizer Imports",
                                             "measurementType": "Number",
                                             "valueFunction": {}
@@ -316,6 +337,7 @@
                                     "children":[],
                                     "measurements": [
                                         {
+                                            "id": "22",
                                             "measurementName": "Agriculture Exports",
                                             "measurementType": "Number",
                                             "valueFunction": {}
@@ -330,6 +352,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "23",
                                     "measurementName": "GDP Growth",
                                     "measurementType": "Percentage"
                                 }
@@ -348,6 +371,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "24",
                                     "measurementName": "Opium production by area (hectares)",
                                     "measurementType": "Number"
                                 }
@@ -359,6 +383,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "25",
                                     "measurementName": "Child labor 12-14 yrs",
                                     "measurementType": "Number"
                                 }
@@ -377,6 +402,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "26",
                                     "measurementName": "Foreign Debt (Percentage of GDP)",
                                     "measurementType": "Percentage"
                                 }
@@ -388,6 +414,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "27",
                                     "measurementName": "Foreign Aid in USD (Billions)",
                                     "measurementType": "Number"
                                 }
@@ -412,6 +439,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "28",
                                     "measurementName": "Curriculum",
                                     "measurementType": "Number"
                                 }
@@ -423,6 +451,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "29",
                                     "measurementName": "Percentage of Child labor",
                                     "measurementType": "Number"
                                 }
@@ -441,10 +470,12 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "30",
                                     "measurementName": "Percentage Enrollment Boys Rural Areas",
                                     "measurementType": "Percentage"
                                 },
                                 {
+                                    "id": "31",
                                     "measurementName": "Percentage Enrollment (Girls in Rural Areas)",
                                     "measurementType": "Percentage"
                                 }
@@ -456,10 +487,12 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "32",
                                     "measurementName": "Vocational Training per Thousand",
                                     "measurementType": "Number"
                                 },
                                 {
+                                    "id": "33",
                                     "measurementName": "Number of Universities",
                                     "measurementType": "Number"
                                 }
@@ -471,6 +504,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "34",
                                     "measurementName": "Student Teacher Ratio",
                                     "measurementType": "Number"
                                 }
@@ -495,6 +529,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "35",
                                     "measurementName": "Availibity of Clean Water (Percentage)",
                                     "measurementType": "Percentage"
                                 }
@@ -506,6 +541,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "36",
                                     "measurementName": "Percentage of People Below Poverty Line",
                                     "measurementType": "Percentage"
                                 }
@@ -517,6 +553,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "37",
                                     "measurementName": "Number of IDPs (Millions)",
                                     "measurementType": "Number"
                                 }
@@ -535,6 +572,7 @@
                             "children":[],
                             "measurements": [
                                 {
+                                    "id": "38",
                                     "measurementName": "Doctors/1000",
                                     "measurementType": "Number"
                                 }
@@ -551,6 +589,7 @@
                                     "children":[],
                                     "measurements": [
                                         {
+                                            "id": "39",
                                             "measurementName": "Percentage with access to electricity",
                                             "measurementType": "Percentage",
                                             "valueFunction": {}
@@ -563,6 +602,7 @@
                                     "children":[],
                                     "measurements": [
                                         {
+                                            "id": "40",
                                             "measurementName": "Percentage of Access to Mobiles",
                                             "measurementType": "Percentage",
                                             "valueFunction": {}

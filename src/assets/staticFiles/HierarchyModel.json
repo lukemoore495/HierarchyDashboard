@@ -13,6 +13,7 @@
                     "weight": 0.75,
                     "measurements": [
                         {
+                            "id": "1",
                             "measurementName": "string",
                             "measurementType": "string",
                             "valueFunction": {
@@ -31,6 +32,7 @@
             "weight": 0.75,
             "measurements": [
                 {
+                    "id": "2",
                     "measurementName": "string",
                     "measurementType": "string",
                     "icon": "warning",
