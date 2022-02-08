@@ -12,7 +12,7 @@ export class NavComponent {
 
 menuItems = [
   {title: 'Dashboard', route: 'dashboard', icon: 'view_quilt'},
-  {title: 'Importance Value', route: 'importanceValue', icon: 'grid_on'}, 
+  {title: 'Weights', route: 'importanceValue', icon: 'grid_on'}, 
   {title: 'Hierarchical View', route: 'hierarchicalView', icon: 'pageview'}];
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
