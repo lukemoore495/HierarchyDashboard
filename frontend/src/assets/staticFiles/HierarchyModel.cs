@@ -27,6 +27,7 @@ namespace Models
 
     public class Alternative
     {
+        public string ID { get; set; }
         public string Name { get; set; }  
         public List<Measurement> Measurements { get; set; }
         public int Rank { get; set; }
@@ -37,6 +38,13 @@ namespace Models
         public string LeafNodeId { get; set; }
         public double Measure { get; set; }
         public double Value { get; set; }
+        public List<Point> valueFunctionData { get; set; }
+    }
+
+    public class Point
+    {
+        public double X { get; set; }
+        public double Y { get; set; }
     }
 
     public interface ValueFunction

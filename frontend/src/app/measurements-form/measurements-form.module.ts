@@ -9,7 +9,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSliderModule} from '@angular/material/slider';
-import { MatCardModule } from '@angular/material/card'
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import { MatCardModule } from '@angular/material/card'
         MatInputModule,
         MatCheckboxModule,
         MatSliderModule,
-        MatCardModule
+        MatCardModule,
+        MatListModule
     ],
     exports: [
         MeasurementsFormComponent,
