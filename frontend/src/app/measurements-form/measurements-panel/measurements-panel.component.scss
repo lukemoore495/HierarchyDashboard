@@ -22,8 +22,8 @@
   align-items: center;
   flex-direction: row-reverse;
   text-align: left;
-  margin: 1rem;
   mat-label{
+    margin: 1rem;
     flex: 1.25;
     font-weight: 300;
     color: map-get($background, 800);
