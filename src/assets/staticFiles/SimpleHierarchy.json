@@ -2,6 +2,7 @@
     "id": "1",
     "name": "RRR Hierarchy",
     "description": "It's a big ol' hierarchy",
+    "measurements": [],
     "nodes": [
         {
             "name": "Freedom From Terror",

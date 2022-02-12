@@ -1,9 +1,14 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
-import { debounceTime, distinctUntilChanged, map, Subscription, tap } from 'rxjs';
+import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+import { debounceTime, map, Subscription, take } from 'rxjs';
 import { Measurement, MeasurementDefinition, MeasurementType, Node } from 'src/app/Hierarchy';
 import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { Output } from '@angular/core';
 import { OnDestroy } from '@angular/core';
+import { HierarchyState } from 'src/app/state/hierarchy.reducer';
+import { Store } from '@ngrx/store';
+import { getSelectedMeasurementId } from 'src/app/state';
+import * as HierarchyActions from '../../state/hierarchy.actions'
+import { MatSelectionList } from '@angular/material/list';
 
 @Component({
   selector: 'app-measurements-panel',
@@ -13,11 +18,13 @@ import { OnDestroy } from '@angular/core';
 export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     @Input() measurementNode: Node | null = null;
     @Output() measurementResultEvent: EventEmitter<Measurement[]>;
+    @ViewChild('measurementSelectList') measurementSelectList?: MatSelectionList;
     form: FormGroup;
     currentMeasurements: Measurement[] = [];
     subscriptions: Subscription[] = [];
+    selectedMeasurementId: string | null = null;
 
-    constructor(private fb: FormBuilder) { 
+    constructor(private fb: FormBuilder, private store: Store<HierarchyState>) { 
         this.form = fb.group({});
         this.measurementResultEvent = new EventEmitter<Measurement[]>();
     }
@@ -25,8 +32,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         let children : Node[] = this.measurementNode?.children ?? [];
         for(let child of children) {
-            let measurements = child?.measurements ?? [];
-            for(let measurement of measurements) {
+            for(let measurement of child?.measurements) {
                 if(this.isNumberMeasurement(measurement)){
                     this.form.addControl(measurement.id, this.fb.control(null, [Validators.pattern("^[0-9]*$")]));
                 } else if (this.isPercentageMeasurement(measurement)) {
@@ -101,5 +107,39 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     isBooleanMeasurement(measurement : MeasurementDefinition){
         return measurement.measurementType === MeasurementType.Boolean;
     }
+
+    selectFirstMeasurement(){
+        if(!this.measurementNode)
+            return;
+
+        let firstMeasurementId = this.measurementNode.children[0].measurements[0].id;
+        this.store.dispatch(HierarchyActions.setSelectedMeasurement({selectedMeasurementId: firstMeasurementId}));
+        this.selectedMeasurementId = firstMeasurementId;
+        if(this.measurementSelectList){
+            this.measurementSelectList.deselectAll()
+            this.measurementSelectList.options.first.selected = true;
+        }
+    }
+
+    deselectMeasurement(){
+        this.store.select(getSelectedMeasurementId)
+            .pipe(
+                take(1)
+            )
+            .subscribe(id => {
+                if(id === this.selectedMeasurementId){
+                    this.store.dispatch(HierarchyActions.setSelectedMeasurement({selectedMeasurementId: null}));
+                }
+            });
+        if(this.measurementSelectList){
+            this.measurementSelectList.deselectAll()
+        }
+    }
+
+    selectMeasurement(measurementId: string){
+        this.store.dispatch(HierarchyActions.setSelectedMeasurement({selectedMeasurementId: measurementId}));
+        this.selectedMeasurementId = measurementId;
+    }
+
 
 }
