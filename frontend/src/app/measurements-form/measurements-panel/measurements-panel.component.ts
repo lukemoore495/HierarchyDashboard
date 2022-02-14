@@ -102,4 +102,8 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
         return measurement.measurementType === MeasurementType.Boolean;
     }
 
+    hasDirectMeasurements(node: Node): boolean{
+        return (!(node?.children?.length) && node?.measurements) as boolean;
+    }
+
 }
