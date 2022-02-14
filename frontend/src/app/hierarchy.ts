@@ -11,7 +11,7 @@ export interface Node {
     weight: number;
     children?: Node[];
     icon?: string;
-    measurements?: MeasurementDefinition[];
+    measurements: MeasurementDefinition[];
 }
 
 export interface MeasurementDefinition {

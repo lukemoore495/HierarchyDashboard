@@ -6,11 +6,13 @@
         {
             "name": "Security",
             "weight": 0.273,
+            "measurements": [],
             "children": [
                 {
                     "name": "Public Safety",
                     "weight": 0.200,
                     "icon": "security",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Freedom From Terror",
@@ -54,6 +56,7 @@
                     "name": "Minimum Extremist Threat",
                     "weight": 0.200,
                     "icon": "warning",
+                    "measurements": [],
                     "children":[                        
                         {
                             "name": "DDR",
@@ -97,6 +100,7 @@
                     "name": "Military Cap",
                     "weight": 0.600,
                     "icon": "flag",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Equipment & Infrastructure",
@@ -141,11 +145,13 @@
         {
             "name": "Justice",
             "weight": 0.273,
+            "measurements": [],
             "children":[
                 {
                     "name": "Judicial System",
                     "weight": 0.250,
                     "icon": "gavel",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Defining Law",
@@ -189,6 +195,7 @@
                     "name": "Law Enforcement",
                     "weight": 0.400,
                     "icon": "people",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Infrastructure",
@@ -232,6 +239,7 @@
                     "name": "Correction Systems",
                     "weight": 0.200,
                     "icon": "location_city",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Infrastructure",
@@ -263,6 +271,7 @@
                     "name": "Accountability",
                     "weight": 0.150,
                     "icon": "pan_tool",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Laws",
@@ -295,11 +304,13 @@
         {
             "name": "Economic Opportunities",
             "weight": 0.182,
+            "measurements": [],
             "children":[
                 {
                     "name": "Economic Development",
                     "weight": 0.300,
                     "icon": "attach_money",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Policy Drafting",
@@ -317,6 +328,7 @@
                             "name": "Market Economy",
                             "weight": 0.333,
                             "icon": "work",
+                            "measurements": [],
                             "children":[
                                 {
                                     "name": "International Trade",
@@ -364,6 +376,7 @@
                     "name": "Economic Crime",
                     "weight": 0.200,
                     "icon": "money_off",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Grey Economy",
@@ -395,6 +408,7 @@
                     "name": "Economic Aid",
                     "weight": 0.500,
                     "icon": "local_hospital",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "International Loans",
@@ -427,11 +441,13 @@
         {
             "name": "Education",
             "weight": 0.182,
+            "measurements": [],
             "children":[
                 {
                     "name": "Policy",
                     "weight": 0.350,
                     "icon": "description",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Modified Syllabus",
@@ -463,6 +479,7 @@
                     "name": "Education Infrastructure",
                     "weight": 0.650,
                     "icon": "school",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Schools",
@@ -517,11 +534,13 @@
         {
             "name": "Socio Economic",
             "weight": 0.091,
+            "measurements": [],
             "children":[
                 {
                     "name": "Relieve Suffering",
                     "weight": 0.600,
                     "icon": "healing",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Water",
@@ -565,6 +584,7 @@
                     "name": "Sustaining Life",
                     "weight": 0.400,
                     "icon": "nature_people",
+                    "measurements": [],
                     "children":[
                         {
                             "name": "Medical",
@@ -582,6 +602,7 @@
                             "name": "Utilities",
                             "weight": 0.300,
                             "icon": "flash_on",
+                            "measurements": [],
                             "children":[
                                 {
                                     "name": "Power",

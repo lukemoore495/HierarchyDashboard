@@ -23,9 +23,13 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        let children : Node[] = this.measurementNode?.children ?? [];
-        for(let child of children) {
-            let measurements = child?.measurements ?? [];
+        let nodes : Node[] = Object.assign([], this.measurementNode?.children);
+        if(this.measurementNode && this.hasDirectMeasurements(this.measurementNode)){
+            nodes.push(this.measurementNode);
+        }
+
+        for(let node of nodes) {
+            let measurements = node?.measurements ?? [];
             for(let measurement of measurements) {
                 if(this.isNumberMeasurement(measurement)){
                     this.form.addControl(measurement.id, this.fb.control(null, [Validators.pattern("^[0-9]*$")]));
@@ -100,6 +104,10 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
 
     isBooleanMeasurement(measurement : MeasurementDefinition){
         return measurement.measurementType === MeasurementType.Boolean;
+    }
+
+    hasDirectMeasurements(node: Node): boolean{
+        return (!(node?.children?.length) && node?.measurements) as boolean;
     }
 
 }

@@ -29,11 +29,11 @@ export class MeasurementsFormComponent implements OnInit {
     selectMeasurements(nodes: Node[]): Node[] {
         let findChildMeasurements = (node: Node): Node[] => {
             let childMeasurementNodes : Node[] = [];
-            if(node.children?.every(x => x.measurements)){
+            if(node.children?.every(x => x.measurements.length > 0)){
                 childMeasurementNodes.push(node);
-            } else if(node.children?.some(x => x.measurements)){
-                let innerNodes = node.children.filter(x => !x.measurements);
-                let allMeasurementNodes = node.children.filter(x => x.measurements);
+            } else if(node.children?.some(x => x.measurements.length > 0)){
+                let innerNodes = node.children.filter(x => !(x.measurements.length > 0));
+                let allMeasurementNodes = node.children.filter(x => x.measurements.length > 0);
                 allMeasurementNodes.push(...this.selectMeasurements(innerNodes));
                 let nodeWithChildren = {...node, children: allMeasurementNodes}
                 childMeasurementNodes.push(nodeWithChildren);
@@ -45,10 +45,6 @@ export class MeasurementsFormComponent implements OnInit {
         let measurementNodes : Node[] = [];
         nodes.forEach(node => measurementNodes.push(...findChildMeasurements(node)));
         return measurementNodes;
-    }
-
-    hasDirectMeasurements(node: Node): boolean{
-        return (!(node?.children?.length) && node?.measurements) as boolean;
     }
 
     saveMeasurements(newMeasurements : Measurement[]){
