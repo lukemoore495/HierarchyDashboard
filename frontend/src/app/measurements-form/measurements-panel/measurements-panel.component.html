@@ -45,13 +45,14 @@
                                 </div>
                             </div>
 
-                            <div *ngIf="hasChildren(child)">
-                                <app-measurements-panel [measurementNode]="child"
-                                    (measurementResultEvent)="updateMeasurements($event)">
-                                </app-measurements-panel>
-                            </div>
                         </div>
                     </div>
+                </div>
+
+                <div *ngIf="hasChildren(child)">
+                    <app-measurements-panel [measurementNode]="child"
+                        (measurementResultEvent)="updateMeasurements($event)">
+                    </app-measurements-panel>
                 </div>
             </div>
         </mat-selection-list>
