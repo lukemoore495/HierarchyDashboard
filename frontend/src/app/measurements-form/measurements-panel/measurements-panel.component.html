@@ -1,5 +1,5 @@
 <div [formGroup]="form" *ngIf="measurementNode as node">
-    <mat-expansion-panel *ngIf="hasChildren(node)" (opened)="selectFirstMeasurement()" (closed)="deselectMeasurement()">
+    <mat-expansion-panel *ngIf="hasChildren(node)" (opened)="onPanelOpen()" (closed)="onPanelClose()">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 {{node.name}}
@@ -50,7 +50,11 @@
                 </div>
 
                 <div *ngIf="hasChildren(child)">
-                    <app-measurements-panel [measurementNode]="child"
+                    <app-measurements-panel 
+                        [measurementNode]="child" 
+                        (childNodeOpened)="deselectAndEmitToParent()" 
+                        (closed)="setSelectionAndNotifyChild()" 
+                        [parentIsSelected]="$parentNodeOpened"
                         (measurementResultEvent)="updateMeasurements($event)">
                     </app-measurements-panel>
                 </div>
