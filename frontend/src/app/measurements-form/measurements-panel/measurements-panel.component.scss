@@ -1,0 +1,76 @@
+@import 'src/styles/colors';
+
+.full-width {
+    width: 100%;
+}
+
+.checkbox{
+  background-color: map-get($background, 100);
+  text-align: left;
+  padding: 1rem;
+
+  mat-label{
+    margin: 1rem !important;
+    font-weight: 300;
+    color: map-get($background, 800);
+  }
+}
+
+.slider{
+  background-color: map-get($background, 100);
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  text-align: left;
+  mat-label{
+    margin: 1rem;
+    flex: 1.25;
+    font-weight: 300;
+    color: map-get($background, 800);
+  }
+  mat-slider{
+    flex: 1.5;
+  }
+}
+
+.panel-icon{
+  margin-right: 5%;
+}
+
+.field-title{
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.measurementSelect{
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+
+  .selectOption{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    .measurementField{
+      flex: 1;
+    }
+    
+    .option-container{
+      flex: 0.1;
+      margin-right: 1rem;
+      width: 1rem;
+      height: 1rem;
+      transform: scale(0.5);
+
+      mat-list-option{
+        border-radius: 25px;
+        background-color: map-get($background, 500);  
+        &[aria-selected="true"] {
+          background-color: map-get($primary, 500);
+        }
+      }
+    }
+  }
+}
