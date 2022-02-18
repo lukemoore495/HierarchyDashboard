@@ -1,0 +1,19 @@
+<div class="table">
+    <mat-grid-list cols="3" rowHeight="5:3">
+        <h1 class="mat-h1">Swing Weight</h1>
+        <mat-grid-tile>1</mat-grid-tile>
+        <mat-grid-tile>2</mat-grid-tile>
+        <mat-grid-tile>3</mat-grid-tile>
+        <mat-grid-tile>4</mat-grid-tile>
+        <mat-grid-tile>5</mat-grid-tile>
+        <mat-grid-tile>6</mat-grid-tile>
+        <mat-grid-tile>7</mat-grid-tile>
+        <mat-grid-tile>8</mat-grid-tile>
+        <mat-grid-tile>9</mat-grid-tile>
+    </mat-grid-list>
+</div>
+<div class="options">
+    <div *ngFor="let weight of weights" class="example-box" cdkDrag>
+        {{weight}}
+    </div>
+</div>
