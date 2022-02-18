@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { Hierarchy } from "../hierarchy";
+import { Hierarchy } from "../Hierarchy";
 import * as HierarchyActions from "./hierarchy.actions";
 
 export interface HierarchyState {

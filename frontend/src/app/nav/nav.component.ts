@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { Hierarchy } from '../hierarchy';
+import { Hierarchy } from '../Hierarchy';
 import { Store } from '@ngrx/store';
 import { HierarchyState } from '../state/hierarchy.reducer';
 import * as HierarchyActions from '../state/hierarchy.actions'

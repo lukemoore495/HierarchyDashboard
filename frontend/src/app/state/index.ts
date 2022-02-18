@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from "@ngrx/store";
-import { Hierarchy, MeasurementDefinition, Node } from "../hierarchy";
+import { Hierarchy, MeasurementDefinition, Node } from "../Hierarchy";
 import { HierarchyState } from "./hierarchy.reducer";
 
 const getHierarchyState = createFeatureSelector<HierarchyState>('hierarchies');

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
-import { Hierarchy, Measurement, Node } from '../hierarchy';
+import { Hierarchy, Measurement, Node } from '../Hierarchy';
 import { getSelectedHierarchy } from '../state';
 import { HierarchyState } from '../state/hierarchy.reducer';
 
@@ -29,9 +29,7 @@ export class AlternativesFormComponent implements OnInit {
     selectMeasurements(nodes: Node[]): Node[] {
         let findChildMeasurements = (node: Node): Node[] => {
             let childMeasurementNodes : Node[] = [];
-            if(node.children.length === 0){
-                return childMeasurementNodes;
-            } else if(node.children?.every(x => x.measurements.length > 0)){
+            if(node.children?.every(x => x.measurements.length > 0)){
                 childMeasurementNodes.push(node);
             } else if(node.children?.some(x => x.measurements.length > 0)){
                 let innerNodes = node.children.filter(x => !(x.measurements.length > 0));
