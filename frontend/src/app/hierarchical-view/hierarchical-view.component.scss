@@ -1,3 +1,27 @@
 mat-card{
-    overflow: auto;
+    max-width: 400px;
+}
+
+mat-list{
+    display: flex;
+    align-items: center;
+    padding-bottom: 10rem;
+}
+
+.node-container{
+    display: flex;
+    align-items: center;
+    padding-bottom: 2rem;
+
+    .node{
+        margin: 5rem;
+    }
+    
+    .head-node{
+        margin:auto;
+    }
+}
+
+.align{
+    margin: auto;
 }
