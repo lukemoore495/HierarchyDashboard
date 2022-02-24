@@ -1,0 +1,92 @@
+<div [formGroup]="form" *ngIf="measurementNode as node">
+    <mat-expansion-panel *ngIf="hasChildren(node)">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                {{node.name}}
+            </mat-panel-title>
+            <mat-icon class="panel-icon" *ngIf="node.icon">{{node.icon}}</mat-icon>
+        </mat-expansion-panel-header>
+        <div *ngFor="let child of node?.children; index as i">
+            <div *ngIf="child?.measurements">
+                <div *ngFor="let measurement of child.measurements;">
+
+                    <h5 class="field-title">{{child.name}}</h5>
+
+                    <mat-form-field *ngIf="isNumberMeasurement(measurement)" class="full-width" appearance="fill">
+                        <mat-label>{{measurement.measurementName}}</mat-label>
+                        <input matInput 
+                        [formControlName]="measurement.id" 
+                        class="form-control">
+                        <mat-error *ngIf="getFormControl(measurement.id)?.errors?.['required']">
+                            This is required.
+                        </mat-error>
+                        <mat-error *ngIf="getFormControl(measurement.id)?.errors?.['pattern']">
+                            Numbers only
+                        </mat-error>
+                    </mat-form-field>
+
+                    <div *ngIf="isPercentageMeasurement(measurement)" class="slider">
+                        <mat-slider *ngIf="isPercentageMeasurement(measurement)"
+                         class="full-width" 
+                         [max]="100"
+                            [min]="0" 
+                            [thumbLabel]="true" 
+                            [formControlName]="measurement.id">
+                        </mat-slider>
+                        <mat-label>{{measurement.measurementName}}</mat-label>
+                    </div>
+
+
+                    <div *ngIf="isBooleanMeasurement(measurement)" class="checkbox">
+                        <mat-checkbox 
+                        [formControlName]="measurement.id"
+                        [indeterminate]="true">
+                            <div class="mat-label-container">
+                                <mat-label>{{measurement.measurementName}}</mat-label>
+                            </div>
+                        </mat-checkbox>
+                    </div>
+
+                </div>
+            </div>
+
+            <div *ngIf="hasChildren(child)">
+                <app-measurements-panel 
+                [measurementNode]="child" 
+                (measurementResultEvent)="updateMeasurements($event)">
+                </app-measurements-panel>
+            </div>
+        </div>
+    </mat-expansion-panel>
+    <div *ngIf="hasDirectMeasurements(node)">
+        <div *ngFor="let measurement of node.measurements">
+            <h5 class="field-title">{{node.name}}</h5>
+            <mat-form-field *ngIf="isNumberMeasurement(measurement)" class="full-width" appearance="fill">
+                <mat-label>{{measurement.measurementName}}</mat-label>
+                <input matInput [formControlName]="measurement.id" class="form-control">
+                <mat-error *ngIf="getFormControl(measurement.id)?.errors?.['required']">
+                    This is required.
+                </mat-error>
+                <mat-error *ngIf="getFormControl(measurement.id)?.errors?.['pattern']">
+                    Numbers only
+                </mat-error>
+            </mat-form-field>
+
+            <div *ngIf="isPercentageMeasurement(measurement)" class="slider">
+                <mat-slider *ngIf="isPercentageMeasurement(measurement)" class="full-width" [max]="100" [min]="0"
+                    [thumbLabel]="true" [formControlName]="measurement.id">
+                </mat-slider>
+                <mat-label>{{measurement.measurementName}}</mat-label>
+            </div>
+
+
+            <div *ngIf="isBooleanMeasurement(measurement)" class="checkbox">
+                <mat-checkbox [formControlName]="measurement.id" [indeterminate]="true">
+                    <div class="mat-label-container">
+                        <mat-label>{{measurement.measurementName}}</mat-label>
+                    </div>
+                </mat-checkbox>
+            </div>
+        </div>
+    </div>
+</div>

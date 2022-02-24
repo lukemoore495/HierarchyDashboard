@@ -1,7 +1,6 @@
 import { AfterViewInit, OnDestroy } from '@angular/core';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-rank-chart',
@@ -33,10 +32,10 @@ export class RankChartComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-  //   const primaryColorString = getComputedStyle(this.primary?.nativeElement).color;
-  //   const accentColorString = getComputedStyle(this.accent?.nativeElement).color;
-  //   const hoverColorString = getComputedStyle(this.hover?.nativeElement).color;
-  //   this.configChart(primaryColorString, accentColorString, hoverColorString);
+    // const primaryColorString = getComputedStyle(this.primary?.nativeElement).color;
+    // const accentColorString = getComputedStyle(this.accent?.nativeElement).color;
+    // const hoverColorString = getComputedStyle(this.hover?.nativeElement).color;
+    //this.configChart(primaryColorString, accentColorString, hoverColorString);
   }
 
   configChart(primaryColor: string, accentColor: string, hoverColor: string){

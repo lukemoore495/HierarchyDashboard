@@ -11,19 +11,20 @@ export interface Node {
     weight: number;
     children?: Node[];
     icon?: string;
-    measurements?: MeasurementDefinition[];
+    measurements: MeasurementDefinition[];
 }
 
 export interface MeasurementDefinition {
+    id: string;
     measurementName: string;
     measurementType: string;
     valueFunction?: ValueFunction;
 }
 
 export enum MeasurementType {
-    Number,
-    Percentage,
-    Boolean
+    Number = "Number",
+    Percentage = "Percentage",
+    Boolean = "Boolean"
 }
 
 export interface ValueFunction {
@@ -48,12 +49,12 @@ export enum ValueFunctionTypes {
 
 export interface Alternative {
     name: string;
-    measurements: Measurement;
+    measurements: Measurement[];
     rank: number;
 }
 
 export interface Measurement {
-    leafNode: Node;
-    measure: number;
-    value: number;
+    measurementDefinitionId: string;
+    measure?: number;
+    value?: number;
 }
