@@ -11,17 +11,28 @@ mat-list{
 .node-container{
     display: flex;
     align-items: center;
-    padding-bottom: 2rem;
+    padding-bottom: 2rem;    
 
     .node{
-        margin: 5rem;
+        position: relative;
+        margin:auto;
+        padding: 1rem;
     }
     
     .head-node{
+        position: relative;
         margin:auto;
     }
 }
 
 .align{
     margin: auto;
+}
+
+.tree{
+    position: absolute;
+}
+
+.svg{
+    position: absolute;
 }
