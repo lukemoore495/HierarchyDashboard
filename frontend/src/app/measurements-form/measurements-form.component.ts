@@ -29,7 +29,9 @@ export class MeasurementsFormComponent implements OnInit {
     selectMeasurements(nodes: Node[]): Node[] {
         let findChildMeasurements = (node: Node): Node[] => {
             let childMeasurementNodes : Node[] = [];
-            if(node.children?.every(x => x.measurements.length > 0)){
+            if(node.children.length === 0){
+                return childMeasurementNodes;
+            } else if(node.children?.every(x => x.measurements.length > 0)){
                 childMeasurementNodes.push(node);
             } else if(node.children?.some(x => x.measurements.length > 0)){
                 let innerNodes = node.children.filter(x => !(x.measurements.length > 0));
@@ -42,7 +44,22 @@ export class MeasurementsFormComponent implements OnInit {
             }
             return childMeasurementNodes;
         }
+        let findDirectMeasurements = (nodes: Node[]): Node => {
+            let topLevelChildren: Node[] = [];
+            nodes
+                .filter(node => node.children.length === 0)
+                .forEach(node => topLevelChildren.push(node));
+            let topLevelMeasurementNode: Node = {
+                name: "Top Level",
+                children: topLevelChildren,
+                measurements: [],
+                weight: 1
+            };
+            return topLevelMeasurementNode;
+        }
+
         let measurementNodes : Node[] = [];
+        measurementNodes.push(findDirectMeasurements(nodes));
         nodes.forEach(node => measurementNodes.push(...findChildMeasurements(node)));
         return measurementNodes;
     }
