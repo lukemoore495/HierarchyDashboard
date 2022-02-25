@@ -22,15 +22,28 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
                 if (hierarchy) {
                     this.hierarchyLevels = this.sortNodesToLevels(hierarchy);
                     this.relationships = this.findRelationships(this.hierarchyLevels);
-                    console.log(this.relationships);
                 }
             });
     }
 
     ngAfterViewInit() {
-        let children = ["00", "01", "02", "03", "04"];
-        let parent = "topLevel";
-        this.repositionChildren(children, parent);
+        let currentParent: string | null = null;
+        let currentChildren: string[] = [];
+        for(let i = 0; i < this.relationships.length; i++){
+            let relationship = this.relationships[i].split(",");
+            if(currentParent === null){
+                currentParent = relationship[0];
+                currentChildren.push(relationship[1])
+            } else if(currentParent !== relationship[0]){
+                this.repositionChildren(currentChildren, currentParent);
+                currentParent = relationship[0];
+                currentChildren = [relationship[1]];
+            } else {
+                currentChildren.push(relationship[1]);
+            }
+        }
+        if(currentParent !== null)
+            this.repositionChildren(currentChildren, currentParent);
 
         for(let i = 0; i < this.relationships.length; i++){
             let relationship = this.relationships[i].split(",");
@@ -41,7 +54,6 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
 
     repositionChildren(childrenIds: string[], parentId: string) {
         let parentPosition = document.getElementById(parentId)?.getBoundingClientRect();
-        console.log(parentPosition);
         if(!parentPosition){
             return;
         }
@@ -50,20 +62,47 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
         let last = document.getElementById(childrenIds[childrenIds.length-1]);
         if(!first || !last)
             return;
-
-        let fullLength = last.getBoundingClientRect().x - first.getBoundingClientRect().x;
-        
-        for(let i = 0; i < childrenIds.length; i++){
-            let child = document.getElementById(childrenIds[i]);
-            if(!child) {
-                continue;
+        let firstPos = first.getBoundingClientRect();
+        let lastPos = last.getBoundingClientRect();
+        let fullLength = (lastPos.x + lastPos.width) - (firstPos.x + firstPos.width);
+        let commonOffset = fullLength/childrenIds.length;
+        if(childrenIds.length % 2 === 0){
+            for(let i = 0; i < childrenIds.length; i++){
+                let child = document.getElementById(childrenIds[i]);
+                if(!child) {
+                    continue;
+                }
+                let childPosition = child.getBoundingClientRect();
+                let center = parentPosition.x - childPosition.x;
+                if(i <= childrenIds.length/2){
+                    let offset = "left:" + (center - (commonOffset * (childrenIds.length/2 - i))).toString() + "px";
+                    child.setAttribute("style", offset);
+                } else {
+                    let offset = "left:" + (center + (commonOffset * ((i+1) - childrenIds.length/2))).toString() + "px";
+                    child.setAttribute("style", offset);
+                }
             }
-            let childPosition = child.getBoundingClientRect();
-            let offset = "left:" + ((parentPosition.x - childPosition.x) - (parentPosition.width/2)).toString() + "px";
-
-            child.setAttribute("style", offset);
+        } else {
+            for(let i = 0; i < childrenIds.length; i++){
+                let child = document.getElementById(childrenIds[i]);
+                if(!child) {
+                    continue;
+                }
+                let childPosition = child.getBoundingClientRect();
+                let center = parentPosition.x - childPosition.x;
+                let middleIndex = ~~(childrenIds.length/2);
+                if(i === middleIndex){
+                    let offset = "left:" + center.toString() + "px";
+                    child.setAttribute("style", offset);
+                }else if(i < middleIndex){
+                    let offset = "left:" + (center - (commonOffset * (middleIndex - i))).toString() + "px";
+                    child.setAttribute("style", offset);
+                } else {
+                    let offset = "left:" + (center + (commonOffset * (i - middleIndex))).toString() + "px";
+                    child.setAttribute("style", offset);
+                }
+            }
         }
-
     }
 
     drawLine(parentId: string, childId: string, lineId: string){
