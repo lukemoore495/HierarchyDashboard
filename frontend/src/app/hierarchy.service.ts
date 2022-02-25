@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Hierarchy } from "./Hierarchy";
+import { Hierarchy } from "./hierarchy";
 import RRRHierarchy from '../assets/staticFiles/RRRHierarchy.json';
 import { Observable, of } from "rxjs";
 import SimpleHierarchy from '../assets/staticFiles/SimpleHierarchy.json';

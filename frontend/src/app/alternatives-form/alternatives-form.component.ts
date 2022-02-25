@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
-import { Hierarchy, Measurement, Node } from '../Hierarchy';
+import { Hierarchy, Measurement, Node } from '../hierarchy';
 import { getSelectedHierarchy } from '../state';
 import { HierarchyState } from '../state/hierarchy.reducer';
 
