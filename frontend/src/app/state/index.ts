@@ -61,28 +61,24 @@ export const getSelectedMeasurementDefinition = createSelector(
 function findMeasurementDefinition(hierarchy: Hierarchy, measurementDefinitionId: string) : MeasurementDefinition | null {
     let findMeasurementFromNode = (node: Node, measurementDefinitionId: string) : MeasurementDefinition | null => {
         let measurementDefinition = node.measurements?.find(m => m.id == measurementDefinitionId);
-        if(measurementDefinition) {
+        if(measurementDefinition)
             return measurementDefinition;
-        } else {
-            if(!node.children || node.children.length === 0) {
-                return null;
-            }
 
-            for(let child of node.children){
-                let measurement = findMeasurementFromNode(child, measurementDefinitionId);
-                if(measurement){
-                    return measurement;
-                }
-            }
+        if(!node.children || node.children.length === 0)
             return null;
+
+        for(let child of node.children){
+            let measurement = findMeasurementFromNode(child, measurementDefinitionId);
+            if(measurement)
+                return measurement;
         }
+        return null;
     }
 
     for(let node of hierarchy.nodes){
         let measurement = findMeasurementFromNode(node, measurementDefinitionId);
-        if(measurement){
+        if(measurement)
             return measurement;
-        }
     }
     return null;
 }
