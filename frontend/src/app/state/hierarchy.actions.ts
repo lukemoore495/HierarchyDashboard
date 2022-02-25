@@ -1,5 +1,5 @@
 import { createAction, props } from "@ngrx/store";
-import { Hierarchy } from "../Hierarchy";
+import { Hierarchy } from "../hierarchy";
 
 export const createHierarchy = createAction(
     '[Hierarchies] Create Hierarchy',

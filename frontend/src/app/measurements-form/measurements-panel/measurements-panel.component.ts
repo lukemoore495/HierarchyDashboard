@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, debounceTime, map, Observable, Subscription, take } from 'rxjs';
-import { Measurement, MeasurementDefinition, MeasurementType, Node } from 'src/app/Hierarchy';
+import { Measurement, MeasurementDefinition, MeasurementType, Node } from 'src/app/hierarchy';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Output } from '@angular/core';
 import { OnDestroy } from '@angular/core';
