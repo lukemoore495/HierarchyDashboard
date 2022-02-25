@@ -78,6 +78,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
                 .subscribe(parentIsSelected => {
                     if(this.measurementSelectList && parentIsSelected){
                         this.measurementSelectList.deselectAll()
+                        this.deselectMeasurement();
                     }
                     this.$parentNodeOpened.next(true);
                 });
@@ -135,6 +136,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     onPanelClose(){
         this.deselectMeasurement();
         this.closed.emit();
+        this.$parentNodeOpened.next(true);
     }
 
     deselectAndEmitToParent(){
