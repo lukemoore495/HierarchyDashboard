@@ -9,7 +9,7 @@ export interface Hierarchy {
 export interface Node {
     name: string;
     weight: number;
-    children?: Node[];
+    children: Node[];
     icon?: string;
     measurements: MeasurementDefinition[];
 }
@@ -48,6 +48,7 @@ export enum ValueFunctionTypes {
 }
 
 export interface Alternative {
+    id: string;
     name: string;
     measurements: Measurement[];
     rank: number;
@@ -57,4 +58,10 @@ export interface Measurement {
     measurementDefinitionId: string;
     measure?: number;
     value?: number;
+    valueFunctionData?: Point[];
+}
+
+export interface Point{
+    x: number;
+    y: number;
 }
