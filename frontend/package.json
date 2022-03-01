@@ -50,7 +50,12 @@
     "@types/chartjs-plugin-annotation": "^0.5.2",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
     "electron": "^16.0.7",
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-prettier": "4.0.0",
     "jasmine-core": "~3.10.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
@@ -84,6 +89,29 @@
           "config": {}
         }
       ]
+    }
+  },
+  "eslintConfig": {
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+      "@typescript-eslint"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/eslint-recommended",
+      "plugin:@typescript-eslint/recommended",
+      "prettier"      
+    ],
+    "rules": {
+      "@typescript-eslint/indent": ["error"],
+      "@typescript-eslint/no-explicit-any": "error",
+      "prefer-const": "error",
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": 1,
+      "no-irregular-whitespace": "error"
     }
   }
 }
