@@ -1,7 +1,7 @@
 <h1>RRR Hierarchy</h1>
 <div class="tree">
     <div class="node-container">
-        <div id="topLevel" class="node">
+        <div id="topLevel" class="node" #nodes>
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>
@@ -19,7 +19,7 @@
         </div>
     </div>
     <div *ngFor="let level of hierarchyLevels; index as i" class="node-container">
-        <div id="{{i}}{{j}}" class="node" *ngFor="let node of level; index as j">
+        <div id="{{i}}{{j}}" class="node" *ngFor="let node of level; index as j" #nodes>
             <mat-card>
                 <mat-card-header>
                     <mat-card-title>
@@ -38,7 +38,6 @@
     </div>
 </div>
 <div *ngFor="let relationship of relationships; index as i">
-    <svg class="svg" width="20000" height="20000"><line id="line{{i}}0" stroke="black"/></svg>
-    <svg class="svg" width="20000" height="20000"><line id="line{{i}}1" stroke="black"/></svg>
-    <svg class="svg" width="20000" height="20000"><line id="line{{i}}2" stroke="black"/></svg>
+    <svg *ngFor="let member of relationship.split(','); index as j" class="svg" width="20000" height="20000"><line id="line{{i}}{{j}}" stroke="black" #lines/></svg>
+    <svg class="svg" width="20000" height="20000"><line id="line{{i}}c" stroke="black" #lines/></svg>
 </div>

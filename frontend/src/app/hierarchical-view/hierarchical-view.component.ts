@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Hierarchy, Node } from '../hierarchy';
 import { getSelectedHierarchy } from '../state';
@@ -13,6 +13,8 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
     hierarchyLevels: Node[][] = [];
     elem: Element | null = null;
     relationships: string[] = [];
+    @ViewChildren('nodes') private nodes?: QueryList<ElementRef<HTMLDivElement>>;
+    @ViewChildren('lines') private lines?: QueryList<ElementRef<SVGLineElement>>;
 
     constructor(private store: Store<HierarchyState>) { }
 
@@ -27,34 +29,35 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        let currentParent: string | null = null;
-        let currentChildren: string[] = [];
         for (let i = 0; i < this.relationships.length; i++) {
             const relationship = this.relationships[i].split(',');
-            if (currentParent === null) {
-                currentParent = relationship[0];
-                currentChildren.push(relationship[1]);
-            } else if (currentParent !== relationship[0]) {
-                this.repositionChildren(currentChildren, currentParent);
-                currentParent = relationship[0];
-                currentChildren = [relationship[1]];
-            } else {
-                currentChildren.push(relationship[1]);
-            }
+            const parentId = relationship[0];
+            const childrenIds = relationship.slice(1);
+            this.repositionChildren(childrenIds, parentId);
         }
-        if (currentParent !== null)
-            this.repositionChildren(currentChildren, currentParent);
         
         this.fixCollisions(this.relationships, this.hierarchyLevels);
 
         for (let i = 0; i < this.relationships.length; i++) {
             const relationship = this.relationships[i].split(',');
-            const lineId1 = 'line' + i.toString() + '0';
-            const lineId2 = 'line' + i.toString() + '1';
-            const lineId3 = 'line' + i.toString() + '2';
+            const parentId = relationship[0];
+            const childrenIds = relationship.slice(1);
+            const lineIds: string [] = [];
+            for(let j = 0; j < relationship.length; j++){
+                lineIds.push('line' + i.toString() + j.toString());
+            }
+            lineIds.push('line' + i.toString() + 'c');
 
-            this.drawLineConnection(relationship[0], relationship[1], lineId1, lineId2, lineId3);
+            this.drawLineConnection(parentId, childrenIds, lineIds);
         }
+    }
+
+    getNodeById(id: string): HTMLDivElement | null {
+        return this.nodes?.find(x => x.nativeElement.id === id)?.nativeElement ?? null;
+    }
+
+    getLineById(id: string): SVGLineElement | null {
+        return this.lines?.find(x => x.nativeElement.id === id)?.nativeElement ?? null;
     }
 
     moveRelativeElement(element: HTMLElement, offset: number){
@@ -67,7 +70,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
     }
 
     repositionChildren(childrenIds: string[], parentId: string) {
-        const parentPosition = document.getElementById(parentId)?.getBoundingClientRect();
+        const parentPosition = this.getNodeById(parentId)?.getBoundingClientRect();
         if (!parentPosition) {
             return;
         }
@@ -76,9 +79,9 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
         if(childrenIds.length % 2 === 0){
             const middleIndex1 = childrenIds.length/2;
             const middleIndex2 = middleIndex1 -1;
-            const middleChild1 = document.getElementById(childrenIds[middleIndex1]);
+            const middleChild1 = this.getNodeById(childrenIds[middleIndex1]);
             const middleChild1Position = middleChild1?.getBoundingClientRect();
-            const middleChild2 = document.getElementById(childrenIds[middleIndex2]);
+            const middleChild2 = this.getNodeById(childrenIds[middleIndex2]);
             const middleChild2Position = middleChild2?.getBoundingClientRect();
             
             if(!middleChild1 || !middleChild1Position || !middleChild2 || !middleChild2Position)
@@ -91,7 +94,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
             shiftAmount = parentX - centerPoint;
         }else{ 
             const middleIndex = ~~(childrenIds.length/2);
-            const middleChild = document.getElementById(childrenIds[middleIndex]);
+            const middleChild = this.getNodeById(childrenIds[middleIndex]);
             const middleChildPosition = middleChild?.getBoundingClientRect();
 
             if(!middleChild || !middleChildPosition)
@@ -103,7 +106,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
         }
 
         for(let i = 0; i < childrenIds.length; i++){
-            const child = document.getElementById(childrenIds[i]);
+            const child = this.getNodeById(childrenIds[i]);
             if(!child) {
                 continue;
             }
@@ -120,14 +123,14 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
 
     findRowCollision (row: string[]): string | null {
         for(const id of row) {
-            const elementPos = document.getElementById(id)?.getBoundingClientRect();
+            const elementPos = this.getNodeById(id)?.getBoundingClientRect();
             if(!elementPos)
                 continue;
             for(const currentId of row){
                 if(currentId === id)
                     continue;
 
-                const currentPos = document.getElementById(currentId)?.getBoundingClientRect();
+                const currentPos = this.getNodeById(currentId)?.getBoundingClientRect();
 
                 if(!currentPos)
                     continue;
@@ -142,14 +145,14 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
 
     findParent (elementId: string, relationships: string[]): string | null {
         const relationship = relationships
-            .find(r => r.split(',')[1] === elementId);
+            .find(r => r.split(',').some(x => x  === elementId));
         return relationship ? relationship.split(',')[0] : null;
     };
 
     findChildren (elementId: string, relationships: string[]): string[] {
-        const childrenIds = relationships
-            .filter(r => r.split(',')[0] === elementId)
-            .map(r => r.split(',')[1]);
+        const relationship = relationships
+            .find(r => r.split(',')[0] === elementId);
+        const childrenIds = relationship?.split(',').slice(1) ?? [];
         return childrenIds;
     };
 
@@ -197,7 +200,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
     shiftElements(elementId: string, relationships: string[]): void {
         const elements = this.findAllElementsToShift(elementId, relationships);
         for(const elementId of elements) { 
-            const element = document.getElementById(elementId);
+            const element = this.getNodeById(elementId);
             const pos = element?.getBoundingClientRect();
             if(!element || !pos)
                 continue;
@@ -220,59 +223,98 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
         }
     }
 
-    drawLineConnection(parentId: string, childId: string, lineId1: string, lineId2: string, lineId3: string) {
-        const top = document.getElementById(parentId);
-        const child = document.getElementById(childId);
-        const line1 = document.getElementById(lineId1);
-        const line2 = document.getElementById(lineId2);
-        const line3 = document.getElementById(lineId3);
-        const childPos = child?.getBoundingClientRect();
-        const parentPos = top?.getBoundingClientRect();
-        if (!line1 || !line2 || !line3 || !childPos || !parentPos){
+    drawLineConnection(parentId: string, childrenIds: string[], lineIds: string[]) {
+        const findBottomCenterEdge = (position: DOMRect): number => {
+            return position.top + position.height/6;
+        };
+
+        const findTopCenterEdge = (position: DOMRect): number => {
+            return position.top - position.height/2;
+        };
+
+        const parent = this.getNodeById(parentId);
+        const parentPos = parent?.getBoundingClientRect();
+        if(!parent || !parentPos)
             return;
+        
+        const children: HTMLDivElement[] = [];
+        const lines: SVGLineElement[] = [];
+        for(const childId of childrenIds){
+            const child = this.getNodeById(childId);
+            if(child)
+                children.push(child);
         }
-        const parentEdge = parentPos.top + parentPos.height/6;
-        const childEdge = childPos.top - childPos.height/2;
-        const verticalLineLength = (childEdge-parentEdge)/2;
+        for(const lineId of lineIds){
+            const line = this.getLineById(lineId);
+            if(line)
+                lines.push(line);
+        }
 
-        let x1Offset = childPos.left - childPos.height + childPos.width/5;
-        let y1Offset = childEdge;
-        let x2Offset = x1Offset;
-        let y2Offset = y1Offset - verticalLineLength;
-        const connectionX1 = x2Offset;
-        const connectionY1 = y2Offset; 
-        let x1 = x1Offset.toString();
-        let y1 = y1Offset.toString();
-        let x2 = x2Offset.toString();
-        let y2 = y2Offset.toString();
-        line2.setAttribute('x1', x1);
-        line2.setAttribute('y1', y1);
-        line2.setAttribute('x2', x1);
-        line2.setAttribute('y2', y2);
+        const parentEdge = findBottomCenterEdge(parentPos);
+        let verticalLineLength: number| null = null;   
+        let connectionX1: string | null = null;
+        let connectionX2: string | null = null;
+        let connectionY: string | null = null;
+        for(const child of children){
+            const childPos = child?.getBoundingClientRect();
+            const line = lines.pop();
+            if(!line)
+                break;
 
-        x1Offset = parentPos.left - parentPos.height + parentPos.width/5;
-        y1Offset = parentEdge; 
-        x2Offset = x1Offset;
-        y2Offset = y1Offset + verticalLineLength;
-        const connectionX2 = x2Offset;
-        const connectionY2 = y2Offset; 
-        x1 = x1Offset.toString();
-        y1 = y1Offset.toString();
-        x2 = x2Offset.toString();
-        y2 = y2Offset.toString();
-        line3.setAttribute('x1', x1);
-        line3.setAttribute('y1', y1);
-        line3.setAttribute('x2', x2);
-        line3.setAttribute('y2', y2);
+            if(!childPos)
+                continue;
+            
+            const childEdge = findTopCenterEdge(childPos);
 
-        x1 = connectionX1.toString();
-        y1 = connectionY1.toString();
-        x2 = connectionX2.toString();
-        y2 = connectionY2.toString();
-        line1.setAttribute('x1', x1);
-        line1.setAttribute('y1', y1);
-        line1.setAttribute('x2', x2);
-        line1.setAttribute('y2', y2);
+            if(!verticalLineLength)
+                verticalLineLength = (childEdge-parentEdge)/2;
+
+            const x1Offset = childPos.left - childPos.height + childPos.width/5;
+            const y1Offset = childEdge;
+            const y2Offset = y1Offset - verticalLineLength;
+            const x1 = x1Offset.toString();
+            const y1 = y1Offset.toString();
+            const y2 = y2Offset.toString();
+
+            if(child === children[0]){
+                connectionX1 = x1;
+                connectionY = y2;
+            }
+            if(child === children[children.length -1]){
+                connectionX2 = x1;
+            }
+
+            line.setAttribute('x1', x1);
+            line.setAttribute('y1', y1);
+            line.setAttribute('x2', x1);
+            line.setAttribute('y2', y2);       
+        }
+
+        const parentLine = lines.pop();
+        if(!parentLine || !verticalLineLength)
+            return;
+
+        const parentX1Offset = parentPos.left - parentPos.height + parentPos.width/5;
+        const parentY1Offset = parentEdge; 
+        const parentX2Offset = parentX1Offset;
+        const parentY2Offset = parentY1Offset + verticalLineLength;
+        const parentX1 = parentX1Offset.toString();
+        const parentY1 = parentY1Offset.toString();
+        const parentX2 = parentX2Offset.toString();
+        const parentY2 = parentY2Offset.toString();
+        parentLine.setAttribute('x1', parentX1);
+        parentLine.setAttribute('y1', parentY1);
+        parentLine.setAttribute('x2', parentX2);
+        parentLine.setAttribute('y2', parentY2);
+
+        const connectingLine = lines.pop();
+        if(!connectingLine || !connectionX1 || !connectionX2 || !connectionY)
+            return;
+
+        connectingLine.setAttribute('x1', connectionX1);
+        connectingLine.setAttribute('y1', connectionY);
+        connectingLine.setAttribute('x2', connectionX2);
+        connectingLine.setAttribute('y2', connectionY);
     }
 
     sortNodesToLevels(hierarchy: Hierarchy): Node[][] {
@@ -291,16 +333,20 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
 
     findRelationships(levels: Node[][]): string[] {
         const relationships: string[] = [];
+        let firstLevel = 'topLevel';
         for (let i = 0; i < levels[0].length; i++) {
-            relationships.push('topLevel' + ',0' + i.toString());
+            firstLevel += ',0' + i.toString();
         }
+        relationships.push(firstLevel);
+
         for (let i = 0; i < levels.length; i++) {
             for (let k = 0; k < levels[i].length; k++) {
                 const node = levels[i][k];
-                const indexes: string[] = [];
                 const currentNodeId = i.toString() + k.toString();
-                node.children.forEach(child => indexes.push(currentNodeId + ',' + (i + 1).toString() + (levels[i + 1].findIndex(node => node === child).toString())));
-                relationships.push(...indexes);
+                let currentLevel = currentNodeId;
+                node.children.forEach(child => currentLevel += (',' + (i + 1).toString() + (levels[i + 1].findIndex(node => node === child).toString())));
+                if(currentLevel.length > currentNodeId.length)
+                    relationships.push(currentLevel);
             }
         }
         return relationships;
