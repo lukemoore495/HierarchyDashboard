@@ -10,6 +10,7 @@ import { HierarchyState } from '../state/hierarchy.reducer';
     styleUrls: ['./hierarchical-view.component.scss']
 })
 export class HierarchicalViewComponent implements OnInit, AfterViewInit {
+    hierarchyName?: string;
     hierarchyLevels: Node[][] = [];
     elem: Element | null = null;
     relationships: string[] = [];
@@ -22,6 +23,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
         this.store.select(getSelectedHierarchy)
             .subscribe(hierarchy => {
                 if (hierarchy) {
+                    this.hierarchyName = hierarchy.name;
                     this.hierarchyLevels = this.sortNodesToLevels(hierarchy);
                     this.relationships = this.findRelationships(this.hierarchyLevels);
                 }
@@ -37,6 +39,8 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
         }
         
         this.fixCollisions(this.relationships, this.hierarchyLevels);
+
+        this.fixOffscreenNodes(this.hierarchyLevels.length);
 
         for (let i = 0; i < this.relationships.length; i++) {
             const relationship = this.relationships[i].split(',');
@@ -126,6 +130,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
             const elementPos = this.getNodeById(id)?.getBoundingClientRect();
             if(!elementPos)
                 continue;
+
             for(const currentId of row){
                 if(currentId === id)
                     continue;
@@ -223,9 +228,32 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
         }
     }
 
-    drawLineConnection(parentId: string, childrenIds: string[], lineIds: string[]) {
+    fixOffscreenNodes(levels: number): void {
+        const getOffset = (relativeElement: HTMLElement) => {
+            const current = relativeElement?.getBoundingClientRect().left ?? 0;
+            relativeElement?.setAttribute('style', 'left:' + '0' + 'px');
+            const defaultLeft = relativeElement?.getBoundingClientRect().left ?? 0;
+            const offset = current-defaultLeft;
+            relativeElement?.setAttribute('style', 'left:' + offset.toString() + 'px');
+            return offset;
+        };
+
+        for(let i = 0; i < levels; i++){
+            const nodeId = i.toString() + '0';
+            const node = this.getNodeById(nodeId);
+            if(!node)
+                continue;
+
+            const offset = getOffset(node);
+            if(offset < 0) {
+                this.shiftElements(nodeId, this.relationships);
+            }
+        }
+    }
+
+    drawLineConnection(parentId: string, childrenIds: string[], lineIds: string[]): void {
         const findBottomCenterEdge = (position: DOMRect): number => {
-            return position.top + position.height/6;
+            return position.top + position.height/15;
         };
 
         const findTopCenterEdge = (position: DOMRect): number => {

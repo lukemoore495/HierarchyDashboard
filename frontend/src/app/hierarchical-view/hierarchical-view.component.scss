@@ -1,13 +1,3 @@
-mat-card{
-    max-width: 400px;
-}
-
-mat-list{
-    display: flex;
-    align-items: center;
-    padding-bottom: 10rem;
-}
-
 .node-container{
     display: flex;
     align-items: center;
@@ -15,15 +5,11 @@ mat-list{
 
     .node{
         position: relative;
-        margin:auto;
+        margin: auto;
         padding: 1rem;
         height: max-content;
         width: max-content;
     }
-}
-
-.align{
-    margin: auto;
 }
 
 .tree{
@@ -33,4 +19,9 @@ mat-list{
 .svg{
     position: absolute;
     z-index: -1;
+}
+
+.name {
+    margin-left: 1rem;
+    margin-top: 1rem;
 }

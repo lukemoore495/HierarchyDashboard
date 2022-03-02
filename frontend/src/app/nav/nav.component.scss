@@ -37,12 +37,13 @@
   }
 }
 
-.sidenav .mat-toolbar {
+.sidenav mat-toolbar {
   background: inherit;
 }
 
-.mat-toolbar.mat-primary {
+.toolbar {
   position: sticky;
   top: 0;
+  left: 0;
   z-index: 1;
 }
