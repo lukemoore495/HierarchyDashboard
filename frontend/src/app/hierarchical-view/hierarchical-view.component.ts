@@ -57,13 +57,22 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
         }
     }
 
+    moveRelativeElement(element: HTMLElement, offset: number){
+        const defaultOffset = 'left:' + '0' + 'px';
+        const currentLeft = element.getBoundingClientRect().left;
+        element.setAttribute('style', defaultOffset);
+        const defaultLeft = element.getBoundingClientRect().left;
+        const finalOffset = 'left:' + (currentLeft - defaultLeft + offset).toString() + 'px';
+        element.setAttribute('style', finalOffset);
+    }
+
     repositionChildren(childrenIds: string[], parentId: string) {
         const parentPosition = document.getElementById(parentId)?.getBoundingClientRect();
         if (!parentPosition) {
             return;
         }
 
-        let offset = '';
+        let shiftAmount;
         if(childrenIds.length % 2 === 0){
             const middleIndex1 = childrenIds.length/2;
             const middleIndex2 = middleIndex1 -1;
@@ -79,8 +88,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
             const middleChild2X = (middleChild2Position.left - middleChild2Position.height + middleChild2Position.width/5);
             const centerPoint = middleChild2X + (middleChild1X - middleChild2X)/2;
             const parentX = parentPosition.left - parentPosition.height + parentPosition.width/5;
-            const shiftAmount = parentX - centerPoint;
-            offset = 'left:' + shiftAmount.toString() + 'px';
+            shiftAmount = parentX - centerPoint;
         }else{ 
             const middleIndex = ~~(childrenIds.length/2);
             const middleChild = document.getElementById(childrenIds[middleIndex]);
@@ -91,8 +99,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
 
             const parentX = parentPosition.left - parentPosition.height + parentPosition.width/5;
             const childX = middleChildPosition.left - middleChildPosition.height + middleChildPosition.width/5;
-            const shiftAmount = parentX - childX;
-            offset = 'left:' + shiftAmount.toString() + 'px';
+            shiftAmount = parentX - childX;
         }
 
         for(let i = 0; i < childrenIds.length; i++){
@@ -100,53 +107,117 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
             if(!child) {
                 continue;
             }
-            child.setAttribute('style', offset);
+            this.moveRelativeElement(child, shiftAmount);
         }
     }
 
-    fixCollisions(relationships: string[], levels: Node[][]) : void {
-        const hasCollision = (pos1: DOMRect, pos2: DOMRect): boolean => {
-            return !(pos1.right <= pos2.left || 
-                pos1.left >= pos2.right || 
-                pos1.bottom <= pos2.top || 
-                pos1.top >= pos2.bottom);
-        };
+    hasCollision (pos1: DOMRect, pos2: DOMRect): boolean {
+        return !(pos1.right <= pos2.left || 
+            pos1.left >= pos2.right || 
+            pos1.bottom <= pos2.top || 
+            pos1.top >= pos2.bottom);
+    };
 
-        const findParent = (elementId: string, relationships: string[]): string | null => {
-            const relationship = relationships
-                .find(r => r.split(',')[1] === elementId);
-            return relationship ? relationship.split(',')[0] : null;
-        };
+    findRowCollision (row: string[]): string | null {
+        for(const id of row) {
+            const elementPos = document.getElementById(id)?.getBoundingClientRect();
+            if(!elementPos)
+                continue;
+            for(const currentId of row){
+                if(currentId === id)
+                    continue;
 
-        const findAllParents = (elementId: string, relationships: string[], parents: string[]): string[] => {
-            const parent = findParent(elementId, relationships);
+                const currentPos = document.getElementById(currentId)?.getBoundingClientRect();
+
+                if(!currentPos)
+                    continue;
+
+                if(this.hasCollision(elementPos, currentPos)){
+                    return currentId;
+                }
+            }
+        }
+        return null;
+    };
+
+    findParent (elementId: string, relationships: string[]): string | null {
+        const relationship = relationships
+            .find(r => r.split(',')[1] === elementId);
+        return relationship ? relationship.split(',')[0] : null;
+    };
+
+    findChildren (elementId: string, relationships: string[]): string[] {
+        const childrenIds = relationships
+            .filter(r => r.split(',')[0] === elementId)
+            .map(r => r.split(',')[1]);
+        return childrenIds;
+    };
+
+    findDescendants (elementId: string, relationships: string[], children: string[]) {
+        const newChildren = this.findChildren(elementId, relationships);
+        if(newChildren.length === 0)
+            return children;
+        
+        children.push(...newChildren);
+        newChildren.forEach(child => children.push(...this.findDescendants(child, relationships, [])));
+        return children;
+    };
+    
+    findAllElementsToShift (elementId: string, relationships: string[]): string[] {
+        const findElementsToShift = (elementId: string, relationships: string[], elements: string[]): string[] => {
+            const parent = this.findParent(elementId, relationships);
             if(!parent)
-                return parents;
+                return elements;
             
-            parents.push(parent);
-            return findAllParents(parent, relationships, parents);
+            const allChildren = this.findChildren(parent, relationships);
+            const elementIndex = allChildren.indexOf(elementId);
+            const children = allChildren.slice(elementIndex);
+      
+            elements.push(...children);
+            children
+                .filter(child => child != elementId)
+                .forEach(child => elements.push(...this.findDescendants(child, relationships, [])));
+            
+            if(parent !== 'topLevel') {
+                return findElementsToShift(parent, relationships, elements);
+            }
+            
+            if(elementIndex <= ~~(allChildren.length/2)){
+                elements.push(parent);
+            }
+    
+            return elements;
         };
 
-        const shiftElements = (elementId: string, relationships: string[]): void => {
-            const parents = findAllParents(elementId, relationships, []);
-            console.log(parents);
-        };
+        const children = this.findDescendants(elementId, relationships, []);
+        const elements = findElementsToShift(elementId, relationships, children);
+        return elements;
+    };
+    
+    shiftElements(elementId: string, relationships: string[]): void {
+        const elements = this.findAllElementsToShift(elementId, relationships);
+        for(const elementId of elements) { 
+            const element = document.getElementById(elementId);
+            const pos = element?.getBoundingClientRect();
+            if(!element || !pos)
+                continue;
 
-        shiftElements('31', relationships);
-        // for (let i = 0; i < levels.length; i++) {
-        //     for (let j = 0; j < levels[i].length; j++) {
-        //         const firstId = i.toString() + j.toString();
-        //         const first = document.getElementById(firstId)?.getBoundingClientRect();
-        //         const secondId = i.toString() + (j+1).toString();
-        //         const second = document.getElementById(secondId)?.getBoundingClientRect();
-        //         if(!first || !second)
-        //             continue;
-                
-        //         if(hasCollision(first, second)){
-        //             shiftElements(secondId, relationships);
-        //         }
-        //     }
-        // }
+            this.moveRelativeElement(element, pos.height);
+        }
+    };
+
+    fixCollisions(relationships: string[], levels: Node[][]) : void {
+        for (let i = 0; i < levels.length; i++) {
+            const levelIds: string[] = [];
+            for (let j = 0; j < levels[i].length; j++) {
+                levelIds.push(i.toString() + j.toString());
+            }
+            let collidingId = this.findRowCollision(levelIds);
+            while(collidingId !== null){
+                this.shiftElements(collidingId, relationships);
+                collidingId = this.findRowCollision(levelIds);
+            }
+        }
     }
 
     drawLineConnection(parentId: string, childId: string, lineId1: string, lineId2: string, lineId3: string) {
