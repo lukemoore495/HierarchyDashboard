@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Hierarchy, Node } from '../hierarchy';
+import { Hierarchy, Node } from '../Hierarchy';
 import { getSelectedHierarchy } from '../state';
 import { HierarchyState } from '../state/hierarchy.reducer';
 

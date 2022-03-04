@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { Hierarchy } from "./hierarchy";
+import { Injectable } from '@angular/core';
+import { Hierarchy } from './Hierarchy';
 import RRRHierarchy from '../assets/staticFiles/RRRHierarchy.json';
-import { Observable, of } from "rxjs";
+import { Observable, of } from 'rxjs';
 import SimpleHierarchy from '../assets/staticFiles/SimpleHierarchy.json';
 import { SensitivityAnalysis, SensitivityAnalysisReport } from "./sensitivity-analysis/SensitivityAnalysis";
 
@@ -11,11 +11,11 @@ import { SensitivityAnalysis, SensitivityAnalysisReport } from "./sensitivity-an
 export class HierarchyService {
 
     getHierarchies(): Observable<Hierarchy[]> {
-        return of([RRRHierarchy]);
+        return of([SimpleHierarchy]);
     }
 
     createHierarchy(hierarchy: Hierarchy): Observable<Hierarchy> {
-        return of(RRRHierarchy);
+        return of(SimpleHierarchy);
     }
 
     getSensitivityAnalysis(parentNodeId: string): Observable<SensitivityAnalysisReport>{

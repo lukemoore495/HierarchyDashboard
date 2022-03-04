@@ -1,8 +1,7 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { HierarchicalViewComponent } from "./hierarchical-view.component";
-import { MatListModule } from "@angular/material/list";
+import { HierarchicalViewComponent } from './hierarchical-view.component';
 
 @NgModule({
     declarations: [
@@ -10,11 +9,10 @@ import { MatListModule } from "@angular/material/list";
     ],
     imports: [
         CommonModule,
-        MatCardModule,
-        MatListModule
+        MatCardModule
     ],
     exports: [
         HierarchicalViewComponent
     ]
-  })
+})
 export class HierarchicalViewModule { }
