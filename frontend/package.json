@@ -52,7 +52,7 @@
     "@types/node": "^12.11.1",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
-    "electron": "^16.0.7",
+    "electron": "^17.1.0",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.4.0",
     "eslint-plugin-prettier": "4.0.0",
@@ -100,10 +100,12 @@
       "eslint:recommended",
       "plugin:@typescript-eslint/eslint-recommended",
       "plugin:@typescript-eslint/recommended",
-      "prettier"      
+      "prettier"
     ],
     "rules": {
-      "@typescript-eslint/indent": ["error"],
+      "@typescript-eslint/indent": [
+        "error"
+      ],
       "@typescript-eslint/no-explicit-any": "error",
       "prefer-const": "error",
       "quotes": [

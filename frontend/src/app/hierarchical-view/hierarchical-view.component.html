@@ -37,7 +37,4 @@
         </div>
     </div>
 </div>
-<div *ngFor="let relationship of relationships; index as i">
-    <svg *ngFor="let member of relationship.split(','); index as j" class="svg" width="20000" height="20000"><line id="line{{i}}{{j}}" stroke="black" #lines/></svg>
-    <svg class="svg" width="20000" height="20000"><line id="line{{i}}c" stroke="black" #lines/></svg>
-</div>
+<svg class="svg" [attr.width]="viewBoxWidth" [attr.height]="viewBoxHeight" #svg></svg>

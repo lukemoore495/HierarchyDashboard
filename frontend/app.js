@@ -1,40 +1,41 @@
-const {app, BrowserWindow} = require('electron')
-    const url = require("url");
-    const path = require("path");
+const {app, BrowserWindow} = require('electron');
+const url = require('url');
+const path = require('path');
 
-    let mainWindow
+let mainWindow;
 
-    function createWindow () {
-      mainWindow = new BrowserWindow({
+function createWindow () {
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         webPreferences: {
-          nodeIntegration: true
+            nodeIntegration: true
         },
-        autoHideMenuBar: true
-      })
+        autoHideMenuBar: true,
+        show: false
+    });
 
-      mainWindow.loadURL(
-        url.format({
-          pathname: path.join(__dirname, `/dist/DashboardApp/index.html`),
-          protocol: "file:",
-          slashes: true
-        })
-      );
-      // Open the DevTools.
-      mainWindow.webContents.openDevTools()
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show();
+    });
 
-      mainWindow.on('closed', function () {
-        mainWindow = null
-      })
-    }
+    mainWindow.loadFile(__dirname + '/dist/DashboardApp/index.html');
 
-    app.on('ready', createWindow)
+    mainWindow.webContents.on('did-fail-load', () => {
+        mainWindow.loadFile(__dirname + '/dist/DashboardApp/index.html');
+    });
 
-    app.on('window-all-closed', function () {
-      if (process.platform !== 'darwin') app.quit()
-    })
+    mainWindow.on('closed', function () {
+        mainWindow = null;
+    });
+}
 
-    app.on('activate', function () {
-      if (mainWindow === null) createWindow()
-    })
+app.on('ready', createWindow);
+
+app.on('window-all-closed', function () {
+    if (process.platform !== 'darwin') app.quit();
+});
+
+app.on('activate', function () {
+    if (mainWindow === null) createWindow();
+});
