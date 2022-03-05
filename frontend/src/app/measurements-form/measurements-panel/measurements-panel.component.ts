@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, debounceTime, map, Observable, Subscription, take } from 'rxjs';
-import { Measurement, MeasurementDefinition, MeasurementType, Node } from 'src/app/Hierarchy';
+import { Measurement, MeasurementDefinition, MeasurementType, Node } from 'src/app/hierarchy';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Output } from '@angular/core';
 import { OnDestroy } from '@angular/core';
@@ -38,10 +38,6 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         let nodes : Node[] = Object.assign([], this.measurementNode?.children);
-        if(this.measurementNode && this.hasDirectMeasurements(this.measurementNode)){
-            nodes.push(this.measurementNode);
-        }
-
         for(let node of nodes) {
             let measurements = node?.measurements ?? [];
             for(let measurement of measurements) {
@@ -82,6 +78,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
                 .subscribe(parentIsSelected => {
                     if(this.measurementSelectList && parentIsSelected){
                         this.measurementSelectList.deselectAll()
+                        this.deselectMeasurement();
                     }
                     this.$parentNodeOpened.next(true);
                 });
@@ -131,10 +128,6 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
         return measurement.measurementType === MeasurementType.Boolean;
     }
 
-    hasDirectMeasurements(node: Node): boolean{
-        return (!(node?.children?.length) && node?.measurements) as boolean;
-    }
-
     onPanelOpen(){
         this.selectFirstMeasurement();
         this.childNodeOpened.emit();
@@ -143,6 +136,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     onPanelClose(){
         this.deselectMeasurement();
         this.closed.emit();
+        this.$parentNodeOpened.next(true);
     }
 
     deselectAndEmitToParent(){

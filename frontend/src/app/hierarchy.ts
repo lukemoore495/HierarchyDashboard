@@ -51,6 +51,7 @@ export interface Alternative {
     id: string;
     name: string;
     measurements: Measurement[];
+    rank: number;
 }
 
 export interface Measurement {
