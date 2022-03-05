@@ -1,9 +1,12 @@
+from genericpath import exists
 from sqlite3 import Connection as SQLite3Connection
-from datetime import datetime
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+
+from datetime import datetime
+from os.path import exists as file_exists
 
 # app
 app = Flask(__name__)
@@ -25,10 +28,10 @@ def _set_sqlite_pragma(dbapi_connection, connection_recor):
 db = SQLAlchemy(app)
 now = datetime.now()
 
-# Must be run everytime the database's structure is changed.
-# from server import db
-# db.create_all()
-# exit()
+# Creates the database file if it doesn't exist.
+if not file_exists('sqlitedb.file'):
+    db.create_all()
+    exit()
 
 # models
 class Hierarchy(db.Model):
@@ -36,6 +39,7 @@ class Hierarchy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
     description = db.Column(db.String(200))
+    nodes = db.relationship("Node", cascade="all, delete")
 
 class Node(db.Model):
     __tablename__ = "node"
@@ -43,6 +47,7 @@ class Node(db.Model):
     name = db.Column(db.String(50))
     weight = db.Column(db.Float)
     hierarchy_id = db.Column(db.Integer, db.ForeignKey("hierarchy.id"), nullable=False)
+    measurements = db.relationship("Measurement", cascade="all, delete")
 
 class Measurement(db.Model):
     __tablename__ = "measurement"
@@ -124,11 +129,14 @@ def get_all_hierarchies_descending():
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['GET'])
 def get_one_hierarchy(hierarchy_id):
-    pass
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['DELETE'])
 def delete_hierarchy(hierarchy_id):
-    pass
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    db.session.delete(hierarchy)
+    db.session.commit()
+    return jsonify({}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
