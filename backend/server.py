@@ -90,17 +90,37 @@ def create_hierarchy():
             db.session.add(new_measurement)
             db.session.commit() # measurement now has a unique id
 
-
-
     return jsonify({"message": "Hierarchy Created"}, 200)
 
 @app.route("/hierarchy/ascending_id", methods=['GET'])
 def get_all_hierarchies_ascending():
-    pass
+    hierarchies = Hierarchy.query.all()
+    all_hierarchies = []
+
+    for hierarchy in hierarchies:
+        all_hierarchies.append({
+            "id": hierarchy.id,
+            "name": hierarchy.name,
+            "description": hierarchy.description,
+        })
+
+    return jsonify(all_hierarchies), 200
 
 @app.route("/hierarchy/descending_id", methods=['GET'])
 def get_all_hierarchies_descending():
-    pass
+    hierarchies = Hierarchy.query.all()
+    all_hierarchies = []
+
+    for hierarchy in hierarchies:
+        all_hierarchies.append({
+            "id": hierarchy.id,
+            "name": hierarchy.name,
+            "description": hierarchy.description,
+        })
+    
+    all_hierarchies.reverse()
+
+    return jsonify(all_hierarchies), 200
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['GET'])
 def get_one_hierarchy(hierarchy_id):
