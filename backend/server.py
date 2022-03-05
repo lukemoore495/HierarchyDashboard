@@ -143,6 +143,7 @@ def get_one_hierarchy(hierarchy_id):
     node_list = []
     for node in nodes:
         new_node = {
+            "id": node.id,
             "name": node.name,
             "weight": node.weight,
         }
@@ -153,6 +154,7 @@ def get_one_hierarchy(hierarchy_id):
         measurement_list = []
         for measurement in measurements:
             new_measurement = {
+                "id": measurement.id,
                 "name": measurement.name,
                 "type": measurement.type,
             }

@@ -12,7 +12,7 @@ Should be created after making venv.
 ```  
 
 ## Create the Database
-For some reason ```db.create_all()``` doesn't place nice when run in server.py  
+For some reason ```db.create_all()``` doesn't play nice when run in server.py  
 ```
 python3
 from server import db
@@ -22,5 +22,5 @@ exit()
 
 ## Run the Server
 ```
-python3 sever.py
+python3 server.py
 ```
