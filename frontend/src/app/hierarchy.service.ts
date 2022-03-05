@@ -11,11 +11,11 @@ import { SensitivityAnalysis, SensitivityAnalysisReport } from "./sensitivity-an
 export class HierarchyService {
 
     getHierarchies(): Observable<Hierarchy[]> {
-        return of([SimpleHierarchy]);
+        return of([RRRHierarchy]);
     }
 
     createHierarchy(hierarchy: Hierarchy): Observable<Hierarchy> {
-        return of(SimpleHierarchy);
+        return of(RRRHierarchy);
     }
 
     getSensitivityAnalysis(parentNodeId: string): Observable<SensitivityAnalysisReport>{
