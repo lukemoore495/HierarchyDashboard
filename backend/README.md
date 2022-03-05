@@ -1,4 +1,26 @@
 # Working on the Backend
 ## Create the Virtual Environment
-1. python3 -m venv venv
-2. pip install -r requirements.txt
+```
+python3 -m venv venv
+pip install -r requirements.txt
+```
+
+## Running the Virtual Environment
+Should be created after making venv. 
+```
+. venv/bin/activate
+```  
+
+## Create the Database
+For some reason ```db.create_all()``` doesn't place nice when run in server.py  
+```
+python3
+from server import db
+db.create_all()
+exit()
+```
+
+## Run the Server
+```
+python3 sever.py
+```

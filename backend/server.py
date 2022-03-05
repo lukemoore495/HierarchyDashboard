@@ -1,4 +1,3 @@
-from genericpath import exists
 from sqlite3 import Connection as SQLite3Connection
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
@@ -6,7 +5,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 from datetime import datetime
-from os.path import exists as file_exists
+
 
 # app
 app = Flask(__name__)
@@ -26,12 +25,8 @@ def _set_sqlite_pragma(dbapi_connection, connection_recor):
         cursor.close()
 
 db = SQLAlchemy(app)
-now = datetime.now()
+now = datetime.now() # Could be used in the futre if we want to add time modified
 
-# Creates the database file if it doesn't exist.
-if not file_exists('sqlitedb.file'):
-    db.create_all()
-    exit()
 
 # models
 class Hierarchy(db.Model):
@@ -41,6 +36,7 @@ class Hierarchy(db.Model):
     description = db.Column(db.String(200))
     nodes = db.relationship("Node", cascade="all, delete")
 
+
 class Node(db.Model):
     __tablename__ = "node"
     id = db.Column(db.Integer, primary_key=True)
@@ -49,6 +45,7 @@ class Node(db.Model):
     hierarchy_id = db.Column(db.Integer, db.ForeignKey("hierarchy.id"), nullable=False)
     measurements = db.relationship("Measurement", cascade="all, delete")
 
+
 class Measurement(db.Model):
     __tablename__ = "measurement"
     id = db.Column(db.Integer, primary_key=True)
@@ -56,10 +53,12 @@ class Measurement(db.Model):
     type = db.Column(db.String(50))
     node_id = db.Column(db.Integer, db.ForeignKey("node.id"), nullable=False)
 
+
 # routes
 @app.route("/", methods=['GET'])
 def hello_world():
     return "<p>Hello World!</p>"
+
 
 @app.route("/hierarchy", methods=['POST'])
 def create_hierarchy():
@@ -97,6 +96,7 @@ def create_hierarchy():
 
     return jsonify({"message": "Hierarchy Created"}, 200)
 
+
 @app.route("/hierarchy/ascending_id", methods=['GET'])
 def get_all_hierarchies_ascending():
     hierarchies = Hierarchy.query.all()
@@ -110,6 +110,7 @@ def get_all_hierarchies_ascending():
         })
 
     return jsonify(all_hierarchies), 200
+
 
 @app.route("/hierarchy/descending_id", methods=['GET'])
 def get_all_hierarchies_descending():
@@ -126,6 +127,7 @@ def get_all_hierarchies_descending():
     all_hierarchies.reverse()
 
     return jsonify(all_hierarchies), 200
+
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['GET'])
 def get_one_hierarchy(hierarchy_id):
@@ -169,6 +171,7 @@ def delete_hierarchy(hierarchy_id):
     db.session.delete(hierarchy)
     db.session.commit()
     return jsonify({}), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)
