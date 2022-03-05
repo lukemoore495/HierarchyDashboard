@@ -1,5 +1,6 @@
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { Hierarchy, Node } from '../Hierarchy';
 import { getSelectedHierarchy } from '../state';
 import { HierarchyState } from '../state/hierarchy.reducer';
@@ -9,7 +10,7 @@ import { HierarchyState } from '../state/hierarchy.reducer';
     templateUrl: './hierarchical-view.component.html',
     styleUrls: ['./hierarchical-view.component.scss']
 })
-export class HierarchicalViewComponent implements OnInit, AfterViewInit {
+export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestroy {
     hierarchyName?: string;
     hierarchyLevels: Node[][] = [];
     elem: Element | null = null;
@@ -18,11 +19,12 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
     viewBoxWidth = 20000;
     @ViewChildren('nodes') private nodes?: QueryList<ElementRef<HTMLDivElement>>;
     @ViewChild('svg') svg?: ElementRef;
+    subscriptions: Subscription[] = [];
 
     constructor(private store: Store<HierarchyState>, private renderer: Renderer2) { }
 
     ngOnInit(): void {   
-        this.store.select(getSelectedHierarchy)
+        const sub = this.store.select(getSelectedHierarchy)
             .subscribe(hierarchy => {
                 if (hierarchy) {
                     this.hierarchyName = hierarchy.name;
@@ -39,6 +41,11 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit {
                     this.viewBoxWidth = (maxWidth + 1) * 300;
                 }
             });
+        this.subscriptions.push(sub);
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
     ngAfterViewInit() {
