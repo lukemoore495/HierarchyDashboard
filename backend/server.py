@@ -130,6 +130,38 @@ def get_all_hierarchies_descending():
 @app.route("/hierarchy/<hierarchy_id>", methods=['GET'])
 def get_one_hierarchy(hierarchy_id):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    hier_dict = {
+        "id": hierarchy.id,
+        "name": hierarchy.name,
+        "description": hierarchy.description,
+    }
+
+    # Parse nodes and append dicts to list
+    nodes = Node.query.filter_by(hierarchy_id=hierarchy.id)
+    node_list = []
+    for node in nodes:
+        new_node = {
+            "name": node.name,
+            "weight": node.weight,
+        }
+        node_list.append(new_node)
+
+        # Parse and create Measurements
+        measurements = Measurement.query.filter_by(node_id=node.id)
+        measurement_list = []
+        for measurement in measurements:
+            new_measurement = {
+                "name": measurement.name,
+                "type": measurement.type,
+            }
+            measurement_list.append(new_measurement)
+        
+        new_node["measurements"] = measurement_list
+    
+    hier_dict["nodes"] = node_list
+
+    return jsonify(hier_dict), 200
+
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['DELETE'])
 def delete_hierarchy(hierarchy_id):
