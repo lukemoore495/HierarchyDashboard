@@ -12,6 +12,7 @@ app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlitedb.file"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = 0
+app.config["JSON_SORT_KEYS"] = False
 
 # configure sqlite3 to enforce foreign key constraints
 # Foreign key constraints prevent non-SQL manipulation of the database
@@ -32,6 +33,7 @@ now = datetime.now() # Could be used in the futre if we want to add time modifie
 class Hierarchy(db.Model):
     __tablename__ = "hierarchy"
     id = db.Column(db.Integer, primary_key=True)
+    
     name = db.Column(db.String(50))
     description = db.Column(db.String(200))
     nodes = db.relationship("Node", cascade="all, delete")
@@ -40,24 +42,67 @@ class Hierarchy(db.Model):
 class Node(db.Model):
     __tablename__ = "node"
     id = db.Column(db.Integer, primary_key=True)
+    hierarchy_id = db.Column(db.Integer, db.ForeignKey("hierarchy.id"), nullable=False)
+    parent_id = db.Column(db.Integer, db.ForeignKey("node.id"))
+
     name = db.Column(db.String(50))
     weight = db.Column(db.Float)
-    hierarchy_id = db.Column(db.Integer, db.ForeignKey("hierarchy.id"), nullable=False)
+
+    children = db.relationship("Node", cascade="all, delete")
     measurements = db.relationship("Measurement", cascade="all, delete")
 
 
 class Measurement(db.Model):
     __tablename__ = "measurement"
     id = db.Column(db.Integer, primary_key=True)
+    hierarchy_id = db.Column(db.Integer, db.ForeignKey("hierarchy.id"), nullable=False)
+    node_id = db.Column(db.Integer, db.ForeignKey("node.id"), nullable=False)
+    
     name = db.Column(db.String(50))
     type = db.Column(db.String(50))
-    node_id = db.Column(db.Integer, db.ForeignKey("node.id"), nullable=False)
+    value_function = db.Column(db.String(50))
 
 
 # routes
 @app.route("/", methods=['GET'])
 def hello_world():
     return "<p>Hello World!</p>"
+
+
+def create_measurements(measurements, hierarchy_id, node_id):
+    for measurement in measurements:
+        new_measurement=Measurement(
+            node_id=node_id,
+            hierarchy_id=hierarchy_id,
+
+            name=measurement["measurementName"],
+            type=measurement["measurementType"],
+            
+        )
+        db.session.add(new_measurement)
+        db.session.commit() # measurement now has a unique id
+
+
+def create_node(node, hierarchy_id, parent_id=None):
+    new_node = Node(
+            hierarchy_id=hierarchy_id,
+            parent_id=parent_id,
+            name=node["name"],
+            weight=node["weight"],
+        )
+    db.session.add(new_node)
+    db.session.commit() # node now has a unique id
+
+    return new_node.id
+
+
+def create_nodes(nodes, hierarchy_id, parent_id=None):
+    for node in nodes:
+        node_id = create_node(node, hierarchy_id, parent_id)
+        if node["children"] == []:
+            create_measurements(node["measurements"], hierarchy_id, node_id)
+        else:
+            create_nodes(node["children"], hierarchy_id, node_id)
 
 
 @app.route("/hierarchy", methods=['POST'])
@@ -74,25 +119,7 @@ def create_hierarchy():
 
     # Parse and create Nodes
     nodes = data["nodes"]
-    for node in nodes:
-        new_node = Node(
-            name=node["name"],
-            weight=node["weight"],
-            hierarchy_id=new_hierarchy.id
-        )
-        db.session.add(new_node)
-        db.session.commit() # node now has a unique id
-
-        # Parse and create Measurements
-        measurements = node["measurements"]
-        for measurement in measurements:
-            new_measurement=Measurement(
-                name=measurement["measurementName"],
-                type=measurement["measurementType"],
-                node_id=new_node.id
-            )
-            db.session.add(new_measurement)
-            db.session.commit() # measurement now has a unique id
+    create_nodes(nodes, new_hierarchy.id)
 
     return jsonify({"message": "Hierarchy Created"}, 200)
 
@@ -129,6 +156,47 @@ def get_all_hierarchies_descending():
     return jsonify(all_hierarchies), 200
 
 
+def get_measurements(hierarchy_id, node_id):
+    measurements = Measurement.query.filter_by(hierarchy_id=hierarchy_id, node_id=node_id)
+    measurement_list = []
+
+    for measurement in measurements:
+        new_measurement = {
+            "id": measurement.id,
+            "hierarchy_id": measurement.hierarchy_id,
+            "node_id": measurement.node_id,
+
+            "name": measurement.name,
+            "type": measurement.type,
+            "value function": measurement.value_function,
+        }
+        measurement_list.append(new_measurement)
+    
+    return measurement_list
+
+
+def get_nodes(hierarchy_id, parent_id):
+    nodes = Node.query.filter_by(hierarchy_id=hierarchy_id, parent_id=parent_id)
+    node_list = []
+
+    for node in nodes:
+        new_node = {
+            "id": node.id,
+            "hierarchy_id": node.hierarchy_id,
+            "parent_id": node.parent_id,
+
+            "name": node.name,
+            "weight": node.weight,
+        }
+        
+        new_node["measurements"] = get_measurements(hierarchy_id, node.id)
+        new_node["children"] = get_nodes(hierarchy_id, node.id)
+
+        node_list.append(new_node)
+        
+    return node_list
+
+
 @app.route("/hierarchy/<hierarchy_id>", methods=['GET'])
 def get_one_hierarchy(hierarchy_id):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
@@ -138,31 +206,8 @@ def get_one_hierarchy(hierarchy_id):
         "description": hierarchy.description,
     }
 
-    # Parse nodes and append dicts to list
-    nodes = Node.query.filter_by(hierarchy_id=hierarchy.id)
-    node_list = []
-    for node in nodes:
-        new_node = {
-            "id": node.id,
-            "name": node.name,
-            "weight": node.weight,
-        }
-        node_list.append(new_node)
-
-        # Parse and create Measurements
-        measurements = Measurement.query.filter_by(node_id=node.id)
-        measurement_list = []
-        for measurement in measurements:
-            new_measurement = {
-                "id": measurement.id,
-                "name": measurement.name,
-                "type": measurement.type,
-            }
-            measurement_list.append(new_measurement)
-        
-        new_node["measurements"] = measurement_list
-    
-    hier_dict["nodes"] = node_list
+    # Parse nodes and add list of dicts to hier_dict
+    hier_dict["nodes"] = get_nodes(hierarchy_id, None)
 
     return jsonify(hier_dict), 200
 
