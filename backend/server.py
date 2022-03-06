@@ -189,8 +189,16 @@ def get_nodes(hierarchy_id, parent_id):
             "weight": node.weight,
         }
         
-        new_node["measurements"] = get_measurements(hierarchy_id, node.id)
-        new_node["children"] = get_nodes(hierarchy_id, node.id)
+        measurements_list = get_measurements(hierarchy_id, node.id)
+        nodes_list = get_nodes(hierarchy_id, node.id)
+
+        # Ensures the empty list is first on returned .json
+        if measurements_list == []:
+            new_node["measurements"] = measurements_list
+            new_node["children"] = nodes_list
+        else:
+            new_node["children"] = nodes_list
+            new_node["measurements"] = measurements_list
 
         node_list.append(new_node)
         
