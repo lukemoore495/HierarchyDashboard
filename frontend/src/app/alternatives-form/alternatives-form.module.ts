@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { MeasurementsFormComponent } from "./measurements-form.component";
+import { AlternativesFormComponent } from "./alternatives-form.component";
 import { MeasurementsPanelComponent } from "./measurements-panel/measurements-panel.component";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -14,7 +14,7 @@ import { MatListModule } from '@angular/material/list';
 
 @NgModule({
     declarations: [
-        MeasurementsFormComponent,
+        AlternativesFormComponent,
         MeasurementsPanelComponent
     ],
     imports: [
@@ -31,8 +31,8 @@ import { MatListModule } from '@angular/material/list';
         MatListModule
     ],
     exports: [
-        MeasurementsFormComponent,
+        AlternativesFormComponent,
         MeasurementsPanelComponent
     ]
   })
-export class MeasurementsFormModule { }
+export class AlternativesFormModule { }

@@ -12,11 +12,13 @@ import { ImportanceValueModule } from './importance-value/importance-value.modul
 import { HierarchicalViewModule } from './hierarchical-view/hierarchical-view.module';
 import { DashModule } from './dash/dash.module';
 import { NavModule } from './nav/nav.module';
+import { SensitivityAnalysisComponent } from './sensitivity-analysis/sensitivity-analysis.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SensitivityAnalysisComponent
   ],
   imports: [
     BrowserModule,

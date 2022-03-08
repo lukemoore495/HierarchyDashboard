@@ -6,11 +6,11 @@ import { getSelectedHierarchy } from '../state';
 import { HierarchyState } from '../state/hierarchy.reducer';
 
 @Component({
-    selector: 'app-measurements-form',
-    templateUrl: './measurements-form.component.html',
-    styleUrls: ['./measurements-form.component.scss']
+    selector: 'app-alternatives-form',
+    templateUrl: './alternatives-form.component.html',
+    styleUrls: ['./alternatives-form.component.scss']
 })
-export class MeasurementsFormComponent implements OnInit {
+export class AlternativesFormComponent implements OnInit {
     selectedHierarchy$?: Observable<Hierarchy | null | undefined>;
     measurementNodes: Node[] | null = null;
     currentMeasurements: Measurement[] = [];
