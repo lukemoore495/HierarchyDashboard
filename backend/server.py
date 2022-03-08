@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 from datetime import datetime
+from pathlib import Path
 
 
 # app
@@ -38,6 +39,18 @@ class Hierarchy(db.Model):
     description = db.Column(db.String(200))
     nodes = db.relationship("Node", cascade="all, delete")
 
+    @classmethod
+    def create(cls, hierarchy_data):
+        new_hierarchy = Hierarchy(
+            name=hierarchy_data["name"],
+            description=hierarchy_data["description"],
+        )
+
+        db.session.add(new_hierarchy)
+        db.session.commit() # hierarchy now has a unique id
+
+        return new_hierarchy.id
+
 
 class Node(db.Model):
     __tablename__ = "node"
@@ -51,6 +64,30 @@ class Node(db.Model):
     children = db.relationship("Node", cascade="all, delete")
     measurements = db.relationship("Measurement", cascade="all, delete")
 
+    @classmethod
+    def create(cls, node_data, hierarchy_id, parent_id=None):
+        new_node = Node(
+            hierarchy_id=hierarchy_id,
+            parent_id=parent_id,
+            name=node_data["name"],
+            weight=node_data["weight"],
+        )
+
+        db.session.add(new_node)
+        db.session.commit() # node now has a unique id
+
+        return new_node.id
+
+    @classmethod
+    def create_nodes(cls, nodes_lst, hierarchy_id, parent_id=None):
+        for node_data in nodes_lst:
+            node_id = Node.create(node_data, hierarchy_id, parent_id)
+
+            if node_data["children"] == []:
+                Measurement.create_measurements(node_data["measurements"], hierarchy_id, node_id)
+            else:
+                Node.create_nodes(node_data["children"], hierarchy_id, node_id)
+
 
 class Measurement(db.Model):
     __tablename__ = "measurement"
@@ -62,6 +99,27 @@ class Measurement(db.Model):
     type = db.Column(db.String(50))
     value_function = db.Column(db.String(50))
 
+    @classmethod
+    def create(cls, measurement_data, hierarchy_id, node_id):
+        new_measurement=Measurement(
+            node_id=node_id,
+            hierarchy_id=hierarchy_id,
+
+            name=measurement_data["measurementName"],
+            type=measurement_data["measurementType"],
+                
+        )
+
+        db.session.add(new_measurement)
+        db.session.commit() # measurement now has a unique id
+
+        return new_measurement.id
+
+    @classmethod
+    def create_measurements(cls, measurements_lst, hierarchy_id, node_id):
+        for measurement_data in measurements_lst:
+            Measurement.create(measurement_data, hierarchy_id, node_id)
+
 
 # routes
 @app.route("/", methods=['GET'])
@@ -69,57 +127,17 @@ def hello_world():
     return "<p>Hello World!</p>"
 
 
-def create_measurements(measurements, hierarchy_id, node_id):
-    for measurement in measurements:
-        new_measurement=Measurement(
-            node_id=node_id,
-            hierarchy_id=hierarchy_id,
-
-            name=measurement["measurementName"],
-            type=measurement["measurementType"],
-            
-        )
-        db.session.add(new_measurement)
-        db.session.commit() # measurement now has a unique id
-
-
-def create_node(node, hierarchy_id, parent_id=None):
-    new_node = Node(
-            hierarchy_id=hierarchy_id,
-            parent_id=parent_id,
-            name=node["name"],
-            weight=node["weight"],
-        )
-    db.session.add(new_node)
-    db.session.commit() # node now has a unique id
-
-    return new_node.id
-
-
-def create_nodes(nodes, hierarchy_id, parent_id=None):
-    for node in nodes:
-        node_id = create_node(node, hierarchy_id, parent_id)
-        if node["children"] == []:
-            create_measurements(node["measurements"], hierarchy_id, node_id)
-        else:
-            create_nodes(node["children"], hierarchy_id, node_id)
-
-
 @app.route("/hierarchy", methods=['POST'])
 def create_hierarchy():
     # Get data from .json sent with request
     data = request.get_json()
+
     # Create Hierarchy
-    new_hierarchy = Hierarchy(
-        name=data["name"],
-        description=data["description"],
-    )
-    db.session.add(new_hierarchy)
-    db.session.commit() # hierarchy now has a unique id
+    new_hierarchy_id = Hierarchy.create(data)
 
     # Parse and create Nodes
-    nodes = data["nodes"]
-    create_nodes(nodes, new_hierarchy.id)
+    nodes_lst = data["nodes"]
+    Node.create_nodes(nodes_lst, new_hierarchy_id)
 
     return jsonify({"message": "Hierarchy Created"}, 200)
 
@@ -223,10 +241,17 @@ def get_one_hierarchy(hierarchy_id):
 @app.route("/hierarchy/<hierarchy_id>", methods=['DELETE'])
 def delete_hierarchy(hierarchy_id):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    
     db.session.delete(hierarchy)
     db.session.commit()
+
     return jsonify({}), 200
 
 
 if __name__ == "__main__":
+    # Create the database if it doesn't exist
+    path = Path("./sqlitedb.file")
+    if not path.is_file():
+        db.create_all()
+
     app.run(debug=True)
