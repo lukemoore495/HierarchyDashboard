@@ -15,9 +15,10 @@ namespace Models
         public int Weight { get; set; }
         List<Node> Children { get; set; }
         public string icon { get; set; }
-  }
+        public List<MeasurementDefinition> measurements { get; set; }
+    }
 
-  public class LeafNode: Node
+    public class MeasurementDefinition
     {
         public string Id { get; set; }
         public string MeasurementName { get; set; }
@@ -30,7 +31,6 @@ namespace Models
         public string ID { get; set; }
         public string Name { get; set; }  
         public List<Measurement> Measurements { get; set; }
-        public int Rank { get; set; }
     }
 
     public class Measurement
