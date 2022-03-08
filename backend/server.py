@@ -59,18 +59,20 @@ class Node(db.Model):
     parent_id = db.Column(db.Integer, db.ForeignKey("node.id"))
 
     name = db.Column(db.String(50))
+    icon = db.Column(db.String(50))
     weight = db.Column(db.Float)
 
     children = db.relationship("Node", cascade="all, delete")
     measurements = db.relationship("Measurement", cascade="all, delete")
 
     @classmethod
-    def create(cls, node_data, hierarchy_id, parent_id=None):
+    def create(cls, node_data, hierarchy_id, parent_id=None, icon=None):
         new_node = Node(
             hierarchy_id=hierarchy_id,
             parent_id=parent_id,
             name=node_data["name"],
             weight=node_data["weight"],
+            icon=icon,
         )
 
         db.session.add(new_node)
@@ -81,7 +83,13 @@ class Node(db.Model):
     @classmethod
     def create_nodes(cls, nodes_lst, hierarchy_id, parent_id=None):
         for node_data in nodes_lst:
-            node_id = Node.create(node_data, hierarchy_id, parent_id)
+            # Check if icon exists
+            if "icon" in node_data:
+                icon = node_data["icon"]
+            else:
+                icon = None
+
+            node_id = Node.create(node_data, hierarchy_id, parent_id, icon)
 
             if node_data["children"] == []:
                 Measurement.create_measurements(node_data["measurements"], hierarchy_id, node_id)
@@ -107,6 +115,7 @@ class Measurement(db.Model):
 
             name=measurement_data["measurementName"],
             type=measurement_data["measurementType"],
+
                 
         )
 
@@ -205,6 +214,7 @@ def get_nodes(hierarchy_id, parent_id):
 
             "name": node.name,
             "weight": node.weight,
+            "icon": node.icon,
         }
         
         measurements_list = get_measurements(hierarchy_id, node.id)
@@ -241,7 +251,7 @@ def get_one_hierarchy(hierarchy_id):
 @app.route("/hierarchy/<hierarchy_id>", methods=['DELETE'])
 def delete_hierarchy(hierarchy_id):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
-    
+
     db.session.delete(hierarchy)
     db.session.commit()
 
