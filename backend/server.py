@@ -115,8 +115,6 @@ class Measurement(db.Model):
 
             name=measurement_data["measurementName"],
             type=measurement_data["measurementType"],
-
-                
         )
 
         db.session.add(new_measurement)
@@ -256,6 +254,26 @@ def delete_hierarchy(hierarchy_id):
     db.session.commit()
 
     return jsonify({}), 200
+
+
+@app.route("/node/<node_id>", methods=['DELETE'])
+def delete_node(node_id):
+    node = Node.query.filter_by(id=node_id).first()
+
+    db.session.delete(node)
+    db.session.commit()
+
+    return jsonify({}, 200)
+
+
+@app.route("/measurement/<measurement_id>", methods=['DELETE'])
+def delete_measurement(measurement_id):
+    measurement = Measurement.query.filter_by(id=measurement_id).first()
+
+    db.session.delete(measurement)
+    db.session.commit()
+
+    return jsonify({}, 200)
 
 
 if __name__ == "__main__":
