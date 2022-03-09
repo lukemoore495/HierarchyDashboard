@@ -96,6 +96,41 @@ class Node(db.Model):
             else:
                 Node.create_nodes(node_data["children"], hierarchy_id, node_id)
 
+    @classmethod
+    def get_all(cls, hierarchy_id, parent_id):
+        return Node.query.filter_by(hierarchy_id=hierarchy_id, parent_id=parent_id)
+
+    @classmethod
+    def get_list(cls, hierarchy_id, parent_id):
+        nodes = Node.get_all(hierarchy_id, parent_id)
+        node_list = []
+
+        for node in nodes:
+            new_node = {
+                "id": node.id,
+                "hierarchy_id": node.hierarchy_id,
+                "parent_id": node.parent_id,
+
+                "name": node.name,
+                "weight": node.weight,
+                "icon": node.icon,
+            }
+            
+            measurements_list = Measurement.get_list(hierarchy_id, node.id)
+            nodes_list = Node.get_list(hierarchy_id, node.id)
+
+            # Ensures the empty list is first on returned .json
+            if measurements_list == []:
+                new_node["measurements"] = measurements_list
+                new_node["children"] = nodes_list
+            else:
+                new_node["children"] = nodes_list
+                new_node["measurements"] = measurements_list
+
+            node_list.append(new_node)
+            
+        return node_list
+
 
 class Measurement(db.Model):
     __tablename__ = "measurement"
@@ -126,6 +161,29 @@ class Measurement(db.Model):
     def create_measurements(cls, measurements_lst, hierarchy_id, node_id):
         for measurement_data in measurements_lst:
             Measurement.create(measurement_data, hierarchy_id, node_id)
+
+    @classmethod
+    def get_all(cls, hierarchy_id, node_id):
+        return Measurement.query.filter_by(hierarchy_id=hierarchy_id, node_id=node_id)
+
+    @classmethod
+    def get_list(cls, hierarchy_id, node_id):
+        measurements = Measurement.get_all(hierarchy_id, node_id)
+        measurement_list = []
+
+        for measurement in measurements:
+            new_measurement = {
+                "id": measurement.id,
+                "hierarchy_id": measurement.hierarchy_id,
+                "node_id": measurement.node_id,
+
+                "name": measurement.name,
+                "type": measurement.type,
+                "value function": measurement.value_function,
+            }
+            measurement_list.append(new_measurement)
+        
+        return measurement_list
 
 
 # routes
@@ -181,56 +239,6 @@ def get_all_hierarchies_descending():
     return jsonify(all_hierarchies), 200
 
 
-def get_measurements(hierarchy_id, node_id):
-    measurements = Measurement.query.filter_by(hierarchy_id=hierarchy_id, node_id=node_id)
-    measurement_list = []
-
-    for measurement in measurements:
-        new_measurement = {
-            "id": measurement.id,
-            "hierarchy_id": measurement.hierarchy_id,
-            "node_id": measurement.node_id,
-
-            "name": measurement.name,
-            "type": measurement.type,
-            "value function": measurement.value_function,
-        }
-        measurement_list.append(new_measurement)
-    
-    return measurement_list
-
-
-def get_nodes(hierarchy_id, parent_id):
-    nodes = Node.query.filter_by(hierarchy_id=hierarchy_id, parent_id=parent_id)
-    node_list = []
-
-    for node in nodes:
-        new_node = {
-            "id": node.id,
-            "hierarchy_id": node.hierarchy_id,
-            "parent_id": node.parent_id,
-
-            "name": node.name,
-            "weight": node.weight,
-            "icon": node.icon,
-        }
-        
-        measurements_list = get_measurements(hierarchy_id, node.id)
-        nodes_list = get_nodes(hierarchy_id, node.id)
-
-        # Ensures the empty list is first on returned .json
-        if measurements_list == []:
-            new_node["measurements"] = measurements_list
-            new_node["children"] = nodes_list
-        else:
-            new_node["children"] = nodes_list
-            new_node["measurements"] = measurements_list
-
-        node_list.append(new_node)
-        
-    return node_list
-
-
 @app.route("/hierarchy/<hierarchy_id>", methods=['GET'])
 def get_one_hierarchy(hierarchy_id):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
@@ -241,7 +249,7 @@ def get_one_hierarchy(hierarchy_id):
     }
 
     # Parse nodes and add list of dicts to hier_dict
-    hier_dict["nodes"] = get_nodes(hierarchy_id, None)
+    hier_dict["nodes"] = Node.get_list(hierarchy_id, None)
 
     return jsonify(hier_dict), 200
 
