@@ -1,7 +1,28 @@
 .chart{
-    margin: 2rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-top: 2rem;
+}
+
+.slider-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .slider{
         margin-top: 2rem;
-        width: 100%;
+        width: 40%;
+    }
+}
+
+.form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .input{
+        font-size: 0.7rem;
+    }
+    .button{
+        margin-bottom: 0.7rem;
+        margin-left: 0.7rem;
     }
 }

@@ -4,8 +4,24 @@
         [options]="lineChartOptions"
         [type]="lineChartType">
       </canvas>
-      <mat-slider class="slider"
-        [max]="1.0" [min]="0" [step]="0.1"
-        [thumbLabel]="true">
-    </mat-slider>
+</div>
+<div class="slider-container">
+  <mat-slider class="slider"
+    [max]="1.0" [min]="0" [step]="0.1"
+    [thumbLabel]="true"
+    [value]="sliderValue"
+    (change)="onSliderChange($event)"
+    (input)="onSliderMove($event)">
+  </mat-slider>
+</div>
+<div class="form">
+  <form>
+    <mat-form-field class="input" appearance="outline">
+      <input matInput class="form-control field">
+    </mat-form-field>
+  </form>
+  <button mat-raised-button color="accent" class="button">
+    <mat-icon>add</mat-icon>
+    Add X-Value
+  </button>
 </div>
