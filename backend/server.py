@@ -145,8 +145,9 @@ class Measurement(db.Model):
     @classmethod
     def create(cls, measurement_data, hierarchy_id, node_id):
         new_measurement=Measurement(
-            node_id=node_id,
             hierarchy_id=hierarchy_id,
+            node_id=node_id,
+            
 
             name=measurement_data["measurementName"],
             type=measurement_data["measurementType"],
@@ -205,6 +206,41 @@ def create_hierarchy():
     Node.create_nodes(nodes_lst, new_hierarchy_id)
 
     return jsonify({"message": "Hierarchy Created"}, 200)
+
+
+# TODO Make more straightforward
+# Currently has to check that the field exist in the dict.
+@app.route("/hierarchy/node", methods=['POST'])
+def create_node():
+    data = request.get_json()
+
+    if "hierarchy_id" in data and "parent_id" in data and "icon" in data:
+        Node.create(
+            data,
+            hierarchy_id=data["hierarchy_id"],
+            parent_id=data["parent_id"],
+            icon=data["icon"]
+        )
+
+        return jsonify({"message": "Node Created"}, 200)
+    else:
+        return jsonify({"message": "Insufficient Data"}, 422)
+
+
+@app.route("/hierarchy/measurement", methods=['POST'])
+def create_measurement():
+    data = request.get_json()
+
+    if "hierarchy_id" in data and "node_id" in data:
+        Measurement.create(
+            data,
+            hierarchy_id=data["hierarchy_id"],
+            node_id=data["node_id"],
+        )
+
+        return jsonify({"message": "Node Created"}, 200)
+    else:
+        return jsonify({"message": "Insufficient Data"}, 422)
 
 
 @app.route("/hierarchy/ascending_id", methods=['GET'])
