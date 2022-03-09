@@ -1,5 +1,7 @@
 import { NgModule } from "@angular/core";
 import { NgChartsModule } from 'ng2-charts';
+import { MatSliderModule} from '@angular/material/slider';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { SensitivityAnalysisComponent } from "./sensitivity-analysis.component";
 
 @NgModule({
@@ -7,7 +9,9 @@ import { SensitivityAnalysisComponent } from "./sensitivity-analysis.component";
         SensitivityAnalysisComponent
     ],
     imports: [
-        NgChartsModule
+        NgChartsModule,
+        MatSliderModule,
+        MatFormFieldModule
     ],
     exports: [
         SensitivityAnalysisComponent

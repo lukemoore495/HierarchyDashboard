@@ -40,7 +40,7 @@ export class SensitivityAnalysisComponent implements OnInit, AfterViewInit {
       },
       {
         data: [1, 0.95, 0.9, 0.85, 0.75, 0.7, 0.65, 0.6, 0.55, 0.5, 0.45],
-        label: 'Economic Opportuniteis',
+        label: 'Economic Opportunities',
         backgroundColor: 'rgba(148,159,177,0.2)',
         fill: false,
       },
