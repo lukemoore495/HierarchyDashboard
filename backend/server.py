@@ -50,6 +50,10 @@ class Hierarchy(db.Model):
         db.session.commit() # hierarchy now has a unique id
 
         return new_hierarchy.id
+    
+    @classmethod
+    def get(cls, hierarchy_id):
+        return Hierarchy.query.filter_by(id=hierarchy_id).first()
 
 
 class Node(db.Model):
@@ -95,6 +99,10 @@ class Node(db.Model):
                 Measurement.create_measurements(node_data["measurements"], hierarchy_id, node_id)
             else:
                 Node.create_nodes(node_data["children"], hierarchy_id, node_id)
+
+    @classmethod
+    def get(cls, node_id):
+        return Node.query.filter_by(id=node_id).first()
 
     @classmethod
     def get_all(cls, hierarchy_id, parent_id):
@@ -162,6 +170,10 @@ class Measurement(db.Model):
     def create_measurements(cls, measurements_lst, hierarchy_id, node_id):
         for measurement_data in measurements_lst:
             Measurement.create(measurement_data, hierarchy_id, node_id)
+
+    @classmethod
+    def get(cls, measurement_id):
+        return Measurement.query.filter_by(id=measurement_id).first()    
 
     @classmethod
     def get_all(cls, hierarchy_id, node_id):
@@ -292,7 +304,7 @@ def get_one_hierarchy(hierarchy_id):
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['DELETE'])
 def delete_hierarchy(hierarchy_id):
-    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    hierarchy = Hierarchy.get(hierarchy_id)
 
     db.session.delete(hierarchy)
     db.session.commit()
@@ -302,7 +314,7 @@ def delete_hierarchy(hierarchy_id):
 
 @app.route("/node/<node_id>", methods=['DELETE'])
 def delete_node(node_id):
-    node = Node.query.filter_by(id=node_id).first()
+    node = Node.get(node_id)
 
     db.session.delete(node)
     db.session.commit()
@@ -312,7 +324,7 @@ def delete_node(node_id):
 
 @app.route("/measurement/<measurement_id>", methods=['DELETE'])
 def delete_measurement(measurement_id):
-    measurement = Measurement.query.filter_by(id=measurement_id).first()
+    measurement = Measurement.get(measurement_id)
 
     db.session.delete(measurement)
     db.session.commit()
