@@ -106,7 +106,7 @@ class Node(db.Model):
         db.session.add(new_node)
         db.session.commit() # node now has a unique id
 
-        return new_node.id
+        return new_node
 
     @classmethod
     def create_nodes(cls, nodes_lst, hierarchy_id, parent_id=None):
@@ -132,32 +132,35 @@ class Node(db.Model):
     def get_all(cls, hierarchy_id, parent_id):
         return Node.query.filter_by(hierarchy_id=hierarchy_id, parent_id=parent_id)
 
+    def to_dict(self):
+        node_dict = {
+            "id": str(self.id),
+
+            "name": self.name,
+            "weight": self.weight,
+            "icon": self.icon,
+        }
+
+        measurements_list = Measurement.get_list(self.hierarchy_id, self.id)
+        nodes_list = Node.get_list(self.hierarchy_id, self.id)
+
+        # Ensures the empty list is first on returned .json
+        if measurements_list == []:
+            node_dict["measurements"] = measurements_list
+            node_dict["children"] = nodes_list
+        else:
+            node_dict["children"] = nodes_list
+            node_dict["measurements"] = measurements_list
+
+        return node_dict
+
     @classmethod
     def get_list(cls, hierarchy_id, parent_id):
         nodes = Node.get_all(hierarchy_id, parent_id)
         node_list = []
 
         for node in nodes:
-            new_node = {
-                "id": str(node.id),
-
-                "name": node.name,
-                "weight": node.weight,
-                "icon": node.icon,
-            }
-            
-            measurements_list = Measurement.get_list(hierarchy_id, node.id)
-            nodes_list = Node.get_list(hierarchy_id, node.id)
-
-            # Ensures the empty list is first on returned .json
-            if measurements_list == []:
-                new_node["measurements"] = measurements_list
-                new_node["children"] = nodes_list
-            else:
-                new_node["children"] = nodes_list
-                new_node["measurements"] = measurements_list
-
-            node_list.append(new_node)
+            node_list.append(node.to_dict())
             
         return node_list
 
@@ -185,7 +188,7 @@ class Measurement(db.Model):
         db.session.add(new_measurement)
         db.session.commit() # measurement now has a unique id
 
-        return new_measurement.id
+        return new_measurement
 
     @classmethod
     def create_measurements(cls, measurements_lst, hierarchy_id, node_id):
@@ -200,20 +203,24 @@ class Measurement(db.Model):
     def get_all(cls, hierarchy_id, node_id):
         return Measurement.query.filter_by(hierarchy_id=hierarchy_id, node_id=node_id)
 
+    def to_dict(self):
+        measurement_dict = {
+                "id": str(self.id),
+
+                "name": self.name,
+                "type": self.type,
+                "valueFunction": self.value_function,
+            }
+        
+        return measurement_dict
+
     @classmethod
     def get_list(cls, hierarchy_id, node_id):
         measurements = Measurement.get_all(hierarchy_id, node_id)
         measurement_list = []
 
         for measurement in measurements:
-            new_measurement = {
-                "id": str(measurement.id),
-
-                "name": measurement.name,
-                "type": measurement.type,
-                "valueFunction": measurement.value_function,
-            }
-            measurement_list.append(new_measurement)
+            measurement_list.append(measurement.to_dict())
         
         return measurement_list
 
@@ -243,7 +250,7 @@ def create_hierarchy():
     return jsonify(201, hierarchy_dict)
 
 
-@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/", methods=['POST'])
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
 def create_node(hierarchy_id, parent_id):
     data = request.get_json()
 
@@ -262,7 +269,7 @@ def create_node(hierarchy_id, parent_id):
         icon=icon
     )
 
-    return jsonify(200, new_node)
+    return jsonify(201, new_node.to_dict())
 
 
 @app.route("/hierarchy/<hierarchy_id>/node/<node_id>/measurement", methods=['POST'])
@@ -275,7 +282,7 @@ def create_measurement(hierarchy_id, node_id):
         node_id=node_id,
     )
 
-    return jsonify(200, new_measurement)
+    return jsonify(201, new_measurement.to_dict())
 
 
 @app.route("/hierarchy/ascending_id", methods=['GET'])
