@@ -305,6 +305,11 @@ def get_one_hierarchy(hierarchy_id):
 def delete_hierarchy(hierarchy_id):
     hierarchy = Hierarchy.get(hierarchy_id)
 
+    # hierarchy does not exist, return 404
+    if not hierarchy:
+        message = f"Hierarchy {hierarchy_id} Does not Exist"
+        return jsonify(404, {"message": message})
+
     db.session.delete(hierarchy)
     db.session.commit()
 
@@ -316,6 +321,11 @@ def delete_hierarchy(hierarchy_id):
 def delete_node(node_id):
     node = Node.get(node_id)
 
+    # node does not exist, return 404
+    if not node:
+        message = f"Node {node_id} Does not Exist"
+        return jsonify(404, {"message": message})
+
     db.session.delete(node)
     db.session.commit()
 
@@ -326,6 +336,11 @@ def delete_node(node_id):
 @app.route("/measurement/<measurement_id>", methods=['DELETE'])
 def delete_measurement(measurement_id):
     measurement = Measurement.get(measurement_id)
+
+    # measurement does not exist, return 404
+    if not measurement:
+        message = f"Measurement {measurement_id} Does not Exist"
+        return jsonify(404, {"message": message})
 
     db.session.delete(measurement)
     db.session.commit()
