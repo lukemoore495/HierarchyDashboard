@@ -49,7 +49,7 @@ class Hierarchy(db.Model):
         db.session.add(new_hierarchy)
         db.session.commit() # hierarchy now has a unique id
 
-        return new_hierarchy.id
+        return new_hierarchy
     
     @classmethod
     def get(cls, hierarchy_id):
@@ -59,7 +59,7 @@ class Hierarchy(db.Model):
     def get_dict(cls, hierarchy_id):
         hierarchy = Hierarchy.get(hierarchy_id)
         hier_dict = {
-            "id": hierarchy.id,
+            "id": str(hierarchy.id),
             "name": hierarchy.name,
             "description": hierarchy.description,
         }
@@ -68,6 +68,16 @@ class Hierarchy(db.Model):
         hier_dict["nodes"] = Node.get_list(hierarchy_id, None)
 
         return hier_dict
+    
+    @classmethod
+    def get_list(cls):
+        hierarchies = Hierarchy.query.all()
+        all_hierarchies = []
+
+        for hierarchy in hierarchies:
+            all_hierarchies.append(Hierarchy.get_dict(hierarchy.id))
+        
+        return all_hierarchies
 
 
 class Node(db.Model):
@@ -129,9 +139,7 @@ class Node(db.Model):
 
         for node in nodes:
             new_node = {
-                "id": node.id,
-                "hierarchy_id": node.hierarchy_id,
-                "parent_id": node.parent_id,
+                "id": str(node.id),
 
                 "name": node.name,
                 "weight": node.weight,
@@ -169,7 +177,6 @@ class Measurement(db.Model):
         new_measurement=Measurement(
             hierarchy_id=hierarchy_id,
             node_id=node_id,
-            
 
             name=measurement_data["measurementName"],
             type=measurement_data["measurementType"],
@@ -200,13 +207,11 @@ class Measurement(db.Model):
 
         for measurement in measurements:
             new_measurement = {
-                "id": measurement.id,
-                "hierarchy_id": measurement.hierarchy_id,
-                "node_id": measurement.node_id,
+                "id": str(measurement.id),
 
                 "name": measurement.name,
                 "type": measurement.type,
-                "value_function": measurement.value_function,
+                "valueFunction": measurement.value_function,
             }
             measurement_list.append(new_measurement)
         
@@ -225,98 +230,75 @@ def create_hierarchy():
     data = request.get_json()
 
     # Create Hierarchy
-    new_hierarchy_id = Hierarchy.create(data)
+    new_hierarchy = Hierarchy.create(data)
 
     # Parse and create Nodes
     nodes_lst = data["nodes"]
-    Node.create_nodes(nodes_lst, new_hierarchy_id)
+    Node.create_nodes(nodes_lst, new_hierarchy.id)
 
     # Create a hierarchy dict with all needed data
-    hierarchy_dict = Hierarchy.get_dict(new_hierarchy_id)
+    hierarchy_dict = Hierarchy.get_dict(new_hierarchy.id)
 
     return jsonify(201, hierarchy_dict)
 
 
 # TODO Make more straightforward
 # Currently has to check that the field exist in the dict.
-@app.route("/hierarchy/node", methods=['POST'])
-def create_node():
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/", methods=['POST'])
+def create_node(hierarchy_id, parent_id):
     data = request.get_json()
 
-    if "hierarchy_id" in data and "parent_id" in data and "icon" in data:
-        Node.create(
-            data,
-            hierarchy_id=data["hierarchy_id"],
-            parent_id=data["parent_id"],
-            icon=data["icon"]
-        )
+    if parent_id == 0:
+        parent_id = None
 
-        return jsonify({"message": "Node Created"}, 200)
+    if "icon" in data:
+        icon = data["icon"]
     else:
-        return jsonify({"message": "Insufficient Data"}, 422)
+        icon = None
+
+    new_node = Node.create(
+        data,
+        hierarchy_id=hierarchy_id,
+        parent_id=parent_id,
+        icon=icon
+    )
+
+    return jsonify(200, new_node)
 
 
-@app.route("/hierarchy/measurement", methods=['POST'])
-def create_measurement():
+@app.route("/hierarchy/<hierarchy_id>/node/<node_id>/measurement", methods=['POST'])
+def create_measurement(hierarchy_id, node_id):
     data = request.get_json()
 
-    if "hierarchy_id" in data and "node_id" in data:
-        Measurement.create(
-            data,
-            hierarchy_id=data["hierarchy_id"],
-            node_id=data["node_id"],
-        )
+    new_measurement = Measurement.create(
+        data,
+        hierarchy_id=hierarchy_id,
+        node_id=node_id,
+    )
 
-        return jsonify({"message": "Node Created"}, 200)
-    else:
-        return jsonify({"message": "Insufficient Data"}, 422)
+    return jsonify(200, new_measurement)
 
 
 @app.route("/hierarchy/ascending_id", methods=['GET'])
 def get_all_hierarchies_ascending():
-    hierarchies = Hierarchy.query.all()
-    all_hierarchies = []
+    all_hierarchies = Hierarchy.get_list()
 
-    for hierarchy in hierarchies:
-        all_hierarchies.append({
-            "id": hierarchy.id,
-            "name": hierarchy.name,
-            "description": hierarchy.description,
-        })
-
-    return jsonify(all_hierarchies), 200
+    return jsonify(200, all_hierarchies)
 
 
 @app.route("/hierarchy/descending_id", methods=['GET'])
 def get_all_hierarchies_descending():
-    hierarchies = Hierarchy.query.all()
-    all_hierarchies = []
-
-    for hierarchy in hierarchies:
-        all_hierarchies.append({
-            "id": hierarchy.id,
-            "name": hierarchy.name,
-            "description": hierarchy.description,
-        })
-    
+    all_hierarchies = Hierarchy.get_list()
     all_hierarchies.reverse()
 
-    return jsonify(all_hierarchies), 200
+    return jsonify(200, all_hierarchies)
 
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['GET'])
 def get_one_hierarchy(hierarchy_id):
-    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
-    hier_dict = {
-        "id": hierarchy.id,
-        "name": hierarchy.name,
-        "description": hierarchy.description,
-    }
+    hier_dict = Hierarchy.get_dict(hierarchy_id)
 
-    # Parse nodes and add list of dicts to hier_dict
-    hier_dict["nodes"] = Node.get_list(hierarchy_id, None)
-
-    return jsonify(hier_dict), 200
+    return jsonify(200, hier_dict)
 
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['DELETE'])
@@ -326,7 +308,8 @@ def delete_hierarchy(hierarchy_id):
     db.session.delete(hierarchy)
     db.session.commit()
 
-    return jsonify({}), 200
+    message = f"Hierarchy {hierarchy_id} Deleted"
+    return jsonify(200, {"message": message})
 
 
 @app.route("/node/<node_id>", methods=['DELETE'])
@@ -336,7 +319,8 @@ def delete_node(node_id):
     db.session.delete(node)
     db.session.commit()
 
-    return jsonify({}, 200)
+    message = f"Node {node_id} Deleted"
+    return jsonify(200, {"message": message})
 
 
 @app.route("/measurement/<measurement_id>", methods=['DELETE'])
@@ -346,7 +330,8 @@ def delete_measurement(measurement_id):
     db.session.delete(measurement)
     db.session.commit()
 
-    return jsonify({}, 200)
+    message = f"Measurement {measurement_id} Deleted"
+    return jsonify(200, {"message": message})
 
 
 if __name__ == "__main__":
