@@ -224,6 +224,7 @@ def hello_world():
     return "<p>Hello World!</p>"
 
 
+# TODO Add checks that hierarchies/nodes exist before adding subordinate resources
 @app.route("/hierarchy", methods=['POST'])
 def create_hierarchy():
     # Get data from .json sent with request
@@ -242,8 +243,6 @@ def create_hierarchy():
     return jsonify(201, hierarchy_dict)
 
 
-# TODO Make more straightforward
-# Currently has to check that the field exist in the dict.
 @app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/", methods=['POST'])
 def create_node(hierarchy_id, parent_id):
     data = request.get_json()
@@ -301,6 +300,7 @@ def get_one_hierarchy(hierarchy_id):
     return jsonify(200, hier_dict)
 
 
+# TODO Reduce the code duplication in the DELETE Routes
 @app.route("/hierarchy/<hierarchy_id>", methods=['DELETE'])
 def delete_hierarchy(hierarchy_id):
     hierarchy = Hierarchy.get(hierarchy_id)
