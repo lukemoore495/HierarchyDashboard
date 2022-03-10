@@ -54,6 +54,20 @@ class Hierarchy(db.Model):
     @classmethod
     def get(cls, hierarchy_id):
         return Hierarchy.query.filter_by(id=hierarchy_id).first()
+    
+    @classmethod
+    def get_dict(cls, hierarchy_id):
+        hierarchy = Hierarchy.get(hierarchy_id)
+        hier_dict = {
+            "id": hierarchy.id,
+            "name": hierarchy.name,
+            "description": hierarchy.description,
+        }
+
+        # Parse nodes and add list of dicts to hier_dict
+        hier_dict["nodes"] = Node.get_list(hierarchy_id, None)
+
+        return hier_dict
 
 
 class Node(db.Model):
@@ -192,7 +206,7 @@ class Measurement(db.Model):
 
                 "name": measurement.name,
                 "type": measurement.type,
-                "value function": measurement.value_function,
+                "value_function": measurement.value_function,
             }
             measurement_list.append(new_measurement)
         
@@ -217,7 +231,10 @@ def create_hierarchy():
     nodes_lst = data["nodes"]
     Node.create_nodes(nodes_lst, new_hierarchy_id)
 
-    return jsonify({"message": "Hierarchy Created"}, 200)
+    # Create a hierarchy dict with all needed data
+    hierarchy_dict = Hierarchy.get_dict(new_hierarchy_id)
+
+    return jsonify(201, hierarchy_dict)
 
 
 # TODO Make more straightforward
