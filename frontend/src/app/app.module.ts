@@ -12,6 +12,7 @@ import { ImportanceValueModule } from './importance-value/importance-value.modul
 import { HierarchicalViewModule } from './hierarchical-view/hierarchical-view.module';
 import { DashModule } from './dash/dash.module';
 import { NavModule } from './nav/nav.module';
+import { SensitivityAnalysisModule } from './sensitivity-analysis/sensitivity-analysis.module';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { NavModule } from './nav/nav.module';
     EffectsModule.forRoot([HierarchyEffects]),
     ImportanceValueModule,
     HierarchicalViewModule,
+    SensitivityAnalysisModule,
     DashModule,
     NavModule
   ],
