@@ -11,16 +11,10 @@ Should be created after making venv.
 . venv/bin/activate
 ```  
 
-## Create the Database
-For some reason ```db.create_all()``` doesn't play nice when run in server.py  
-```
-python3
-from server import db
-db.create_all()
-exit()
-```
-
 ## Run the Server
 ```
-python3 server.py
+python3 app.py
 ```
+
+## Use Postman
+Send me a message on discord, and I can add you to our Postman team.
