@@ -1,9 +1,10 @@
-import { createAction, props } from '@ngrx/store';
-import { Hierarchy } from '../Hierarchy';
+import { createAction, props } from "@ngrx/store";
+import { Hierarchy, HierarchyListItem } from "../hierarchy";
+import { HierarchyRequest } from "../hierarchy.service";
 
 export const createHierarchy = createAction(
     '[Hierarchies] Create Hierarchy',
-    props<{hierarchy: Hierarchy}>()
+    props<{hierarchy: HierarchyRequest}>()
 );
 
 export const createHierarchySuccess = createAction(
@@ -22,7 +23,7 @@ export const retrieveHierarchies = createAction(
 
 export const retrieveHierarchiesSuccess = createAction(
     '[Hierarchies API] Retrieve Hierarchies Success',
-    props<{hierarchies: Hierarchy[]}>()
+    props<{hierarchies: HierarchyListItem[]}>()
 );
 
 export const retrieveHierarchiesFailure = createAction(
@@ -33,6 +34,16 @@ export const retrieveHierarchiesFailure = createAction(
 export const setSelectedHierarchy = createAction(
     '[Hierarchies] Set Selected Hierarchy',
     props<{ selectedHierarchyId: string }>()
+);
+
+export const setSelectedHierarchySuccess = createAction(
+    '[Hierarchies API] Set Hierarchy Success',
+    props<{hierarchy: Hierarchy}>()
+);
+
+export const setSelectedHierarchyFailure = createAction(
+    '[Hierarchies API] Set Hierarchy Failure',
+    props<{error: string}>()
 );
 
 export const setSelectedAlternative = createAction(

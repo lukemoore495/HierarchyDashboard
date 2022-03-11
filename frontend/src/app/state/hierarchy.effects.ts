@@ -15,7 +15,7 @@ export class HierarchyEffects{
                 ofType(HierarchyActions.createHierarchy),
                 concatMap(action => this.hierarchyService.createHierarchy(action.hierarchy)
                     .pipe(
-                        map(hierarchy => HierarchyActions.createHierarchySuccess({hierarchy})),
+                        map(hierarchy => HierarchyActions.createHierarchySuccess({hierarchy: hierarchy})),
                         catchError(error => of(HierarchyActions.createHierarchyFailure({error})))
                     )
                 )
@@ -29,6 +29,18 @@ export class HierarchyEffects{
                     .pipe(
                         map(hierarchies => HierarchyActions.retrieveHierarchiesSuccess({hierarchies})),
                         catchError(error => of(HierarchyActions.retrieveHierarchiesFailure({error})))
+                    )
+                )
+            )
+    });
+    setHierarchy$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.setSelectedHierarchy),
+                mergeMap(action => this.hierarchyService.getHierarchy(action.selectedHierarchyId)
+                    .pipe(
+                        map(hierarchy => HierarchyActions.setSelectedHierarchySuccess({hierarchy})),
+                        catchError(error => of(HierarchyActions.setSelectedHierarchyFailure({error})))
                     )
                 )
             )

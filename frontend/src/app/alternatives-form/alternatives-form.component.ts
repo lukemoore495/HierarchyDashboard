@@ -50,6 +50,7 @@ export class AlternativesFormComponent implements OnInit {
                 .filter(node => node.children.length === 0)
                 .forEach(node => topLevelChildren.push(node));
             let topLevelMeasurementNode: Node = {
+                id: '',
                 name: "Top Level",
                 children: topLevelChildren,
                 measurements: [],

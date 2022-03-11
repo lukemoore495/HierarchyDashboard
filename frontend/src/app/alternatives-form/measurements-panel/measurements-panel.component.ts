@@ -117,15 +117,15 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     }
 
     isNumberMeasurement(measurement : MeasurementDefinition){
-        return measurement.measurementType === MeasurementType.Number;
+        return measurement.type === MeasurementType.Number;
     }
 
     isPercentageMeasurement(measurement : MeasurementDefinition){
-        return measurement.measurementType === MeasurementType.Percentage;
+        return measurement.type === MeasurementType.Percentage;
     }
 
     isBooleanMeasurement(measurement : MeasurementDefinition){
-        return measurement.measurementType === MeasurementType.Boolean;
+        return measurement.type === MeasurementType.Boolean;
     }
 
     onPanelOpen(){

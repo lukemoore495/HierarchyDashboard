@@ -21,7 +21,7 @@
 
                                 <mat-form-field *ngIf="isNumberMeasurement(measurement)" class="full-width"
                                     appearance="fill">
-                                    <mat-label>{{measurement.measurementName}}</mat-label>
+                                    <mat-label>{{measurement.name}}</mat-label>
                                     <input matInput [formControlName]="measurement.id" class="form-control">
                                     <mat-error *ngIf="getFormControl(measurement.id)?.errors?.['required']">
                                         This is required.
@@ -35,12 +35,12 @@
                                     <mat-slider *ngIf="isPercentageMeasurement(measurement)" class="full-width"
                                         [max]="100" [min]="0" [thumbLabel]="true" [formControlName]="measurement.id">
                                     </mat-slider>
-                                    <mat-label>{{measurement.measurementName}}</mat-label>
+                                    <mat-label>{{measurement.name}}</mat-label>
                                 </div>
 
                                 <div *ngIf="isBooleanMeasurement(measurement)" class="checkbox">
                                     <mat-checkbox [formControlName]="measurement.id" [indeterminate]="true">
-                                        <mat-label>{{measurement.measurementName}}</mat-label>
+                                        <mat-label>{{measurement.name}}</mat-label>
                                     </mat-checkbox>
                                 </div>
                             </div>

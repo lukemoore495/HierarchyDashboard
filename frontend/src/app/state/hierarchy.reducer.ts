@@ -1,17 +1,19 @@
-import { createReducer, on } from '@ngrx/store';
-import { Hierarchy } from '../Hierarchy';
-import * as HierarchyActions from './hierarchy.actions';
+import { createReducer, on } from "@ngrx/store";
+import { Hierarchy, HierarchyListItem } from "../hierarchy";
+import * as HierarchyActions from "./hierarchy.actions";
+import RRRHierarchy from '../../assets/staticFiles/RRRHierarchy.json';
+import SimpleHierarchy from '../../assets/staticFiles/SimpleHierarchy.json';
 
 export interface HierarchyState {
-    selectedHierarchyId: string | null;
-    Hierarchies: Hierarchy[];
+    selectedHierarchy: Hierarchy | null;
+    Hierarchies: HierarchyListItem[];
     error: string;
     selectedAlternativeId: string | null;
     selectedMeasurementId: string | null;
 }
 
 const initialState: HierarchyState = {
-    selectedHierarchyId: null,
+    selectedHierarchy: null,
     Hierarchies: [],
     error: '',
     selectedAlternativeId: null,
@@ -21,12 +23,18 @@ const initialState: HierarchyState = {
 export const HierarchyReducer = createReducer<HierarchyState>(
     initialState,
     on(HierarchyActions.createHierarchySuccess, (state, action): HierarchyState => {
-        const hierarchies = state.Hierarchies;
-        hierarchies.push(action.hierarchy);
+        let hierarchies = [...state.Hierarchies];
+        hierarchies.push({
+            id: action.hierarchy.id,
+            description: action.hierarchy.description,
+            name: action.hierarchy.name
+        });
+
         return {
             ...state,
-            Hierarchies: hierarchies
-        };
+            Hierarchies: hierarchies,
+            selectedHierarchy: action.hierarchy
+        }
     }),
     on(HierarchyActions.createHierarchyFailure, (state, action): HierarchyState => {
         return {
@@ -37,10 +45,8 @@ export const HierarchyReducer = createReducer<HierarchyState>(
     on(HierarchyActions.retrieveHierarchiesSuccess, (state, action): HierarchyState => {
         return {
             ...state,
-            Hierarchies: action.hierarchies,
-            selectedHierarchyId: action.hierarchies[0].id,
-            selectedAlternativeId: action.hierarchies[0].alternatives[0]?.id
-        };
+            Hierarchies: action.hierarchies
+        }
     }),
     on(HierarchyActions.retrieveHierarchiesFailure, (state, action): HierarchyState => {
         return {
@@ -49,13 +55,30 @@ export const HierarchyReducer = createReducer<HierarchyState>(
             error: action.error
         };
     }),
-    on(HierarchyActions.setSelectedHierarchy, (state, action): HierarchyState => {
+    on(HierarchyActions.setSelectedHierarchySuccess, (state, action): HierarchyState => { 
+        let hierarchy = {...action.hierarchy};  
+
+        //Remove this once we have alternatives in the backend
+        if(hierarchy.name === 'RRR Hierarchy'){
+            hierarchy.alternatives = (RRRHierarchy as Hierarchy).alternatives
+        }
+        
+        let alternative = hierarchy.alternatives ? hierarchy.alternatives[0] : null;
         return {
             ...state,
-            selectedHierarchyId: action.selectedHierarchyId,
-            selectedAlternativeId: null,
-            selectedMeasurementId: null
-        };
+             selectedHierarchy: hierarchy,
+             selectedAlternativeId: alternative ? alternative.id : null,
+             selectedMeasurementId: null
+        }
+    }),
+    on(HierarchyActions.setSelectedHierarchyFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+             selectedHierarchy: null,
+             selectedAlternativeId: null,
+             selectedMeasurementId: null,
+             error: action.error
+        }
     }),
     on(HierarchyActions.setSelectedAlternative, (state, action): HierarchyState => {
         return {
