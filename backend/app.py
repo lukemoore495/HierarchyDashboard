@@ -30,12 +30,10 @@ def create_hierarchy():
     nodes_lst = data["nodes"]
     Node.create_nodes(nodes_lst, new_hierarchy.id)
 
-    # Create a hierarchy dict with all needed data
-    hierarchy_dict = Hierarchy.get_dict(new_hierarchy.id)
-
-    return jsonify(201, hierarchy_dict)
+    return jsonify(201, new_hierarchy.to_dict())
 
 
+# To add a node to the root of the hierarchy, send 0 for parent_id
 @app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
 def create_node(hierarchy_id, parent_id):
     data = request.get_json()
@@ -88,9 +86,13 @@ def get_all_hierarchies_descending():
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['GET'])
 def get_one_hierarchy(hierarchy_id):
-    hier_dict = Hierarchy.get_dict(hierarchy_id)
+    hierarchy = Hierarchy.get(hierarchy_id)
+    
+    if not hierarchy:
+        message = f"Hierarchy {hierarchy_id} Does not Exist"
+        return jsonify(404, {"message": message})
 
-    return jsonify(200, hier_dict)
+    return jsonify(200, hierarchy.to_dict())
 
 
 # TODO Reduce the code duplication in the DELETE Routes

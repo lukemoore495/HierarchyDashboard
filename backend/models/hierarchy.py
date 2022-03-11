@@ -25,17 +25,15 @@ class Hierarchy(db.Model):
     def get(cls, hierarchy_id):
         return Hierarchy.query.filter_by(id=hierarchy_id).first()
     
-    @classmethod
-    def get_dict(cls, hierarchy_id):
-        hierarchy = Hierarchy.get(hierarchy_id)
+    def to_dict(self):
         hier_dict = {
-            "id": str(hierarchy.id),
-            "name": hierarchy.name,
-            "description": hierarchy.description,
+            "id": str(self.id),
+            "name": self.name,
+            "description": self.description,
         }
 
         # Parse nodes and add list of dicts to hier_dict
-        hier_dict["nodes"] = Node.get_list(hierarchy_id, None)
+        hier_dict["nodes"] = Node.get_list(self.id, None)
 
         return hier_dict
     
@@ -45,6 +43,6 @@ class Hierarchy(db.Model):
         all_hierarchies = []
 
         for hierarchy in hierarchies:
-            all_hierarchies.append(Hierarchy.get_dict(hierarchy.id))
+            all_hierarchies.append(hierarchy.to_dict())
         
         return all_hierarchies
