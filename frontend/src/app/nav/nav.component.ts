@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
-import { Hierarchy } from '../hierarchy';
+import { map, shareReplay, skipWhile, take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { HierarchyState } from '../state/hierarchy.reducer';
 import * as HierarchyActions from '../state/hierarchy.actions'
 import { getError, getHierarchies } from '../state';
+import RRRHierarchy from '../../assets/staticFiles/RRRHierarchyPost.json';
+import SimpleHierarchy from '../../assets/staticFiles/SimpleHierarchyPost.json';
 
 @Component({
     selector: 'app-nav',
@@ -14,7 +15,6 @@ import { getError, getHierarchies } from '../state';
     styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
-    hierarchies$?: Observable<Hierarchy[]>;
     errorMessage$?: Observable<string>;
 
     menuItems = [
@@ -32,8 +32,18 @@ export class NavComponent implements OnInit {
     constructor(private store: Store<HierarchyState>, private breakpointObserver: BreakpointObserver) { }
 
     ngOnInit(): void {
-        this.hierarchies$ = this.store.select(getHierarchies);
+        //this.store.dispatch(HierarchyActions.createHierarchy({hierarchy: RRRHierarchy}))
         this.errorMessage$ = this.store.select(getError);
         this.store.dispatch(HierarchyActions.retrieveHierarchies());
+        this.store.select(getHierarchies)
+            .pipe(
+                skipWhile(x => x.length === 0),
+                take(1)
+            )
+            .subscribe(x=> {
+                if(x.length > 0){
+                    this.store.dispatch(HierarchyActions.setSelectedHierarchy({selectedHierarchyId: x[0].id}))
+                }
+            });
     }
 }

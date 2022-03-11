@@ -1,0 +1,599 @@
+{
+    "name": "RRR Hierarchy",
+    "description": "It's a big ol' hierarchy",
+    "nodes": [
+        {
+            "name": "Security",
+            "weight": 0.273,
+            "measurements": [],
+            "children": [
+                {
+                    "name": "Public Safety",
+                    "weight": 0.200,
+                    "icon": "security",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Freedom From Terror",
+                            "weight": 0.400,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Number of Terrorist Attacks",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Secure Bus & Travel",
+                            "weight": 0.400,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Percentage of People",
+                                    "type": "Percentage"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Participation",
+                            "weight": 0.200,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Women Vote",
+                                    "type": "Boolean"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Minimum Extremist Threat",
+                    "weight": 0.200,
+                    "icon": "warning",
+                    "measurements": [],
+                    "children":[                        
+                        {
+                            "name": "DDR",
+                            "weight": 0.300,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Number of People",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Gauge Pub Supp",
+                            "weight": 0.300,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Percentage of Support",
+                                    "type": "Percentage"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Narrative Shaping",
+                            "weight": 0.400,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Optimistic Outlook",
+                                    "type": "Boolean"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Military Cap",
+                    "weight": 0.600,
+                    "icon": "flag",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Equipment & Infrastructure",
+                            "weight": 0.350,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "International Trainers",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Mil Personnel",
+                            "weight": 0.350,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Spending Budget",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Hybrid Warfare",
+                            "weight": 0.300,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Badal",
+                                    "type": "Boolean"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Justice",
+            "weight": 0.273,
+            "measurements": [],
+            "children":[
+                {
+                    "name": "Judicial System",
+                    "weight": 0.250,
+                    "icon": "gavel",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Defining Law",
+                            "weight": 0.400,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Constitution",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Establishing Courts",
+                            "weight": 0.300,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Faith in Courts",
+                                    "type": "Percentage"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Trg Personnel",
+                            "weight": 0.300,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Resolution Time",
+                                    "type": "Number"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Law Enforcement",
+                    "weight": 0.400,
+                    "icon": "people",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Infrastructure",
+                            "weight": 0.333,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Comprehensive Plan",
+                                    "type": "Boolean"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Interim Solution",
+                            "weight": 0.333,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Opinion Poll",
+                                    "type": "Percentage"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Indigenous Cap",
+                            "weight": 0.333,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Crime Rate",
+                                    "type": "Number"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Correction Systems",
+                    "weight": 0.200,
+                    "icon": "location_city",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Infrastructure",
+                            "weight": 0.500,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Prison Capacity",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Personnel",
+                            "weight": 0.500,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Manning Level",
+                                    "type": "Number"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Accountability",
+                    "weight": 0.150,
+                    "icon": "pan_tool",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Laws",
+                            "weight": 0.500,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Accountability Laws",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Courts",
+                            "weight": 0.500,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Accountabilty Courts",
+                                    "type": "Number"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Economic Opportunities",
+            "weight": 0.182,
+            "measurements": [],
+            "children":[
+                {
+                    "name": "Economic Development",
+                    "weight": 0.300,
+                    "icon": "attach_money",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Policy Drafting",
+                            "weight": 0.333,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Official Policy",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Market Economy",
+                            "weight": 0.333,
+                            "icon": "work",
+                            "measurements": [],
+                            "children":[
+                                {
+                                    "name": "International Trade",
+                                    "weight": 0.500,
+                                    "children":[],
+                                    "measurements": [
+                                        {
+                                            "name": "Fertilizer Imports",
+                                            "type": "Number",
+                                            "valueFunction": {}
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Private Sector",
+                                    "weight": 0.500,
+                                    "children":[],
+                                    "measurements": [
+                                        {
+                                            "name": "Agriculture Exports",
+                                            "type": "Number",
+                                            "valueFunction": {}
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Macro Economic",
+                            "weight": 0.333,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "GDP Growth",
+                                    "type": "Percentage"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Economic Crime",
+                    "weight": 0.200,
+                    "icon": "money_off",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Grey Economy",
+                            "weight": 0.500,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Opium production by area (hectares)",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Black Economy",
+                            "weight": 0.500,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Child labor 12-14 yrs",
+                                    "type": "Number"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Economic Aid",
+                    "weight": 0.500,
+                    "icon": "local_hospital",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "International Loans",
+                            "weight": 0.500,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Foreign Debt (Percentage of GDP)",
+                                    "type": "Percentage"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Grants",
+                            "weight": 0.500,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Foreign Aid in USD (Billions)",
+                                    "type": "Number"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Education",
+            "weight": 0.182,
+            "measurements": [],
+            "children":[
+                {
+                    "name": "Policy",
+                    "weight": 0.350,
+                    "icon": "description",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Modified Syllabus",
+                            "weight": 0.700,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Curriculum",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Incentives",
+                            "weight": 0.300,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Percentage of Child labor",
+                                    "type": "Number"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Education Infrastructure",
+                    "weight": 0.650,
+                    "icon": "school",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Schools",
+                            "weight": 0.400,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Percentage Enrollment Boys Rural Areas",
+                                    "type": "Percentage"
+                                },
+                                {
+                                    "name": "Percentage Enrollment (Girls in Rural Areas)",
+                                    "type": "Percentage"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Professional Institutions",
+                            "weight": 0.300,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Vocational Training per Thousand",
+                                    "type": "Number"
+                                },
+                                {
+                                    "name": "Number of Universities",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Trainers",
+                            "weight": 0.300,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Student Teacher Ratio",
+                                    "type": "Number"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Socio Economic",
+            "weight": 0.091,
+            "measurements": [],
+            "children":[
+                {
+                    "name": "Relieve Suffering",
+                    "weight": 0.600,
+                    "icon": "healing",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Water",
+                            "weight": 0.350,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Availibity of Clean Water (Percentage)",
+                                    "type": "Percentage"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Food",
+                            "weight": 0.350,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Percentage of People Below Poverty Line",
+                                    "type": "Percentage"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Shelter",
+                            "weight": 0.300,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Number of IDPs (Millions)",
+                                    "type": "Number"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "Sustaining Life",
+                    "weight": 0.400,
+                    "icon": "nature_people",
+                    "measurements": [],
+                    "children":[
+                        {
+                            "name": "Medical",
+                            "weight": 0.700,
+                            "children":[],
+                            "measurements": [
+                                {
+                                    "name": "Doctors/1000",
+                                    "type": "Number"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "Utilities",
+                            "weight": 0.300,
+                            "icon": "flash_on",
+                            "measurements": [],
+                            "children":[
+                                {
+                                    "name": "Power",
+                                    "weight": 0.500,
+                                    "children":[],
+                                    "measurements": [
+                                        {
+                                            "name": "Percentage with access to electricity",
+                                            "type": "Percentage",
+                                            "valueFunction": {}
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "Communications",
+                                    "weight": 0.500,
+                                    "children":[],
+                                    "measurements": [
+                                        {
+                                            "name": "Percentage of Access to Mobiles",
+                                            "type": "Percentage",
+                                            "valueFunction": {}
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

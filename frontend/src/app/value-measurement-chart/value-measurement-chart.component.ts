@@ -45,8 +45,8 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
             }
 
             this.chartNewMeasurement(measurement[0]);
-            if(measurement[1]?.measurementName){
-                this.updateLabel(measurement[1].measurementName);
+            if(measurement[1]?.name){
+                this.updateLabel(measurement[1].name);
             }
             this.chart.update();
         })

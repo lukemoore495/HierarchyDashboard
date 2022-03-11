@@ -5,38 +5,41 @@
     "measurements": [],
     "nodes": [
         {
+            "id": " ",
             "name": "Freedom From Terror",
             "weight": 0.400,
             "children":[],
             "measurements": [
                 {
                     "id": "1",
-                    "measurementName": "Number of Terrorist Attacks",
-                    "measurementType": "Number"
+                    "name": "Number of Terrorist Attacks",
+                    "type": "Number"
                 }
             ]
         },
         {
+            "id": " ",
             "name": "Secure Bus & Travel",
             "weight": 0.400,
             "children":[],
             "measurements": [
                 {
                     "id": "2",
-                    "measurementName": "Percentage of People",
-                    "measurementType": "Percentage"
+                    "name": "Percentage of People",
+                    "type": "Percentage"
                 }
             ]
         },
         {
+            "id": " ",
             "name": "Participation",
             "weight": 0.200,
             "children":[],
             "measurements": [
                 {
                     "id": "3",
-                    "measurementName": "Women Vote",
-                    "measurementType": "Boolean"
+                    "name": "Women Vote",
+                    "type": "Boolean"
                 }
             ]
         }
