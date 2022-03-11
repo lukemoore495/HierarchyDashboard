@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, abort, jsonify, request
 from pathlib import Path
 
 from models.hierarchy import Hierarchy, Node, Measurement
@@ -30,7 +30,7 @@ def create_hierarchy():
     nodes_lst = data["nodes"]
     Node.create_nodes(nodes_lst, new_hierarchy.id)
 
-    return jsonify(201, new_hierarchy.to_dict())
+    return jsonify(new_hierarchy.to_dict()), 201
 
 
 # To add a node to the root of the hierarchy, send 0 for parent_id
@@ -53,7 +53,7 @@ def create_node(hierarchy_id, parent_id):
         icon=icon
     )
 
-    return jsonify(201, new_node.to_dict())
+    return jsonify(new_node.to_dict()), 201
 
 
 @app.route("/hierarchy/<hierarchy_id>/node/<node_id>/measurement", methods=['POST'])
@@ -66,7 +66,7 @@ def create_measurement(hierarchy_id, node_id):
         node_id=node_id,
     )
 
-    return jsonify(201, new_measurement.to_dict())
+    return jsonify(new_measurement.to_dict()), 201
 
 
 @app.route("/hierarchy/ascending_id", methods=['GET'])
@@ -74,9 +74,9 @@ def get_all_hierarchies_ascending():
     all_hierarchies = Hierarchy.get_list()
 
     if not all_hierarchies:
-        return jsonify(404, {"message": "No Hierarchies"})
+        abort(404, description="Resource not found")
 
-    return jsonify(200, all_hierarchies)
+    return jsonify(all_hierarchies), 200
 
 
 @app.route("/hierarchy/descending_id", methods=['GET'])
@@ -85,9 +85,9 @@ def get_all_hierarchies_descending():
     all_hierarchies.reverse()
 
     if not all_hierarchies:
-        return jsonify(404, {"message": "No Hierarchies"})
+        abort(404, description="Resource not found")
 
-    return jsonify(200, all_hierarchies)
+    return jsonify(all_hierarchies), 200
 
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['GET'])
@@ -95,10 +95,9 @@ def get_one_hierarchy(hierarchy_id):
     hierarchy = Hierarchy.get(hierarchy_id)
     
     if not hierarchy:
-        message = f"Hierarchy {hierarchy_id} Does not Exist"
-        return jsonify(404, {"message": message})
+        abort(404, description="Resource not found")
 
-    return jsonify(200, hierarchy.to_dict())
+    return jsonify(hierarchy.to_dict()), 200
 
 
 # TODO Reduce the code duplication in the DELETE Routes
@@ -108,14 +107,13 @@ def delete_hierarchy(hierarchy_id):
 
     # hierarchy does not exist, return 404
     if not hierarchy:
-        message = f"Hierarchy {hierarchy_id} Does not Exist"
-        return jsonify(404, {"message": message})
+        abort(404, description="Resource not found")
 
     db.session.delete(hierarchy)
     db.session.commit()
 
     message = f"Hierarchy {hierarchy_id} Deleted"
-    return jsonify(200, {"message": message})
+    return jsonify({"message": message}), 200
 
 
 @app.route("/node/<node_id>", methods=['DELETE'])
@@ -124,14 +122,13 @@ def delete_node(node_id):
 
     # node does not exist, return 404
     if not node:
-        message = f"Node {node_id} Does not Exist"
-        return jsonify(404, {"message": message})
+        abort(404, description="Resource not found")
 
     db.session.delete(node)
     db.session.commit()
 
     message = f"Node {node_id} Deleted"
-    return jsonify(200, {"message": message})
+    return jsonify({"message": message}), 200
 
 
 @app.route("/measurement/<measurement_id>", methods=['DELETE'])
@@ -140,14 +137,13 @@ def delete_measurement(measurement_id):
 
     # measurement does not exist, return 404
     if not measurement:
-        message = f"Measurement {measurement_id} Does not Exist"
-        return jsonify(404, {"message": message})
+        abort(404, description="Resource not found")
 
     db.session.delete(measurement)
     db.session.commit()
 
     message = f"Measurement {measurement_id} Deleted"
-    return jsonify(200, {"message": message})
+    return jsonify({"message": message}), 200
 
 if __name__ == "__main__":
     # Create the database if it doesn't exist
