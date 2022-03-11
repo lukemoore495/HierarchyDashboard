@@ -30,10 +30,16 @@ export const HierarchyReducer = createReducer<HierarchyState>(
             name: action.hierarchy.name
         });
 
+        //Remove this once we have alternatives in the backend
+        let hierarchy = {...action.hierarchy};
+        if(hierarchy.name === 'RRR Hierarchy'){
+            hierarchy.alternatives = (RRRHierarchy as Hierarchy).alternatives
+        }
+        
         return {
             ...state,
             Hierarchies: hierarchies,
-            selectedHierarchy: action.hierarchy
+            selectedHierarchy: hierarchy
         }
     }),
     on(HierarchyActions.createHierarchyFailure, (state, action): HierarchyState => {

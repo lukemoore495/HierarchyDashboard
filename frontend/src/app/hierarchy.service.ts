@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Hierarchy, HierarchyListItem } from "./hierarchy";
+import { Alternative, Hierarchy, HierarchyListItem } from "./hierarchy";
 import { Observable, of } from "rxjs";
 import { SensitivityAnalysisReport } from "./sensitivity-analysis/SensitivityAnalysis";
 import { HttpClient } from "@angular/common/http";
@@ -8,6 +8,7 @@ export interface HierarchyRequest {
     name: string;
     description: string;
     nodes: NodeRequest[];
+    alternatives: Alternative[];
 }
 
 export interface NodeRequest {
@@ -19,8 +20,8 @@ export interface NodeRequest {
 }
 
 export interface MeasurementDefinitionRequest {
-    name: string;
-    type: string;
+    measurementName: string;
+    measurementType: string;
 }
 
 @Injectable({

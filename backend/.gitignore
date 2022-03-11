@@ -132,4 +132,4 @@ dmypy.json
 *.Zip
 
 #sqlite
-sqlitedb.file
+*.db

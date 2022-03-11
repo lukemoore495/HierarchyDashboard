@@ -32,7 +32,10 @@ export class NavComponent implements OnInit {
     constructor(private store: Store<HierarchyState>, private breakpointObserver: BreakpointObserver) { }
 
     ngOnInit(): void {
+        
+        //Uncomment and reload once inorder to create the RRRHierarchy in the backend
         //this.store.dispatch(HierarchyActions.createHierarchy({hierarchy: RRRHierarchy}))
+        
         this.errorMessage$ = this.store.select(getError);
         this.store.dispatch(HierarchyActions.retrieveHierarchies());
         this.store.select(getHierarchies)
