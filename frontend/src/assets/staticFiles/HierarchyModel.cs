@@ -35,6 +35,7 @@ namespace Models
 
     public class Measurement
     {
+        public string MeasurementDefinitionId { get; set; }
         public string LeafNodeId { get; set; }
         public double Measure { get; set; }
         public double Value { get; set; }

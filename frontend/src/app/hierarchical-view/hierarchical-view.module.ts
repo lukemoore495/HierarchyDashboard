@@ -1,7 +1,7 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { HierarchicalViewComponent } from "./hierarchical-view.component";
+import { HierarchicalViewComponent } from './hierarchical-view.component';
 
 @NgModule({
     declarations: [
@@ -14,5 +14,5 @@ import { HierarchicalViewComponent } from "./hierarchical-view.component";
     exports: [
         HierarchicalViewComponent
     ]
-  })
+})
 export class HierarchicalViewModule { }
