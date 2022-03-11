@@ -73,6 +73,9 @@ def create_measurement(hierarchy_id, node_id):
 def get_all_hierarchies_ascending():
     all_hierarchies = Hierarchy.get_list()
 
+    if not all_hierarchies:
+        return jsonify(404, {"message": "No Hierarchies"})
+
     return jsonify(200, all_hierarchies)
 
 
@@ -80,6 +83,9 @@ def get_all_hierarchies_ascending():
 def get_all_hierarchies_descending():
     all_hierarchies = Hierarchy.get_list()
     all_hierarchies.reverse()
+
+    if not all_hierarchies:
+        return jsonify(404, {"message": "No Hierarchies"})
 
     return jsonify(200, all_hierarchies)
 
