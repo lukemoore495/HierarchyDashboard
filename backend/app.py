@@ -71,7 +71,7 @@ def create_measurement(hierarchy_id, node_id):
 
 @app.route("/hierarchy/ascending_id", methods=['GET'])
 def get_all_hierarchies_ascending():
-    all_hierarchies = Hierarchy.get_list(False)
+    all_hierarchies = Hierarchy.get_list(get_nodes=False)
 
     if not all_hierarchies:
         abort(404, description="Resource not found")
@@ -81,7 +81,7 @@ def get_all_hierarchies_ascending():
 
 @app.route("/hierarchy/descending_id", methods=['GET'])
 def get_all_hierarchies_descending():
-    all_hierarchies = Hierarchy.get_list(False)
+    all_hierarchies = Hierarchy.get_list(get_nodes=False)
     all_hierarchies.reverse()
 
     if not all_hierarchies:
