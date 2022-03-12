@@ -87,6 +87,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
+        this.deselectMeasurement();
         this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 

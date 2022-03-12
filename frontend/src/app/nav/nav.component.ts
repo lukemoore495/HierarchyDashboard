@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
-import { map, shareReplay, skipWhile, take } from 'rxjs/operators';
+import { delay, map, shareReplay, skipWhile, take, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { HierarchyState } from '../state/hierarchy.reducer';
 import * as HierarchyActions from '../state/hierarchy.actions'
@@ -40,10 +40,17 @@ export class NavComponent implements OnInit {
         this.store.dispatch(HierarchyActions.retrieveHierarchies());
         this.store.select(getHierarchies)
             .pipe(
+                delay(1000),
+                tap(x => {
+                    if(x.length === 0){
+                        this.store.dispatch(HierarchyActions.retrieveHierarchies());
+                    }
+                }),
                 skipWhile(x => x.length === 0),
                 take(1)
             )
             .subscribe(x=> {
+                console.log(x);
                 if(x.length > 0){
                     this.store.dispatch(HierarchyActions.setSelectedHierarchy({selectedHierarchyId: x[0].id}))
                 }

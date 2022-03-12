@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Alternative, Hierarchy, HierarchyListItem } from "./hierarchy";
+import { Alternative, Hierarchy, HierarchyListItem } from "./Hierarchy";
 import { Observable, of } from "rxjs";
 import { SensitivityAnalysisReport } from "./sensitivity-analysis/SensitivityAnalysis";
 import { HttpClient } from "@angular/common/http";
@@ -28,7 +28,7 @@ export interface MeasurementDefinitionRequest {
     providedIn: 'root'
 })
 export class HierarchyService {
-    root = '/api';
+    root = 'http://localhost:4200/api';
 
     constructor(private http: HttpClient){ }
 

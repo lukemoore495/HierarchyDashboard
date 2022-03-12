@@ -1,5 +1,5 @@
 import { createReducer, on } from "@ngrx/store";
-import { Hierarchy, HierarchyListItem } from "../hierarchy";
+import { Hierarchy, HierarchyListItem } from "../Hierarchy";
 import * as HierarchyActions from "./hierarchy.actions";
 import RRRHierarchy from '../../assets/staticFiles/RRRHierarchy.json';
 import SimpleHierarchy from '../../assets/staticFiles/SimpleHierarchy.json';
