@@ -50,7 +50,6 @@ export class NavComponent implements OnInit {
                 take(1)
             )
             .subscribe(x=> {
-                console.log(x);
                 if(x.length > 0){
                     this.store.dispatch(HierarchyActions.setSelectedHierarchy({selectedHierarchyId: x[0].id}))
                 }
