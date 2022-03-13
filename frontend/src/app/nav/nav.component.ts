@@ -6,8 +6,6 @@ import { Store } from '@ngrx/store';
 import { HierarchyState } from '../state/hierarchy.reducer';
 import * as HierarchyActions from '../state/hierarchy.actions'
 import { getError, getHierarchies } from '../state';
-import RRRHierarchy from '../../assets/staticFiles/RRRHierarchyPost.json';
-import SimpleHierarchy from '../../assets/staticFiles/SimpleHierarchyPost.json';
 
 @Component({
     selector: 'app-nav',
@@ -32,11 +30,7 @@ export class NavComponent implements OnInit {
     constructor(private store: Store<HierarchyState>, private breakpointObserver: BreakpointObserver) { }
 
     ngOnInit(): void {
-        
-        //Uncomment and reload once inorder to create the RRRHierarchy in the backend
-        //this.store.dispatch(HierarchyActions.createHierarchy({hierarchy: RRRHierarchy}))
-        
-        this.errorMessage$ = this.store.select(getError);
+       this.errorMessage$ = this.store.select(getError);
         this.store.dispatch(HierarchyActions.retrieveHierarchies());
         this.store.select(getHierarchies)
             .pipe(

@@ -21,7 +21,21 @@
     z-index: -1;
 }
 
-.name {
-    margin-left: 1rem;
+.header-container{
+    display: flex;
+    align-items: left;
+    flex-direction: row;
     margin-top: 1rem;
+
+    .select{
+        font-size: x-large;
+        text-align: center;
+        margin-left: 1rem;
+        width: 30%;
+    }
+    .button{
+        margin-left: 1rem;
+        margin-top: 2rem;
+        height: 50%;
+    }
 }

@@ -1,44 +1,41 @@
 
  {
-    "name": "RRR Hierarchy",
-    "description": "It's a big ol' hierarchy",
-    "measurements": [],
+    "name": "Simple Hierarchy",
+    "description": "It smol",
     "nodes": [
         {
-            "id": " ",
             "name": "Freedom From Terror",
             "weight": 0.400,
             "children":[],
             "measurements": [
                 {
-                    "name": "Number of Terrorist Attacks",
-                    "type": "Number"
+                    "measurementName": "Number of Terrorist Attacks",
+                    "measurementType": "Number"
                 }
             ]
         },
         {
-            "id": " ",
             "name": "Secure Bus & Travel",
             "weight": 0.400,
             "children":[],
             "measurements": [
                 {
-                    "name": "Percentage of People",
-                    "type": "Percentage"
+                    "measurementName": "Percentage of People",
+                    "measurementType": "Percentage"
                 }
             ]
         },
         {
-            "id": " ",
             "name": "Participation",
             "weight": 0.200,
             "children":[],
             "measurements": [
                 {
-                    "name": "Women Vote",
-                    "type": "Boolean"
+                    "measurementName": "Women Vote",
+                    "measurementType": "Boolean"
                 }
             ]
         }
-    ]
+    ],
+    "alternatives": []
 }
