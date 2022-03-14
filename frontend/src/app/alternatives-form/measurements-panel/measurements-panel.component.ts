@@ -6,14 +6,14 @@ import { Output } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { HierarchyState } from 'src/app/state/hierarchy.reducer';
 import { Store } from '@ngrx/store';
-import { getSelectedMeasurementId } from 'src/app/state';
-import * as HierarchyActions from '../../state/hierarchy.actions'
+import { getSelectedAlternative, getSelectedMeasurementId } from 'src/app/state';
+import * as HierarchyActions from '../../state/hierarchy.actions';
 import { MatSelectionList } from '@angular/material/list';
 
 @Component({
-  selector: 'app-measurements-panel',
-  templateUrl: './measurements-panel.component.html',
-  styleUrls: ['./measurements-panel.component.scss']
+    selector: 'app-measurements-panel',
+    templateUrl: './measurements-panel.component.html',
+    styleUrls: ['./measurements-panel.component.scss']
 })
 export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     @Input() measurementNode: Node | null = null;
@@ -23,12 +23,19 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     @Output() closed: EventEmitter<void>;
     @ViewChild('measurementSelectList') measurementSelectList?: MatSelectionList;
     form: FormGroup;
-    currentMeasurements: Measurement[] = [];
     subscriptions: Subscription[] = [];
     selectedMeasurementId: string | null = null;
     $parentNodeOpened: BehaviorSubject<boolean>;
+    alternativeMeasurements: Measurement[] = [];
 
     constructor(private fb: FormBuilder, private store: Store<HierarchyState>) { 
+        const sub = this.store.select(getSelectedAlternative)
+            .pipe(
+                map(alternative => alternative?.measurements)
+            )
+            .subscribe(measurements => this.alternativeMeasurements = measurements ?? []);
+        this.subscriptions.push(sub);
+    
         this.form = fb.group({});
         this.measurementResultEvent = new EventEmitter<Measurement[]>();
         this.childNodeOpened = new EventEmitter<void>();
@@ -37,17 +44,21 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        let nodes : Node[] = Object.assign([], this.measurementNode?.children);
-        for(let node of nodes) {
-            let measurements = node?.measurements ?? [];
-            for(let measurement of measurements) {
-                if(this.isNumberMeasurement(measurement)){
-                    this.form.addControl(measurement.id, this.fb.control(null, [Validators.pattern("^[0-9]*$")]));
-                } else if (this.isPercentageMeasurement(measurement)) {
-                    this.form.addControl(measurement.id, this.fb.control(null, []));
-                } else if (this.isBooleanMeasurement(measurement)) {
-                    this.form.addControl(measurement.id, this.fb.control(null, []));
+        const nodes : Node[] = Object.assign([], this.measurementNode?.children);
+        for(const node of nodes) {
+            const measurementFields = node?.measurements ?? [];
+            for(const measurementField of measurementFields) {
+                if(this.isNumberMeasurement(measurementField)){
+                    this.form.addControl(measurementField.id, this.fb.control(null, [Validators.pattern('^[0-9]*$')]));
+                } else if (this.isPercentageMeasurement(measurementField)) {
+                    this.form.addControl(measurementField.id, this.fb.control(null, []));
+                } else if (this.isBooleanMeasurement(measurementField)) {
+                    this.form.addControl(measurementField.id, this.fb.control(null, []));
                 }
+                const measurementValue 
+                    = this.alternativeMeasurements.find(m => m.measurementDefinitionId === measurementField.id) ?? null;
+                const formControl = this.getFormControl(measurementField.id);
+                formControl?.setValue(measurementValue?.measure);
             }
         }
 
@@ -55,7 +66,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
             .pipe(
                 debounceTime(1000),
                 map(form => {
-                    let measurements : Measurement[] = [];
+                    const measurements : Measurement[] = [];
                     for(const id in form){
                         measurements.push({
                             measurementDefinitionId: id,
@@ -77,7 +88,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
             const parentSelectedSub = this.parentIsSelected
                 .subscribe(parentIsSelected => {
                     if(this.measurementSelectList && parentIsSelected){
-                        this.measurementSelectList.deselectAll()
+                        this.measurementSelectList.deselectAll();
                         this.deselectMeasurement();
                     }
                     this.$parentNodeOpened.next(true);
@@ -103,18 +114,25 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     }
 
     updateMeasurements (newMeasurements: Measurement[]){
-        let updatedMeasurements = [];
-        for(let currentMeasure of this.currentMeasurements){
-            let updatedMeasure = newMeasurements.find(newMeasure => newMeasure.measurementDefinitionId == currentMeasure.measurementDefinitionId) ?? currentMeasure;
-            updatedMeasurements.push(updatedMeasure);
-        }
-        for (let measure of newMeasurements) {
-            if(!this.currentMeasurements.some(currentMeasure => currentMeasure.measurementDefinitionId == measure.measurementDefinitionId)){
-                updatedMeasurements.push(measure);
+        const modifiedMeasurements = [];
+        const currentMeasurements = [];
+        for(const measure of this.alternativeMeasurements) {
+            if(!newMeasurements.some(newMeasure => newMeasure.measurementDefinitionId === measure.measurementDefinitionId)){
+                currentMeasurements.push(measure);
             }
         }
-        this.currentMeasurements = updatedMeasurements;
-        this.measurementResultEvent.emit(this.currentMeasurements);
+        
+        for(const newMeasure of newMeasurements) {
+            const currentMeasure = this.alternativeMeasurements.find(measure => measure.measurementDefinitionId === newMeasure.measurementDefinitionId) ?? newMeasure;
+            if(currentMeasure.measure !== newMeasure.measure) {
+                modifiedMeasurements.push(newMeasure);
+                currentMeasurements.push(newMeasure);
+                continue;
+            }
+            currentMeasurements.push(currentMeasure);
+        }
+        this.alternativeMeasurements = currentMeasurements;
+        this.measurementResultEvent.emit(modifiedMeasurements);
     }
 
     isNumberMeasurement(measurement : MeasurementDefinition){
@@ -141,7 +159,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     }
 
     deselectAndEmitToParent(){
-        this.deselectMeasurement()
+        this.deselectMeasurement();
         this.childNodeOpened.emit();
     }
 
@@ -154,11 +172,11 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
         if(!this.measurementNode)
             return;
 
-        let firstMeasurementId = this.measurementNode.children[0].measurements[0].id;
+        const firstMeasurementId = this.measurementNode.children[0].measurements[0].id;
         this.store.dispatch(HierarchyActions.setSelectedMeasurement({selectedMeasurementId: firstMeasurementId}));
         this.selectedMeasurementId = firstMeasurementId;
         if(this.measurementSelectList){
-            this.measurementSelectList.deselectAll()
+            this.measurementSelectList.deselectAll();
             this.measurementSelectList.options.first.selected = true;
         }
     }
@@ -174,7 +192,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
                 }
             });
         if(this.measurementSelectList){
-            this.measurementSelectList.deselectAll()
+            this.measurementSelectList.deselectAll();
         }
     }
 
