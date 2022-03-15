@@ -7,9 +7,9 @@ let backend;
 let development = !app.isPackaged;
 
 if(development){
-    backend = path.join(process.cwd(),'../backend/dist/app/app.exe');
+    backend = path.join(process.cwd(),'./dist/app.exe');
 } else {
-    backend = path.join(process.resourcesPath,'app/app.exe');
+    backend = path.join(process.resourcesPath,'app.exe');
 }
 
 var execfile = require('child_process').execFile;

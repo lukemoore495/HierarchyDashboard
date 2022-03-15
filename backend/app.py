@@ -1,15 +1,30 @@
+from distutils.command.config import config
 from flask import Flask, abort, jsonify, request
 from pathlib import Path
+import os
+import sys
 
 from models.hierarchy import Hierarchy, Node, Measurement
 from models.shared import db
 
+def get_config_path():
+    if hasattr(sys, "_MEIPASS"):
+        abs_home = os.path.abspath(os.path.expanduser("~"))
+        abs_dir_app = os.path.join(abs_home, f"hierarchyDashboard")
+        if not os.path.exists(abs_dir_app):
+            os.mkdir(abs_dir_app)
+        return abs_dir_app
+    else:
+       return ""
 
 # app
 app = Flask(__name__)
 
 # app configurations
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///app.db"
+home_path = os.path.join(get_config_path(), "app.db")
+database_path = 'sqlite:///' + Path(home_path).as_posix()
+print(database_path)
+app.config["SQLALCHEMY_DATABASE_URI"] = database_path
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = 0
 app.config["JSON_SORT_KEYS"] = False
 
@@ -147,7 +162,8 @@ def delete_measurement(measurement_id):
 
 if __name__ == "__main__":
     # Create the database if it doesn't exist
-    path = Path("./app.db")
+    config_path = os.path.join(get_config_path(), "app.db")
+    path = Path(config_path)
     if not path.is_file():
         with app.app_context():
             db.create_all()

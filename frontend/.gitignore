@@ -5,6 +5,8 @@
 /out
 /tmp
 /out-tsc
+/build
+
 # Only exists if Bazel was run
 /bazel-out
 
