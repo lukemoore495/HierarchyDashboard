@@ -700,7 +700,1011 @@
         {
             "id": "1",
             "name": "2006",
-            "rank": 1,
+            "measurements": [
+                {                   
+                    "measurementDefinitionId": "1",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "2",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "3",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "4",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "5",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "6",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "7",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "8",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "9",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "10",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "11",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "12",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "13",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "14",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "15",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "16",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "17",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "18",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "19",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "20",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },                {                   
+                    "measurementDefinitionId": "21",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "22",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "23",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "24",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "25",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "26",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "27",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "28",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "29",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "30",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "31",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "32",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "33",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "34",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "35",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "36",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "37",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "38",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "39",
+                    "measure": 13,
+                    "value": 0.5,
+                    "valueFunctionData": [
+                        {
+                            "x": 5, "y": 1.00
+                        },
+                        {
+                            "x": 10, "y": 0.8
+                        },
+                        {
+                            "x": 15, "y": 0.3
+                        },
+                        {
+                            "x": 20, "y": 0.2
+                        },
+                        {
+                            "x": 25, "y": 0.1
+                        },
+                        {
+                            "x": 30, "y": 0
+                        }
+                    ]
+                },
+                {                   
+                    "measurementDefinitionId": "40",
+                    "measure": 220,
+                    "value": 0.55,
+                    "valueFunctionData": [
+                        {
+                            "x": 100, "y": 0.3
+                        },
+                        {
+                            "x": 200, "y": 0.5
+                        },
+                        {
+                            "x": 300, "y": 0.66
+                        },
+                        {
+                            "x": 400, "y": 0.8
+                        },
+                        {
+                            "x": 500, "y": 0.9
+                        },
+                        {
+                            "x": 600, "y": 1.00
+                        }
+                    ]
+                }            
+            ]
+        },
+        {
+            "id": "2",
+            "name": "2007",
             "measurements": [
                 {                   
                     "measurementDefinitionId": "1",
