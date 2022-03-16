@@ -12,8 +12,11 @@
     color: map-get($primary, 500);
 }
 .mat-accent{
-    color: map-get($accent, 100);
+    color: map-get($accent, 700);
 }
 .mat-hover{
     color: map-get($background, 100);
+}
+.mat-muted{
+    color: map-get($accent, 100);
 }
