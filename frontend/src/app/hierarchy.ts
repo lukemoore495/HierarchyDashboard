@@ -1,3 +1,9 @@
+export interface HierarchyListItem {
+    id: string;
+    name: string;
+    description: string;
+}
+
 export interface Hierarchy {
     id : string;
     name: string;
@@ -7,6 +13,7 @@ export interface Hierarchy {
 }
 
 export interface Node {
+    id: string
     name: string;
     weight: number;
     children: Node[];
@@ -16,8 +23,8 @@ export interface Node {
 
 export interface MeasurementDefinition {
     id: string;
-    measurementName: string;
-    measurementType: string;
+    name: string;
+    type: string;
     valueFunction?: ValueFunction;
 }
 

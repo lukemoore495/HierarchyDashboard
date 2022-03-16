@@ -130,3 +130,6 @@ dmypy.json
 
 # Zip files
 *.Zip
+
+#sqlite
+*.db

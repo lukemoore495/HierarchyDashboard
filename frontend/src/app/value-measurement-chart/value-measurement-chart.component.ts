@@ -44,12 +44,12 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
                     return;
                 }
 
-                this.chartNewMeasurement(measurement[0]);
-                if(measurement[1]?.measurementName){
-                    this.updateLabel(measurement[1].measurementName);
-                }
-                this.chart.update();
-            });
+            this.chartNewMeasurement(measurement[0]);
+            if(measurement[1]?.name){
+                this.updateLabel(measurement[1].name);
+            }
+            this.chart.update();
+        })
     }
 
     chartNewMeasurement(measurement : Measurement) {

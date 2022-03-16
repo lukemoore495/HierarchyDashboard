@@ -1,9 +1,13 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { Hierarchy, Node } from '../Hierarchy';
-import { getSelectedHierarchy } from '../state';
+import { Observable, Subscription } from 'rxjs';
+import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
+import { getHierarchies, getSelectedHierarchy } from '../state';
+import { createHierarchy, setSelectedHierarchy } from '../state/hierarchy.actions';
 import { HierarchyState } from '../state/hierarchy.reducer';
+import RRRHierarchy from '../../assets/staticFiles/RRRHierarchyPost.json';
+import SimpleHierarchy from '../../assets/staticFiles/SimpleHierarchyPost.json';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
     selector: 'app-hierarchical-view',
@@ -11,7 +15,8 @@ import { HierarchyState } from '../state/hierarchy.reducer';
     styleUrls: ['./hierarchical-view.component.scss']
 })
 export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestroy {
-    hierarchyName?: string;
+    selectedHierarchy?: Hierarchy;
+    defaultId = "";
     hierarchyLevels: Node[][] = [];
     elem: Element | null = null;
     relationships: string[] = [];
@@ -20,6 +25,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
     @ViewChildren('nodes') private nodes?: QueryList<ElementRef<HTMLDivElement>>;
     @ViewChild('svg') svg?: ElementRef;
     subscriptions: Subscription[] = [];
+    hierarchies$?: Observable<HierarchyListItem[]>
 
     constructor(private store: Store<HierarchyState>, private renderer: Renderer2) { }
 
@@ -27,7 +33,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
         const sub = this.store.select(getSelectedHierarchy)
             .subscribe(hierarchy => {
                 if (hierarchy) {
-                    this.hierarchyName = hierarchy.name;
+                    this.selectedHierarchy = hierarchy;
                     this.hierarchyLevels = this.sortNodesToLevels(hierarchy);
                     this.relationships = this.findRelationships(this.hierarchyLevels);
                     
@@ -42,6 +48,8 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
                 }
             });
         this.subscriptions.push(sub);
+        
+        this.hierarchies$ = this.store.select(getHierarchies);
     }
 
     ngOnDestroy(): void {
@@ -380,5 +388,16 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
         line.setAttributeNS(null, 'y2', svgP2.y);
         line.setAttributeNS(null, 'stroke', 'black');
         this.renderer.appendChild(this.svg?.nativeElement, line);
+    }
+
+    createHierarchy() {
+        //This will go away eventually. We will replace it with creating hierarchies
+        //from scratch
+        this.store.dispatch(createHierarchy({hierarchy: RRRHierarchy}))
+        //this.store.dispatch(createHierarchy({hierarchy: SimpleHierarchy}))
+    }
+
+    onSelect(event: MatSelectChange) {
+        this.store.dispatch(setSelectedHierarchy({selectedHierarchyId: event.value}));
     }
 }

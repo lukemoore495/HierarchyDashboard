@@ -4,150 +4,137 @@
     "description": "It's a big ol' hierarchy",
     "nodes": [
         {
-            "id": " ",
             "name": "Security",
             "weight": 0.273,
             "measurements": [],
             "children": [
                 {
-                    "id": " ",
                     "name": "Public Safety",
                     "weight": 0.200,
                     "icon": "security",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Freedom From Terror",
                             "weight": 0.400,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "1",
-                                    "name": "Number of Terrorist Attacks",
-                                    "type": "Number"
+                                    "measurementName": "Number of Terrorist Attacks",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Secure Bus & Travel",
                             "weight": 0.400,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "2",
-                                    "name": "Percentage of People",
-                                    "type": "Percentage"
+                                    "measurementName": "Percentage of People",
+                                    "measurementType": "Percentage"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Participation",
                             "weight": 0.200,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "3",
-                                    "name": "Women Vote",
-                                    "type": "Boolean"
+                                    "measurementName": "Women Vote",
+                                    "measurementType": "Boolean"
                                 }
                             ]
                         }
                     ]
                 },
                 {
-                    "id": " ",
                     "name": "Minimum Extremist Threat",
                     "weight": 0.200,
                     "icon": "warning",
                     "measurements": [],
                     "children":[                        
                         {
-                            "id": " ",
                             "name": "DDR",
                             "weight": 0.300,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "4",
-                                    "name": "Number of People",
-                                    "type": "Number"
+                                    "measurementName": "Number of People",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Gauge Pub Supp",
                             "weight": 0.300,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "5",
-                                    "name": "Percentage of Support",
-                                    "type": "Percentage"
+                                    "measurementName": "Percentage of Support",
+                                    "measurementType": "Percentage"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Narrative Shaping",
                             "weight": 0.400,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "6",
-                                    "name": "Optimistic Outlook",
-                                    "type": "Boolean"
+                                    "measurementName": "Optimistic Outlook",
+                                    "measurementType": "Boolean"
                                 }
                             ]
                         }
                     ]
                 },
                 {
-                    "id": " ",
                     "name": "Military Cap",
                     "weight": 0.600,
                     "icon": "flag",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Equipment & Infrastructure",
                             "weight": 0.350,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "7",
-                                    "name": "International Trainers",
-                                    "type": "Number"
+                                    "measurementName": "International Trainers",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Mil Personnel",
                             "weight": 0.350,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "8",
-                                    "name": "Spending Budget",
-                                    "type": "Number"
+                                    "measurementName": "Spending Budget",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Hybrid Warfare",
                             "weight": 0.300,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "9",
-                                    "name": "Badal",
-                                    "type": "Boolean"
+                                    "measurementName": "Badal",
+                                    "measurementType": "Boolean"
                                 }
                             ]
                         }
@@ -156,172 +143,157 @@
             ]
         },
         {
-            "id": " ",
             "name": "Justice",
             "weight": 0.273,
             "measurements": [],
             "children":[
                 {
-                    "id": " ",
                     "name": "Judicial System",
                     "weight": 0.250,
                     "icon": "gavel",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Defining Law",
                             "weight": 0.400,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "10",
-                                    "name": "Constitution",
-                                    "type": "Number"
+                                    "measurementName": "Constitution",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Establishing Courts",
                             "weight": 0.300,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "11",
-                                    "name": "Faith in Courts",
-                                    "type": "Percentage"
+                                    "measurementName": "Faith in Courts",
+                                    "measurementType": "Percentage"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Trg Personnel",
                             "weight": 0.300,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "12",
-                                    "name": "Resolution Time",
-                                    "type": "Number"
+                                    "measurementName": "Resolution Time",
+                                    "measurementType": "Number"
                                 }
                             ]
                         }
                     ]
                 },
                 {
-                    "id": " ",
                     "name": "Law Enforcement",
                     "weight": 0.400,
                     "icon": "people",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Infrastructure",
                             "weight": 0.333,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "13",
-                                    "name": "Comprehensive Plan",
-                                    "type": "Boolean"
+                                    "measurementName": "Comprehensive Plan",
+                                    "measurementType": "Boolean"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Interim Solution",
                             "weight": 0.333,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "14",
-                                    "name": "Opinion Poll",
-                                    "type": "Percentage"
+                                    "measurementName": "Opinion Poll",
+                                    "measurementType": "Percentage"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Indigenous Cap",
                             "weight": 0.333,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "15",
-                                    "name": "Crime Rate",
-                                    "type": "Number"
+                                    "measurementName": "Crime Rate",
+                                    "measurementType": "Number"
                                 }
                             ]
                         }
                     ]
                 },
                 {
-                    "id": " ",
                     "name": "Correction Systems",
                     "weight": 0.200,
                     "icon": "location_city",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Infrastructure",
                             "weight": 0.500,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "16",
-                                    "name": "Prison Capacity",
-                                    "type": "Number"
+                                    "measurementName": "Prison Capacity",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Personnel",
                             "weight": 0.500,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "17",
-                                    "name": "Manning Level",
-                                    "type": "Number"
+                                    "measurementName": "Manning Level",
+                                    "measurementType": "Number"
                                 }
                             ]
                         }
                     ]
                 },
                 {
-                    "id": " ",
                     "name": "Accountability",
                     "weight": 0.150,
                     "icon": "pan_tool",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Laws",
                             "weight": 0.500,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "18",
-                                    "name": "Accountability Laws",
-                                    "type": "Number"
+                                    "measurementName": "Accountability Laws",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Courts",
                             "weight": 0.500,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "19",
-                                    "name": "Accountabilty Courts",
-                                    "type": "Number"
+                                    "measurementName": "Accountabilty Courts",
+                                    "measurementType": "Number"
                                 }
                             ]
                         }
@@ -330,62 +302,56 @@
             ]
         },
         {
-            "id": " ",
             "name": "Economic Opportunities",
             "weight": 0.182,
             "measurements": [],
             "children":[
                 {
-                    "id": " ",
                     "name": "Economic Development",
                     "weight": 0.300,
                     "icon": "attach_money",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Policy Drafting",
                             "weight": 0.333,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "20",
-                                    "name": "Official Policy",
-                                    "type": "Number"
+                                    "measurementName": "Official Policy",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Market Economy",
                             "weight": 0.333,
                             "icon": "work",
                             "measurements": [],
                             "children":[
                                 {
-                                    "id": " ",
                                     "name": "International Trade",
                                     "weight": 0.500,
                                     "children":[],
                                     "measurements": [
                                         {
                                             "id": "21",
-                                            "name": "Fertilizer Imports",
-                                            "type": "Number",
+                                            "measurementName": "Fertilizer Imports",
+                                            "measurementType": "Number",
                                             "valueFunction": {}
                                         }
                                     ]
                                 },
                                 {
-                                    "id": " ",
                                     "name": "Private Sector",
                                     "weight": 0.500,
                                     "children":[],
                                     "measurements": [
                                         {
                                             "id": "22",
-                                            "name": "Agriculture Exports",
-                                            "type": "Number",
+                                            "measurementName": "Agriculture Exports",
+                                            "measurementType": "Number",
                                             "valueFunction": {}
                                         }
                                     ]
@@ -393,85 +359,78 @@
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Macro Economic",
                             "weight": 0.333,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "23",
-                                    "name": "GDP Growth",
-                                    "type": "Percentage"
+                                    "measurementName": "GDP Growth",
+                                    "measurementType": "Percentage"
                                 }
                             ]
                         }
                     ]
                 },
                 {
-                    "id": " ",
                     "name": "Economic Crime",
                     "weight": 0.200,
                     "icon": "money_off",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Grey Economy",
                             "weight": 0.500,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "24",
-                                    "name": "Opium production by area (hectares)",
-                                    "type": "Number"
+                                    "measurementName": "Opium production by area (hectares)",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Black Economy",
                             "weight": 0.500,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "25",
-                                    "name": "Child labor 12-14 yrs",
-                                    "type": "Number"
+                                    "measurementName": "Child labor 12-14 yrs",
+                                    "measurementType": "Number"
                                 }
                             ]
                         }
                     ]
                 },
                 {
-                    "id": " ",
                     "name": "Economic Aid",
                     "weight": 0.500,
                     "icon": "local_hospital",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "International Loans",
                             "weight": 0.500,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "26",
-                                    "name": "Foreign Debt (Percentage of GDP)",
-                                    "type": "Percentage"
+                                    "measurementName": "Foreign Debt (Percentage of GDP)",
+                                    "measurementType": "Percentage"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Grants",
                             "weight": 0.500,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "27",
-                                    "name": "Foreign Aid in USD (Billions)",
-                                    "type": "Number"
+                                    "measurementName": "Foreign Aid in USD (Billions)",
+                                    "measurementType": "Number"
                                 }
                             ]
                         }
@@ -480,99 +439,91 @@
             ]
         },
         {
-            "id": " ",
             "name": "Education",
             "weight": 0.182,
             "measurements": [],
             "children":[
                 {
-                    "id": " ",
                     "name": "Policy",
                     "weight": 0.350,
                     "icon": "description",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Modified Syllabus",
                             "weight": 0.700,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "28",
-                                    "name": "Curriculum",
-                                    "type": "Number"
+                                    "measurementName": "Curriculum",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Incentives",
                             "weight": 0.300,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "29",
-                                    "name": "Percentage of Child labor",
-                                    "type": "Number"
+                                    "measurementName": "Percentage of Child labor",
+                                    "measurementType": "Number"
                                 }
                             ]
                         }
                     ]
                 },
                 {
-                    "id": " ",
                     "name": "Education Infrastructure",
                     "weight": 0.650,
                     "icon": "school",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Schools",
                             "weight": 0.400,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "30",
-                                    "name": "Percentage Enrollment Boys Rural Areas",
-                                    "type": "Percentage"
+                                    "measurementName": "Percentage Enrollment Boys Rural Areas",
+                                    "measurementType": "Percentage"
                                 },
                                 {
                                     "id": "31",
-                                    "name": "Percentage Enrollment (Girls in Rural Areas)",
-                                    "type": "Percentage"
+                                    "measurementName": "Percentage Enrollment (Girls in Rural Areas)",
+                                    "measurementType": "Percentage"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Professional Institutions",
                             "weight": 0.300,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "32",
-                                    "name": "Vocational Training per Thousand",
-                                    "type": "Number"
+                                    "measurementName": "Vocational Training per Thousand",
+                                    "measurementType": "Number"
                                 },
                                 {
                                     "id": "33",
-                                    "name": "Number of Universities",
-                                    "type": "Number"
+                                    "measurementName": "Number of Universities",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Trainers",
                             "weight": 0.300,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "34",
-                                    "name": "Student Teacher Ratio",
-                                    "type": "Number"
+                                    "measurementName": "Student Teacher Ratio",
+                                    "measurementType": "Number"
                                 }
                             ]
                         }
@@ -581,110 +532,100 @@
             ]
         },
         {
-            "id": " ",
             "name": "Socio Economic",
             "weight": 0.091,
             "measurements": [],
             "children":[
                 {
-                    "id": " ",
                     "name": "Relieve Suffering",
                     "weight": 0.600,
                     "icon": "healing",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Water",
                             "weight": 0.350,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "35",
-                                    "name": "Availibity of Clean Water (Percentage)",
-                                    "type": "Percentage"
+                                    "measurementName": "Availibity of Clean Water (Percentage)",
+                                    "measurementType": "Percentage"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Food",
                             "weight": 0.350,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "36",
-                                    "name": "Percentage of People Below Poverty Line",
-                                    "type": "Percentage"
+                                    "measurementName": "Percentage of People Below Poverty Line",
+                                    "measurementType": "Percentage"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Shelter",
                             "weight": 0.300,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "37",
-                                    "name": "Number of IDPs (Millions)",
-                                    "type": "Number"
+                                    "measurementName": "Number of IDPs (Millions)",
+                                    "measurementType": "Number"
                                 }
                             ]
                         }
                     ]
                 },
                 {
-                    "id": " ",
                     "name": "Sustaining Life",
                     "weight": 0.400,
                     "icon": "nature_people",
                     "measurements": [],
                     "children":[
                         {
-                            "id": " ",
                             "name": "Medical",
                             "weight": 0.700,
                             "children":[],
                             "measurements": [
                                 {
                                     "id": "38",
-                                    "name": "Doctors/1000",
-                                    "type": "Number"
+                                    "measurementName": "Doctors/1000",
+                                    "measurementType": "Number"
                                 }
                             ]
                         },
                         {
-                            "id": " ",
                             "name": "Utilities",
                             "weight": 0.300,
                             "icon": "flash_on",
                             "measurements": [],
                             "children":[
                                 {
-                                    "id": " ",
                                     "name": "Power",
                                     "weight": 0.500,
                                     "children":[],
                                     "measurements": [
                                         {
                                             "id": "39",
-                                            "name": "Percentage with access to electricity",
-                                            "type": "Percentage",
+                                            "measurementName": "Percentage with access to electricity",
+                                            "measurementType": "Percentage",
                                             "valueFunction": {}
                                         }
                                     ]
                                 },
                                 {
-                                    "id": " ",
                                     "name": "Communications",
                                     "weight": 0.500,
                                     "children":[],
                                     "measurements": [
                                         {
                                             "id": "40",
-                                            "name": "Percentage of Access to Mobiles",
-                                            "type": "Percentage",
+                                            "measurementName": "Percentage of Access to Mobiles",
+                                            "measurementType": "Percentage",
                                             "valueFunction": {}
                                         }
                                     ]

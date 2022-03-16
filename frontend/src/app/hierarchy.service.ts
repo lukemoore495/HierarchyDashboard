@@ -1,21 +1,50 @@
-import { Injectable } from '@angular/core';
-import { Hierarchy } from './Hierarchy';
-import RRRHierarchy from '../assets/staticFiles/RRRHierarchy.json';
-import { Observable, of } from 'rxjs';
-import SimpleHierarchy from '../assets/staticFiles/SimpleHierarchy.json';
-import { SensitivityAnalysis, SensitivityAnalysisReport } from "./sensitivity-analysis/SensitivityAnalysis";
+import { Injectable } from "@angular/core";
+import { Alternative, Hierarchy, HierarchyListItem } from "./Hierarchy";
+import { Observable, of } from "rxjs";
+import { SensitivityAnalysisReport } from "./sensitivity-analysis/SensitivityAnalysis";
+import { HttpClient } from "@angular/common/http";
+
+export interface HierarchyRequest {
+    name: string;
+    description: string;
+    nodes: NodeRequest[];
+    alternatives: Alternative[];
+}
+
+export interface NodeRequest {
+    name: string;
+    weight: number;
+    children: NodeRequest[];
+    icon?: string;
+    measurements: MeasurementDefinitionRequest[];
+}
+
+export interface MeasurementDefinitionRequest {
+    measurementName: string;
+    measurementType: string;
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class HierarchyService {
+    root = 'http://localhost:4200/api';
 
-    getHierarchies(): Observable<Hierarchy[]> {
-        return of([RRRHierarchy]);
+    constructor(private http: HttpClient){ }
+
+    getHierarchies(): Observable<HierarchyListItem[]> {
+        const url = this.root + '/hierarchy/ascending_id';
+        return this.http.get<HierarchyListItem[]>(url);
     }
 
-    createHierarchy(hierarchy: Hierarchy): Observable<Hierarchy> {
-        return of(RRRHierarchy);
+    getHierarchy(id: string) {
+        const url = this.root + `/hierarchy/${id}`;
+        return this.http.get<Hierarchy>(url);
+    }
+
+    createHierarchy(hierarchy: HierarchyRequest): Observable<Hierarchy> {
+        const url = this.root + '/hierarchy';
+        return this.http.post<Hierarchy>(url, hierarchy);
     }
 
     getSensitivityAnalysis(parentNodeId: string): Observable<SensitivityAnalysisReport>{

@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
+import { HttpClientModule } from '@angular/common/http';
 import { HierarchyReducer } from './state/hierarchy.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { HierarchyEffects } from './state/hierarchy.effects';
@@ -29,7 +30,8 @@ import { SensitivityAnalysisModule } from './sensitivity-analysis/sensitivity-an
     HierarchicalViewModule,
     SensitivityAnalysisModule,
     DashModule,
-    NavModule
+    NavModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
