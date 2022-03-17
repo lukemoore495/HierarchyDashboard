@@ -32,7 +32,7 @@
             {{card.title}}
           </mat-card-title>
           <mat-form-field>
-            <mat-select (selectionChange) = "onSelectionchange($event)">
+            <mat-select *ngIf= "alternatives$ | async as alternatives" (selectionChange) = "onSelectionchange($event)">
               <mat-option *ngFor= "let alternative of alternatives" [value] = "alternative.id">
                 {{alternative.name}}
               </mat-option>

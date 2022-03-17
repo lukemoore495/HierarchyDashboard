@@ -7,6 +7,7 @@ import { getSelectedHierarchy } from '../state';
 import { Alternative } from '../hierarchy';
 import { setSelectedAlternative, setSelectedHierarchy } from '../state/hierarchy.actions';
 import { MatSelectChange } from '@angular/material/select';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-dash',
@@ -17,11 +18,12 @@ export class DashComponent{
     card2 = 'Value Function';
     card3 = 'Alternatives';
     card1 = 'Rank';
+    alternatives$?:Observable<Alternative[]>;
 
     constructor(private breakpointObserver: BreakpointObserver, private store: Store<HierarchyState>) {
-        this.store.select(getSelectedHierarchy).pipe(
+        this.alternatives$ = this.store.select(getSelectedHierarchy).pipe(
             map(hierarchy => hierarchy?.alternatives === undefined ? [] : hierarchy?.alternatives)
-        ).subscribe(alternatives => this.alternatives = alternatives);
+        )
      }
 
     /** Based on the screen size, switch from standard to one column per row */
@@ -42,9 +44,8 @@ export class DashComponent{
             ];
         })
     );
-    
+
     onSelectionchange(event:MatSelectChange){
-        console.log(event.value);
         this.store.dispatch(setSelectedAlternative({selectedAlternativeId: event.value}));
       }
 }
