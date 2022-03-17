@@ -16,6 +16,10 @@ import { CommonModule } from '@angular/common';
         MatGridListModule,
         RankChartModule,
         ValueMeasurementChartModule,
+        MeasurementsFormModule,
+        CommonModule,
+        MatSelectionModule,
+        MatFormFieldModule,
         AlternativesFormModule,
         CommonModule
     ],
