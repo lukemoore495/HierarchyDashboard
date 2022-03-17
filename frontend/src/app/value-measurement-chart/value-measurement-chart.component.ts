@@ -5,7 +5,7 @@ import { getSelectedMeasurement, getSelectedMeasurementDefinition } from '../sta
 import { HierarchyState } from '../state/hierarchy.reducer';
 import { BaseChartDirective } from 'ng2-charts';
 import { AfterViewInit } from '@angular/core';
-import { Measurement } from '../Hierarchy';
+import { Measurement } from '../hierarchy';
 import { combineLatest } from 'rxjs';
 
 @Component({

@@ -5,7 +5,9 @@ import { AlternativesFormModule} from "../alternatives-form/alternatives-form.mo
 import { RankChartModule } from "../rank-chart/rank-chart.module";
 import { ValueMeasurementChartModule } from "../value-measurement-chart/value-measurement-chart.module";
 import { DashComponent } from "./dash.component";
-import { CommonModule } from '@angular/common';  
+import { CommonModule } from '@angular/common';
+import { MatSelectModule } from "@angular/material/select";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 @NgModule({
     declarations: [
@@ -16,6 +18,9 @@ import { CommonModule } from '@angular/common';
         MatGridListModule,
         RankChartModule,
         ValueMeasurementChartModule,
+        CommonModule,
+        MatSelectModule,
+        MatFormFieldModule,
         AlternativesFormModule,
         CommonModule
     ],
