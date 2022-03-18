@@ -109,6 +109,10 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
 
     updateRanking(ranks: Rank[]) {
         const rankValuesToBarChartData = (rankValues: RankValue[][]): RankChartData[] => {
+            if(rankValues.length === 0){
+                return [];
+            }
+            
             const barChartData: RankChartData[] = [];
             for(let i = 0; i < rankValues[0].length; i++) {
                 const dataColumn: number[] = [];

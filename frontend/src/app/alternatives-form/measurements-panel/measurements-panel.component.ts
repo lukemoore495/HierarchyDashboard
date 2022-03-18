@@ -27,6 +27,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     selectedMeasurementId: string | null = null;
     $parentNodeOpened: BehaviorSubject<boolean>;
     alternativeMeasurements: Measurement[] = [];
+    measurementDefinitions: MeasurementDefinition[] = [];
 
     constructor(private fb: FormBuilder, private store: Store<HierarchyState>) { 
         const sub = this.store.select(getSelectedAlternative)
@@ -46,19 +47,21 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         const nodes : Node[] = Object.assign([], this.measurementNode?.children);
         for(const node of nodes) {
-            const measurementFields = node?.measurements ?? [];
+            const measurementFields = node.measurements ?? [];
+            this.measurementDefinitions.push(...measurementFields);
             for(const measurementField of measurementFields) {
+                let measurementValue : number | boolean | null
+                    = this.alternativeMeasurements.find(m => m.measurementDefinitionId === measurementField.id)?.measure ?? null;
                 if(this.isNumberMeasurement(measurementField)){
                     this.form.addControl(measurementField.id, this.fb.control(null, [Validators.pattern('^[0-9]*$')]));
                 } else if (this.isPercentageMeasurement(measurementField)) {
                     this.form.addControl(measurementField.id, this.fb.control(null, []));
                 } else if (this.isBooleanMeasurement(measurementField)) {
                     this.form.addControl(measurementField.id, this.fb.control(null, []));
+                    measurementValue = this.convertNumberToBoolean(measurementValue);
                 }
-                const measurementValue 
-                    = this.alternativeMeasurements.find(m => m.measurementDefinitionId === measurementField.id) ?? null;
                 const formControl = this.getFormControl(measurementField.id);
-                formControl?.setValue(measurementValue?.measure);
+                formControl?.setValue(measurementValue);
             }
         }
 
@@ -68,9 +71,13 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
                 map(form => {
                     const measurements : Measurement[] = [];
                     for(const id in form){
+                        let measure = form[id];
+                        if(this.isBooleanMeasurementUsingId(id)){
+                            measure = this.convertBooleanToNumber(measure);
+                        }
                         measurements.push({
                             measurementDefinitionId: id,
-                            measure: form[id]
+                            measure: measure
                         });
                     }
                     return measurements;
@@ -106,11 +113,32 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
         return this.form.get(name);
     }
 
+    getCheckboxValue(formControlName: string): boolean | null {
+        const formControl = this.getFormControl(formControlName);
+        return formControl?.value as boolean ?? null;
+    }
+
+    checkboxIsIndeterminate(formControlName: string): boolean {
+        const value = this.getCheckboxValue(formControlName);
+        return value === null;
+    }
+
     hasChildren(node: Node): boolean{
         if(node?.children != undefined && node?.children.length) {
             return true;
         }
         return false;
+    }
+
+    convertNumberToBoolean(number: number | null): boolean | null {
+        if(number !== null && (number === 0 || number === 1)) {
+            return number === 1;
+        }
+        return null;
+    }
+
+    convertBooleanToNumber(bool: boolean): number {
+        return bool ? 1 : 0;
     }
 
     updateMeasurements (newMeasurements: Measurement[]){
@@ -135,16 +163,24 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
         this.measurementResultEvent.emit(modifiedMeasurements);
     }
 
-    isNumberMeasurement(measurement : MeasurementDefinition){
+    isNumberMeasurement(measurement : MeasurementDefinition): boolean {
         return measurement.type === MeasurementType.Number;
     }
 
-    isPercentageMeasurement(measurement : MeasurementDefinition){
+    isPercentageMeasurement(measurement : MeasurementDefinition): boolean {
         return measurement.type === MeasurementType.Percentage;
     }
 
-    isBooleanMeasurement(measurement : MeasurementDefinition){
+    isBooleanMeasurement(measurement : MeasurementDefinition): boolean {
         return measurement.type === MeasurementType.Boolean;
+    }
+
+    isBooleanMeasurementUsingId(measurementDefinitionId : string): boolean {
+        const measurement = this.measurementDefinitions.find(m => m.id == measurementDefinitionId);
+        if(!measurement){
+            return false;
+        }
+        return this.isBooleanMeasurement(measurement);
     }
 
     onPanelOpen(){
