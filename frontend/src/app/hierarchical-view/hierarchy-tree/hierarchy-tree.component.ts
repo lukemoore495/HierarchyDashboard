@@ -1,22 +1,18 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { getHierarchies, getSelectedHierarchy } from 'src/app/state';
+import { HierarchyState } from 'src/app/state/hierarchy.reducer';
 import { Store } from '@ngrx/store';
+import { Hierarchy, HierarchyListItem, Node } from 'src/app/Hierarchy';
 import { Observable, Subscription } from 'rxjs';
-import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
-import { getHierarchies, getSelectedHierarchy } from '../state';
-import { createHierarchy, setSelectedHierarchy } from '../state/hierarchy.actions';
-import { HierarchyState } from '../state/hierarchy.reducer';
-import RRRHierarchy from '../../assets/staticFiles/RRRHierarchyPost.json';
-import SimpleHierarchy from '../../assets/staticFiles/SimpleHierarchyPost.json';
-import { MatSelectChange } from '@angular/material/select';
 
 @Component({
-    selector: 'app-hierarchical-view',
-    templateUrl: './hierarchical-view.component.html',
-    styleUrls: ['./hierarchical-view.component.scss']
+    selector: 'app-hierarchy-tree',
+    templateUrl: './hierarchy-tree.component.html',
+    styleUrls: ['./hierarchy-tree.component.scss']
 })
-export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HierarchyTreeComponent implements OnInit {
     selectedHierarchy?: Hierarchy;
-    defaultId = "";
+    defaultId = '';
     hierarchyLevels: Node[][] = [];
     elem: Element | null = null;
     relationships: string[] = [];
@@ -25,7 +21,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
     @ViewChildren('nodes') private nodes?: QueryList<ElementRef<HTMLDivElement>>;
     @ViewChild('svg') svg?: ElementRef;
     subscriptions: Subscription[] = [];
-    hierarchies$?: Observable<HierarchyListItem[]>
+    hierarchies$?: Observable<HierarchyListItem[]>;
 
     constructor(private store: Store<HierarchyState>, private renderer: Renderer2) { }
 
@@ -36,7 +32,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
                     this.selectedHierarchy = hierarchy;
                     this.hierarchyLevels = this.sortNodesToLevels(hierarchy);
                     this.relationships = this.findRelationships(this.hierarchyLevels);
-                    
+                  
                     this.viewBoxHeight = this.hierarchyLevels.length * 250;
                     let maxWidth = 0;
                     this.hierarchyLevels.forEach(level => {
@@ -48,7 +44,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
                 }
             });
         this.subscriptions.push(sub);
-        
+      
         this.hierarchies$ = this.store.select(getHierarchies);
     }
 
@@ -63,7 +59,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
             const childrenIds = relationship.slice(1);
             this.repositionChildren(childrenIds, parentId);
         }
-        
+      
         this.fixCollisions(this.relationships, this.hierarchyLevels);
 
         this.fixOffscreenNodes(this.hierarchyLevels.length);
@@ -124,7 +120,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
             const middleChild1Position = middleChild1?.getBoundingClientRect();
             const middleChild2 = this.getNodeById(childrenIds[middleIndex2]);
             const middleChild2Position = middleChild2?.getBoundingClientRect();
-            
+          
             if(!middleChild1 || !middleChild1Position || !middleChild2 || !middleChild2Position)
                 return;
 
@@ -157,9 +153,9 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
 
     hasCollision (pos1: DOMRect, pos2: DOMRect): boolean {
         return !(pos1.right <= pos2.left || 
-            pos1.left >= pos2.right || 
-            pos1.bottom <= pos2.top || 
-            pos1.top >= pos2.bottom);
+          pos1.left >= pos2.right || 
+          pos1.bottom <= pos2.top || 
+          pos1.top >= pos2.bottom);
     };
 
     fixCollisions(relationships: string[], levels: Node[][]) : void {
@@ -177,7 +173,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     findRowCollision (row: string[]): string | null {
-        
+      
         for(const id of row) {
             const elementPos = this.getNodeById(id)?.getBoundingClientRect();
             if(!elementPos)
@@ -226,24 +222,24 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
             const parent = this.findParent(elementId, relationships);
             if(!parent)
                 return elements;
-            
+          
             const allChildren = this.findChildren(parent, relationships);
             const elementIndex = allChildren.indexOf(elementId);
             const children = allChildren.slice(elementIndex);
-      
+    
             elements.push(...children);
             children
                 .filter(child => child != elementId)
                 .forEach(child => elements.push(...this.findDescendants(child, relationships, [])));
-            
+          
             if(parent !== 'topLevel') {
                 return findElementsToShift(parent, relationships, elements);
             }
-            
+          
             if(elementIndex <= ~~(allChildren.length/2)){
                 elements.push(parent);
             }
-    
+  
             return elements;
         };
 
@@ -263,12 +259,12 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
         const newChildren = this.findChildren(elementId, relationships);
         if(newChildren.length === 0)
             return children;
-        
+      
         children.push(...newChildren);
         newChildren.forEach(child => children.push(...this.findDescendants(child, relationships, [])));
         return children;
     };
-    
+  
     findParent (elementId: string, relationships: string[]): string | null {
         const relationship = relationships
             .find(r => r.split(',').some(x => x  === elementId));
@@ -312,7 +308,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
         const parentPos = parent?.getBoundingClientRect();
         if(!parent || !parentPos)
             return;
-        
+      
         const children: HTMLDivElement[] = [];
         for(const childId of childrenIds){
             const child = this.getNodeById(childId);
@@ -331,7 +327,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
 
             if(!childPos)
                 continue;
-            
+          
             const childEdge = childPos.top + childPos.height/2;;
 
             if(!verticalLineLength)
@@ -366,7 +362,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
 
         this.drawLine(connectionX1, connectionY, connectionX2, connectionY);
     }
-    
+  
     drawLine(x1: number, y1: number, x2: number, y2: number){
         const DOMCoordinateToSVG = (svg: ElementRef, x: number, y: number): SVGPoint => {
             const point = svg?.nativeElement.createSVGPoint();
@@ -390,14 +386,4 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
         this.renderer.appendChild(this.svg?.nativeElement, line);
     }
 
-    createHierarchy() {
-        //This will go away eventually. We will replace it with creating hierarchies
-        //from scratch
-        this.store.dispatch(createHierarchy({hierarchy: RRRHierarchy}));
-        //this.store.dispatch(createHierarchy({hierarchy: SimpleHierarchy}))
-    }
-
-    onSelect(event: MatSelectChange) {
-        this.store.dispatch(setSelectedHierarchy({selectedHierarchyId: event.value}));
-    }
 }

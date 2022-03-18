@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { HierarchyState } from '../state/hierarchy.reducer';
 import { getSelectedHierarchy } from '../state';
 import { Alternative } from '../Hierarchy';
-import { setSelectedAlternative, setSelectedHierarchy } from '../state/hierarchy.actions';
+import { setSelectedAlternative } from '../state/hierarchy.actions';
 import { MatSelectChange } from '@angular/material/select';
 import { Observable } from 'rxjs';
 
@@ -15,9 +15,8 @@ import { Observable } from 'rxjs';
     styleUrls: ['./dash.component.scss']
 })
 export class DashComponent{
-    card2 = 'Value Function';
-    card3 = 'Alternatives';
-    card1 = 'Rank';
+    card1 = 'Value Function';
+    card2 = 'Alternatives';
     alternatives$?:Observable<Alternative[]>;
 
     constructor(private breakpointObserver: BreakpointObserver, private store: Store<HierarchyState>) {
@@ -33,14 +32,12 @@ export class DashComponent{
                 return [
                     { title: this.card1, cols: 1, rows: 1 },
                     { title: this.card2, cols: 1, rows: 1 },
-                    { title: this.card3, cols: 1, rows: 1 },
                 ];
             }
 
             return [
-                { title: this.card2, cols: 1, rows: 1.5},
-                { title: this.card3, cols: 1, rows: 2 },
-                { title: this.card1, cols: 2, rows: 2}
+                { title: this.card1, cols: 1, rows: 2},
+                { title: this.card2, cols: 1, rows: 2}
             ];
         })
     );

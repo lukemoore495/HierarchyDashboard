@@ -2,14 +2,10 @@
 <div #accent class="mat-accent" style="display:none"></div>
 <div #hover class="mat-hover" style="display:none"></div>
 <div #hover class="mat-muted" style="display:none"></div>
-<div>
-  <div>
-    <div #rankChart class="chart">
-      <canvas class="rank" baseChart [width]="width" [height]="height"
-        [data]="barChartData"
-        [options]="barChartOptions"
-        [type]="barChartType">
-      </canvas>
-    </div>
+  <div #rankChart class="chart">
+    <canvas class="rank" baseChart [width]="width" [height]="height"
+      [data]="barChartData"
+      [options]="barChartOptions"
+      [type]="barChartType">
+    </canvas>
   </div>
-</div>

@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { ChartConfiguration, ChartType, ChartEvent, ChartTypeRegistry, Plugin, ChartData, ScatterDataPoint } from 'chart.js';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChartConfiguration, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { Chart } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -34,7 +34,7 @@ export class SensitivityAnalysisComponent implements OnInit {
     }
 
     onSliderChange(event: MatSliderChange) {
-        this.sliderValue = event.value
+        this.sliderValue = event.value;
         if (!this.sensitivityAnalysisReport)
             return;
 
@@ -45,7 +45,7 @@ export class SensitivityAnalysisComponent implements OnInit {
     }
 
     onSliderMove(event: MatSliderChange) {
-        this.sliderValue = event.value
+        this.sliderValue = event.value;
         if (event.value !== null) {
             this.setVerticalLine(event.value);
         }

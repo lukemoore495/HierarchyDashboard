@@ -1,0 +1,26 @@
+.node-container{
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;    
+
+    .node{
+        position: relative;
+        margin: auto;
+        padding: 1rem;
+        height: max-content;
+        width: max-content;
+    }
+}
+
+.tree{
+    position: absolute;
+}
+
+.svg{
+    position: absolute;
+    z-index: -1;
+}
+
+.text{
+    margin-left: 1rem;
+}

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { delay, map, shareReplay, skipWhile, take, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { HierarchyState } from '../state/hierarchy.reducer';
-import * as HierarchyActions from '../state/hierarchy.actions'
+import * as HierarchyActions from '../state/hierarchy.actions';
 import { getError, getHierarchies } from '../state';
 
 @Component({
@@ -16,10 +16,10 @@ export class NavComponent implements OnInit {
     errorMessage$?: Observable<string>;
 
     menuItems = [
-        { title: 'Dashboard', route: 'dashboard', icon: 'view_quilt' },
-        { title: 'Weights', route: 'importanceValue', icon: 'grid_on' },
-        { title: 'Sensitivity Analysis', route: 'sensitivityAnalysis', icon: 'show_chart' },
-        { title: 'Hierarchical View', route: 'hierarchicalView', icon: 'pageview' }];
+        { title: 'Hierarchical View', route: 'hierarchicalView', icon: 'pageview' },
+        { title: 'alternatives', route: 'alternatives', icon: 'query_stats' },
+        { title: 'Rank', route: 'rank', icon: 'stacked_bar_chart' },
+        { title: 'Sensitivity Analysis', route: 'sensitivityAnalysis', icon: 'ssid_chart' }];
 
     isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
         .pipe(
@@ -30,7 +30,7 @@ export class NavComponent implements OnInit {
     constructor(private store: Store<HierarchyState>, private breakpointObserver: BreakpointObserver) { }
 
     ngOnInit(): void {
-       this.errorMessage$ = this.store.select(getError);
+        this.errorMessage$ = this.store.select(getError);
         this.store.dispatch(HierarchyActions.retrieveHierarchies());
         this.store.select(getHierarchies)
             .pipe(
@@ -45,7 +45,7 @@ export class NavComponent implements OnInit {
             )
             .subscribe(x=> {
                 if(x.length > 0){
-                    this.store.dispatch(HierarchyActions.setSelectedHierarchy({selectedHierarchyId: x[0].id}))
+                    this.store.dispatch(HierarchyActions.setSelectedHierarchy({selectedHierarchyId: x[0].id}));
                 }
             });
     }

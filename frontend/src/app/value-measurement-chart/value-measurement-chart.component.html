@@ -5,12 +5,16 @@
     [type]="lineChartType">
   </canvas>
 </div>
-<mat-form-field class="coordinate" appearance="fill">
-  <mat-label>X Value</mat-label>
-  <input matInput>
-</mat-form-field>
-<mat-form-field class="coordinate" appearance="fill">
-  <mat-label>Y Value</mat-label>
-  <input matInput>
-</mat-form-field>
+<div class="form">
+  <form>
+    <mat-form-field class="input" appearance="fill">
+      <mat-label>X-Value</mat-label>
+      <input matInput class="form-control field">
+    </mat-form-field>
+  </form>
+  <button mat-raised-button color="accent" class="button">
+    <mat-icon>add</mat-icon>
+    Insert X-Value
+  </button>
+</div>
 

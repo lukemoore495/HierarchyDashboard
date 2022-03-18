@@ -1,0 +1,55 @@
+<div class="tree">
+    <div class="node-container">
+        <div id="topLevel" class="node" #nodes>
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        Top Value
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="dashboard-card-content">
+                    <div class="text">
+                        Weight: 1.000
+                    </div>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button>Add</button>
+                    <button mat-button>Delete</button>
+                    <button mat-button *ngIf="hierarchyLevels.length > 0" 
+                        matTooltip="Weights"
+                        [routerLink]="['/weights', 'topLevel']"
+                        class="button">
+                        <mat-icon color="accent">balance</mat-icon>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+    <div *ngFor="let level of hierarchyLevels; index as i" class="node-container">
+        <div id="{{i}}{{j}}" class="node" *ngFor="let node of level; index as j" #nodes>
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        {{node.name}}
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="dashboard-card-content">
+                    <div class="text">
+                        Weight: {{node.weight}}
+                    </div>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button>Add</button>
+                    <button mat-button>Delete</button>
+                    <button mat-button *ngIf="node.children.length > 0" 
+                        matTooltip="Weights"
+                        [routerLink]="['/weights', node.id]"
+                        class="button">
+                        <mat-icon color="accent">balance</mat-icon>
+                    </button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+</div>
+<svg class="svg" [attr.width]="viewBoxWidth" [attr.height]="viewBoxHeight" #svg></svg>
