@@ -1,5 +1,5 @@
 import { AfterViewInit, OnDestroy } from '@angular/core';
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { Subscription } from 'rxjs/internal/Subscription';
@@ -75,7 +75,7 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
 
     findMeasurementName(measurementId: string): string | null {
         const measurement = this.measurements.find(measurement => measurement.id === measurementId);
-        return measurement?.measurementName ?? null;
+        return measurement?.name ?? null;
     }
 
     rankAlternatives(alternatives: Alternative[]): Rank[] {
