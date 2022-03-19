@@ -15,7 +15,7 @@ import { MatSelectChange } from '@angular/material/select';
     styleUrls: ['./hierarchical-view.component.scss']
 })
 export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestroy {
-    selectedHierarchy?: Hierarchy;
+    selectedHierarchy: Hierarchy | null = null;
     hierarchyLevels: Node[][] = [];
     elem: Element | null = null;
     relationships: string[] = [];
@@ -390,6 +390,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     createHierarchy() {
+        this.selectedHierarchy = null;
         //This will go away eventually. We will replace it with creating hierarchies
         //from scratch
         this.store.dispatch(createHierarchy({hierarchy: RRRHierarchy}));
@@ -397,6 +398,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
     }
 
     onSelect(event: MatSelectChange) {
+        this.selectedHierarchy = null;
         this.store.dispatch(setSelectedHierarchy({selectedHierarchyId: event.value}));
     }
 }
