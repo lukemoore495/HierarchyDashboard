@@ -1,17 +1,16 @@
-import { Component, ElementRef, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { getHierarchies, getSelectedHierarchy } from 'src/app/state';
+import { Component, ElementRef, Input, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { HierarchyState } from 'src/app/state/hierarchy.reducer';
 import { Store } from '@ngrx/store';
-import { Hierarchy, HierarchyListItem, Node } from 'src/app/Hierarchy';
-import { Observable, Subscription } from 'rxjs';
+import { Hierarchy, Node } from 'src/app/Hierarchy';
+import { OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-hierarchy-tree',
     templateUrl: './hierarchy-tree.component.html',
     styleUrls: ['./hierarchy-tree.component.scss']
 })
-export class HierarchyTreeComponent implements OnInit {
-    selectedHierarchy?: Hierarchy;
+export class HierarchyTreeComponent implements OnInit{
+    @Input() hierarchy: Hierarchy | null = null;
     defaultId = '';
     hierarchyLevels: Node[][] = [];
     elem: Element | null = null;
@@ -20,38 +19,27 @@ export class HierarchyTreeComponent implements OnInit {
     viewBoxWidth = 20000;
     @ViewChildren('nodes') private nodes?: QueryList<ElementRef<HTMLDivElement>>;
     @ViewChild('svg') svg?: ElementRef;
-    subscriptions: Subscription[] = [];
-    hierarchies$?: Observable<HierarchyListItem[]>;
 
-    constructor(private store: Store<HierarchyState>, private renderer: Renderer2) { }
+    constructor(private renderer: Renderer2) {}
 
-    ngOnInit(): void {   
-        const sub = this.store.select(getSelectedHierarchy)
-            .subscribe(hierarchy => {
-                if (hierarchy) {
-                    this.selectedHierarchy = hierarchy;
-                    this.hierarchyLevels = this.sortNodesToLevels(hierarchy);
-                    this.relationships = this.findRelationships(this.hierarchyLevels);
-                  
-                    this.viewBoxHeight = this.hierarchyLevels.length * 250;
-                    let maxWidth = 0;
-                    this.hierarchyLevels.forEach(level => {
-                        if(level.length > maxWidth){
-                            maxWidth = level.length;
-                        }
-                    });
-                    this.viewBoxWidth = (maxWidth + 1) * 300;
-                }
-            });
-        this.subscriptions.push(sub);
+    ngOnInit(){
+        if(!this.hierarchy) {
+            return;
+        }
+
+        this.hierarchyLevels = this.sortNodesToLevels(this.hierarchy);
+        this.relationships = this.findRelationships(this.hierarchyLevels);
       
-        this.hierarchies$ = this.store.select(getHierarchies);
+        this.viewBoxHeight = this.hierarchyLevels.length * 250;
+        let maxWidth = 0;
+        this.hierarchyLevels.forEach(level => {
+            if(level.length > maxWidth){
+                maxWidth = level.length;
+            }
+        });
+        this.viewBoxWidth = (maxWidth + 1) * 300;
     }
-
-    ngOnDestroy(): void {
-        this.subscriptions.forEach(sub => sub.unsubscribe());
-    }
-
+    
     ngAfterViewInit() {
         for (let i = 0; i < this.relationships.length; i++) {
             const relationship = this.relationships[i].split(',');

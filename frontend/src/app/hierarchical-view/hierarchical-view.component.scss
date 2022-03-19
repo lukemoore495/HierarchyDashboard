@@ -18,3 +18,14 @@
         height: 50%;
     }
 }
+
+.welcome{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 10%;
+    transform: scale(1.5);
+    .title{
+        font-size: xx-large;
+    }
+}

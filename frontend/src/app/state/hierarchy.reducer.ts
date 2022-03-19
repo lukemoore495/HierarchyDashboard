@@ -24,6 +24,12 @@ export const HierarchyReducer = createReducer<HierarchyState>(
     initialState,
     on(HierarchyActions.createHierarchySuccess, (state, action): HierarchyState => {
         const hierarchies = [...state.Hierarchies];
+        
+        const existingHierarchyIndex = hierarchies.findIndex(x => x.id === action.hierarchy.id);
+        if(existingHierarchyIndex !== -1) {
+            hierarchies.splice(existingHierarchyIndex);
+        }
+
         hierarchies.push({
             id: action.hierarchy.id,
             description: action.hierarchy.description,

@@ -14,6 +14,7 @@ import { getError, getHierarchies } from '../state';
 })
 export class NavComponent implements OnInit {
     errorMessage$?: Observable<string>;
+    hasHierarchies = false;
 
     menuItems = [
         { title: 'Hierarchical View', route: 'hierarchicalView', icon: 'pageview' },
@@ -43,9 +44,10 @@ export class NavComponent implements OnInit {
                 skipWhile(x => x.length === 0),
                 take(1)
             )
-            .subscribe(x=> {
-                if(x.length > 0){
-                    this.store.dispatch(HierarchyActions.setSelectedHierarchy({selectedHierarchyId: x[0].id}));
+            .subscribe(hierarchies => {
+                if(hierarchies.length > 0){
+                    this.store.dispatch(HierarchyActions.setSelectedHierarchy({selectedHierarchyId: hierarchies[0].id}));
+                    this.hasHierarchies = true;
                 }
             });
     }
