@@ -3,26 +3,37 @@ import { map } from 'rxjs/operators';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
 import { Store } from '@ngrx/store';
 import { HierarchyState } from '../state/hierarchy.reducer';
-import { getSelectedHierarchy } from '../state';
+import { getSelectedAlternative, getSelectedHierarchy } from '../state';
 import { Alternative } from '../Hierarchy';
 import { setSelectedAlternative } from '../state/hierarchy.actions';
 import { MatSelectChange } from '@angular/material/select';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { OnDestroy } from '@angular/core';
 
 @Component({
     selector: 'app-dash',
     templateUrl: './dash.component.html',
     styleUrls: ['./dash.component.scss']
 })
-export class DashComponent{
+export class DashComponent implements OnDestroy{
     card1 = 'Value Function';
     card2 = 'Alternatives';
     alternatives$?:Observable<Alternative[]>;
+    selectedAlternative: Alternative | null = null;
+    subscriptions: Subscription[] = [];
 
     constructor(private breakpointObserver: BreakpointObserver, private store: Store<HierarchyState>) {
         this.alternatives$ = this.store.select(getSelectedHierarchy).pipe(
             map(hierarchy => hierarchy?.alternatives === undefined ? [] : hierarchy?.alternatives)
         );
+
+        const sub = this.store.select(getSelectedAlternative)
+            .subscribe(alternative => this.selectedAlternative = alternative);
+        this.subscriptions.push(sub);
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
     /** Based on the screen size, switch from standard to one column per row */

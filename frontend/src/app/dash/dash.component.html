@@ -14,17 +14,20 @@
         </mat-card-content>
       </mat-card>
       <mat-card *ngIf="card.title===card2" class="dashboard-card scroll">
-        <mat-card-header>
-          <mat-card-title>
+        <mat-card-header class="alternative-header">
+          <mat-card-title class="title">
             {{card.title}}
           </mat-card-title>
           <mat-form-field>
-            <mat-select *ngIf= "alternatives$ | async as alternatives" (selectionChange) = "onSelectionchange($event)">
-              <mat-option *ngFor= "let alternative of alternatives" [value] = "alternative.id">
-                {{alternative.name}}
-              </mat-option>
-          </mat-select>
-           </mat-form-field>
+            <mat-select *ngIf="alternatives$ | async as alternatives" 
+              [value]="selectedAlternative?.id ?? ' '" 
+              (selectionChange) = "onSelectionchange($event)"
+              class="select">
+                <mat-option *ngFor= "let alternative of alternatives" [value]="alternative.id">
+                  {{alternative.name}}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
           <div>

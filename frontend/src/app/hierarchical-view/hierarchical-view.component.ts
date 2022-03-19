@@ -16,7 +16,6 @@ import { MatSelectChange } from '@angular/material/select';
 })
 export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestroy {
     selectedHierarchy?: Hierarchy;
-    defaultId = "";
     hierarchyLevels: Node[][] = [];
     elem: Element | null = null;
     relationships: string[] = [];
@@ -25,7 +24,7 @@ export class HierarchicalViewComponent implements OnInit, AfterViewInit, OnDestr
     @ViewChildren('nodes') private nodes?: QueryList<ElementRef<HTMLDivElement>>;
     @ViewChild('svg') svg?: ElementRef;
     subscriptions: Subscription[] = [];
-    hierarchies$?: Observable<HierarchyListItem[]>
+    hierarchies$?: Observable<HierarchyListItem[]>;
 
     constructor(private store: Store<HierarchyState>, private renderer: Renderer2) { }
 
