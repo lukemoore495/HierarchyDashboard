@@ -28,13 +28,18 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     $parentNodeOpened: BehaviorSubject<boolean>;
     alternativeMeasurements: Measurement[] = [];
     measurementDefinitions: MeasurementDefinition[] = [];
+    alternativeChanged = false;
 
     constructor(private fb: FormBuilder, private store: Store<HierarchyState>) { 
         const sub = this.store.select(getSelectedAlternative)
             .pipe(
                 map(alternative => alternative?.measurements)
             )
-            .subscribe(measurements => this.alternativeMeasurements = measurements ?? []);
+            .subscribe(measurements => {
+                this.alternativeMeasurements = measurements ?? []; 
+                this.setFormValues(this.alternativeMeasurements);
+                this.alternativeChanged = true;
+            });
         this.subscriptions.push(sub);
     
         this.form = fb.group({});
@@ -84,8 +89,11 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
                 })
             )
             .subscribe(formMeasurements => {
-                if(this.form.valid){
+                if(this.form.valid && !this.alternativeChanged){
                     this.updateMeasurements(formMeasurements);
+                }
+                if(this.alternativeChanged) {
+                    this.alternativeChanged = false;
                 }
             });
 
@@ -109,8 +117,19 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
         this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
+    setFormValues(measurements: Measurement[]){
+        for(const measurement of measurements) {
+            let measurementValue : number | boolean | null = measurement.measure ?? null;
+            if (this.isBooleanMeasurementUsingId(measurement.measurementDefinitionId)) {
+                measurementValue = this.convertNumberToBoolean(measurementValue);
+            }
+            const formControl = this.getFormControl(measurement.measurementDefinitionId);
+            formControl?.setValue(measurementValue);
+        }
+    }
+
     getFormControl(name : string): AbstractControl | null{
-        return this.form.get(name);
+        return this.form?.get(name);
     }
 
     getCheckboxValue(formControlName: string): boolean | null {
@@ -238,6 +257,4 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
         this.$parentNodeOpened.next(true);
         this.childNodeOpened.emit();
     }
-
-
 }

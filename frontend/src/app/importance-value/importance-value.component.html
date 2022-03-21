@@ -13,7 +13,7 @@
     </mat-grid-list>
 </div>
 <div class="options">
-    <div *ngFor="let weight of weights" class="example-box" cdkDrag>
-        {{weight}}
+    <div *ngFor="let child of children" class="example-box" cdkDrag>
+        {{child.name}}
     </div>
 </div>

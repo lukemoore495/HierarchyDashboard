@@ -1,57 +1,26 @@
 <div class="header-container">
     <mat-form-field class="select" appearance="outline" *ngIf="hierarchies$ | async as hierarchies">
-        <mat-select [value]="selectedHierarchy?.id ?? defaultId" (selectionChange)="onSelect($event)">
+        <mat-select [value]="selectedHierarchy?.id ?? ' '" (selectionChange)="onSelect($event)">
             <mat-option *ngFor="let hierarchy of hierarchies" [value]="hierarchy.id">{{hierarchy.name}}</mat-option>
         </mat-select>
     </mat-form-field>
-    <button mat-raised-button color="accent" class="button">
+    <button mat-raised-button color="accent" class="header-button">
         <mat-icon>add</mat-icon>
         Create Hierarchy
     </button>
 
     <!-- This is a short term hack to save RRRHierarchy into the db -->
-    <button mat-raised-button color="accent" class="button" (click)="createHierarchy()">
+    <button mat-raised-button color="accent" class="header-button" (click)="createHierarchy()">
         <mat-icon>download</mat-icon>
         Import RRRHierarchy
     </button>
-
 </div>
-<div class="tree">
-    <div class="node-container">
-        <div id="topLevel" class="node" #nodes>
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>
-                        Top Value
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content class="dashboard-card-content">
-                    1.000
-                </mat-card-content>
-                <mat-card-actions>
-                    <button mat-button>Add</button>
-                    <button mat-button>Delete</button>
-                </mat-card-actions>
-            </mat-card>
+<app-hierarchy-tree *ngIf="selectedHierarchy" [hierarchy]="selectedHierarchy"></app-hierarchy-tree>
+<ng-container *ngIf="hierarchies$ | async as hierarchies">
+    <ng-container *ngIf="hierarchies.length === 0">
+        <div class="welcome">
+            <h1 class="title">Welcome to Hierarchy Dashboard</h1>
+            <h3>Get started by creating a new hierarchy</h3>
         </div>
-    </div>
-    <div *ngFor="let level of hierarchyLevels; index as i" class="node-container">
-        <div id="{{i}}{{j}}" class="node" *ngFor="let node of level; index as j" #nodes>
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>
-                        {{node.name}}
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content class="dashboard-card-content">
-                    {{node.weight}}
-                </mat-card-content>
-                <mat-card-actions>
-                    <button mat-button>Add</button>
-                    <button mat-button>Delete</button>
-                </mat-card-actions>
-            </mat-card>
-        </div>
-    </div>
-</div>
-<svg class="svg" [attr.width]="viewBoxWidth" [attr.height]="viewBoxHeight" #svg></svg>
+    </ng-container>
+</ng-container>

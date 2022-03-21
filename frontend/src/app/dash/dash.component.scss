@@ -43,3 +43,15 @@
   padding-left: 10%;
 }
 
+.alternative-header{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  .title{
+    margin-right: 2rem;
+  }
+  .select {
+    font-size: larger;
+  }
+}
+
