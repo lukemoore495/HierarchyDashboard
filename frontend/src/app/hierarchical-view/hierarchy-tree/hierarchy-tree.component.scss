@@ -1,3 +1,4 @@
+@import 'src/styles/colors';
 .node-container{
     display: flex;
     align-items: center;
@@ -7,8 +8,13 @@
         position: relative;
         margin: auto;
         padding: 1rem;
-        height: max-content;
+        height: 8rem;
         width: max-content;
+
+        .measurement-node{
+            background-color: map-get($primary, 300);;
+            border-radius: 50px;
+        }
     }
 }
 

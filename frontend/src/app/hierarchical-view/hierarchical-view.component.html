@@ -17,10 +17,10 @@
 </div>
 <app-hierarchy-tree *ngIf="selectedHierarchy" [hierarchy]="selectedHierarchy"></app-hierarchy-tree>
 <ng-container *ngIf="hierarchies$ | async as hierarchies">
-    <div *ngIf="hierarchies.length === 0">
+    <ng-container *ngIf="hierarchies.length === 0">
         <div class="welcome">
             <h1 class="title">Welcome to Hierarchy Dashboard</h1>
             <h3>Get started by creating a new hierarchy</h3>
         </div>
-    </div>
+    </ng-container>
 </ng-container>

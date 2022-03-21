@@ -27,21 +27,25 @@
     </div>
     <div *ngFor="let level of hierarchyLevels; index as i" class="node-container">
         <div id="{{i}}{{j}}" class="node" *ngFor="let node of level; index as j" #nodes>
-            <mat-card>
+            <mat-card [ngClass]="{'measurement-node': node.measurementNode}">
                 <mat-card-header>
-                    <mat-card-title>
+                    <mat-card-title *ngIf="node.name.length > 27"
+                        matTooltip="{{node.name}}">
+                        {{(node.name | slice:0:27) +'...'}}
+                    </mat-card-title>
+                    <mat-card-title *ngIf="node.name.length <= 27">
                         {{node.name}}
                     </mat-card-title>
                 </mat-card-header>
                 <mat-card-content class="dashboard-card-content">
-                    <div class="text">
+                    <div *ngIf="node?.weight" class="text">
                         Weight: {{node.weight}}
                     </div>
                 </mat-card-content>
-                <mat-card-actions>
+                <mat-card-actions *ngIf="!node.measurementNode">
                     <button mat-button>Add</button>
                     <button mat-button>Delete</button>
-                    <button mat-button *ngIf="node.children.length > 0" 
+                    <button mat-button *ngIf="canBeWeighted(node)" 
                         matTooltip="Weights"
                         [routerLink]="['/weights', node.id]"
                         class="button">

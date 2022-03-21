@@ -1,8 +1,7 @@
 import { Component, ElementRef, Input, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { HierarchyState } from 'src/app/state/hierarchy.reducer';
-import { Store } from '@ngrx/store';
-import { Hierarchy, Node } from 'src/app/Hierarchy';
+import { Hierarchy, MeasurementDefinition, Node } from 'src/app/Hierarchy';
 import { OnInit } from '@angular/core';
+import { TreeNode } from './TreeNode';
 
 @Component({
     selector: 'app-hierarchy-tree',
@@ -12,7 +11,7 @@ import { OnInit } from '@angular/core';
 export class HierarchyTreeComponent implements OnInit{
     @Input() hierarchy: Hierarchy | null = null;
     defaultId = '';
-    hierarchyLevels: Node[][] = [];
+    hierarchyLevels: TreeNode[][] = [];
     elem: Element | null = null;
     relationships: string[] = [];
     viewBoxHeight = 20000;
@@ -37,7 +36,7 @@ export class HierarchyTreeComponent implements OnInit{
                 maxWidth = level.length;
             }
         });
-        this.viewBoxWidth = (maxWidth + 1) * 300;
+        this.viewBoxWidth = (maxWidth + 1) * 400;
     }
     
     ngAfterViewInit() {
@@ -55,9 +54,35 @@ export class HierarchyTreeComponent implements OnInit{
         this.drawAllLineConnections(this.relationships);
     }
 
-    sortNodesToLevels(hierarchy: Hierarchy): Node[][] {
-        const levels: Node[][] = [];
-        const addNodesToLevel = (node: Node, currentLevel: number) => {
+    nodeToTreeNode(node: Node): TreeNode {
+        const children: TreeNode[] = [];
+        children.push(...node.children.map(node => this.nodeToTreeNode(node)));
+        children.push(...node.measurements.map(measurement => this.measurementDefinitionToTreeNode(measurement)));
+        return {
+            id: node.id,
+            name: node.name,
+            weight: node.weight,
+            measurementNode: false,
+            children: children
+        };
+    }
+
+    measurementDefinitionToTreeNode(measurementDefinition: MeasurementDefinition): TreeNode {
+        return {
+            id: measurementDefinition.id,
+            name: measurementDefinition.name,
+            measurementNode: true,
+            children: []
+        };
+    }
+
+    canBeWeighted(node: TreeNode){
+        return node.children.some(child => !child.measurementNode);
+    }
+
+    sortNodesToLevels(hierarchy: Hierarchy): TreeNode[][] {
+        const levels: TreeNode[][] = [];
+        const addNodesToLevel = (node: TreeNode, currentLevel: number) => {
             if (!levels[currentLevel]) {
                 levels.push([]);
             }
@@ -65,11 +90,14 @@ export class HierarchyTreeComponent implements OnInit{
             const nextLevel = currentLevel + 1;
             node.children.forEach(child => addNodesToLevel(child, nextLevel));
         };
-        hierarchy.nodes.forEach(node => addNodesToLevel(node, 0));
+        hierarchy.nodes.forEach(node => {
+            const treeNode = this.nodeToTreeNode(node);
+            addNodesToLevel(treeNode, 0);
+        });
         return levels;
     }
 
-    findRelationships(levels: Node[][]): string[] {
+    findRelationships(levels: TreeNode[][]): string[] {
         const relationships: string[] = [];
         let firstLevel = 'topLevel';
         for (let i = 0; i < levels[0].length; i++) {
@@ -82,9 +110,11 @@ export class HierarchyTreeComponent implements OnInit{
                 const node = levels[i][k];
                 const currentNodeId = i.toString() + k.toString();
                 let currentLevel = currentNodeId;
-                node.children.forEach(child => currentLevel += (',' + (i + 1).toString() + (levels[i + 1].findIndex(node => node === child).toString())));
-                if(currentLevel.length > currentNodeId.length)
+                node.children.forEach(child => currentLevel += (',' + (i + 1).toString()
+                     + (levels[i + 1].findIndex(node => node === child).toString())));
+                if(currentLevel.length > currentNodeId.length){
                     relationships.push(currentLevel);
+                }
             }
         }
         return relationships;
@@ -146,7 +176,7 @@ export class HierarchyTreeComponent implements OnInit{
           pos1.top >= pos2.bottom);
     };
 
-    fixCollisions(relationships: string[], levels: Node[][]) : void {
+    fixCollisions(relationships: string[], levels: TreeNode[][]) : void {
         for (let i = 0; i < levels.length; i++) {
             const levelIds: string[] = [];
             for (let j = 0; j < levels[i].length; j++) {
