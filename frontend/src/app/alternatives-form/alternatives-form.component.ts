@@ -27,59 +27,47 @@ export class AlternativesFormComponent implements OnInit {
     }
 
     selectMeasurements(nodes: Node[]): Node[] {
-        let findChildMeasurements = (node: Node): Node[] => {
-            let childMeasurementNodes : Node[] = [];
+        const findChildMeasurements = (node: Node): Node[] => {
+            const childMeasurementNodes : Node[] = [];
             if(node.children.length === 0){
                 return childMeasurementNodes;
             } else if(node.children?.every(x => x.measurements.length > 0)){
                 childMeasurementNodes.push(node);
             } else if(node.children?.some(x => x.measurements.length > 0)){
-                let innerNodes = node.children.filter(x => !(x.measurements.length > 0));
-                let allMeasurementNodes = node.children.filter(x => x.measurements.length > 0);
+                const innerNodes = node.children.filter(x => !(x.measurements.length > 0));
+                const allMeasurementNodes = node.children.filter(x => x.measurements.length > 0);
                 allMeasurementNodes.push(...this.selectMeasurements(innerNodes));
-                let nodeWithChildren = {...node, children: allMeasurementNodes}
+                const nodeWithChildren = {...node, children: allMeasurementNodes};
                 childMeasurementNodes.push(nodeWithChildren);
             } else if (node.children){
                 node.children.forEach(child => childMeasurementNodes.push(...findChildMeasurements(child)));
             }
             return childMeasurementNodes;
-        }
-        let findDirectMeasurements = (nodes: Node[]): Node => {
-            let topLevelChildren: Node[] = [];
+        };
+        const findDirectMeasurements = (nodes: Node[]): Node => {
+            const topLevelChildren: Node[] = [];
             nodes
                 .filter(node => node.children.length === 0)
                 .forEach(node => topLevelChildren.push(node));
-            let topLevelMeasurementNode: Node = {
+            const topLevelMeasurementNode: Node = {
                 id: '',
-                name: "Top Level",
+                name: 'Top Level',
                 children: topLevelChildren,
                 measurements: [],
                 weight: 1
             };
             return topLevelMeasurementNode;
-        }
+        };
 
-        let measurementNodes : Node[] = [];
+        const measurementNodes : Node[] = [];
         measurementNodes.push(findDirectMeasurements(nodes));
         nodes.forEach(node => measurementNodes.push(...findChildMeasurements(node)));
         return measurementNodes;
     }
 
     saveMeasurements(newMeasurements : Measurement[]){
-        let updatedMeasurements = [];
-        for(let currentMeasure of this.currentMeasurements){
-            let updatedMeasure = newMeasurements.find(newMeasure => newMeasure.measurementDefinitionId == currentMeasure.measurementDefinitionId) ?? currentMeasure;
-            updatedMeasurements.push(updatedMeasure);
-        }
-        for (let measure of newMeasurements) {
-            if(!this.currentMeasurements.some(currentMeasure => currentMeasure.measurementDefinitionId == measure.measurementDefinitionId)){
-                updatedMeasurements.push(measure);
-            }
-        }
-        this.currentMeasurements = updatedMeasurements;
-        
         //replace this with an api call in the future
-        console.log(this.currentMeasurements);
+        console.log(newMeasurements);
     }
 
 }

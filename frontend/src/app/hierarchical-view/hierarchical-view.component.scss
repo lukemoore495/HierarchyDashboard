@@ -1,25 +1,4 @@
-.node-container{
-    display: flex;
-    align-items: center;
-    margin-bottom: 2rem;    
-
-    .node{
-        position: relative;
-        margin: auto;
-        padding: 1rem;
-        height: max-content;
-        width: max-content;
-    }
-}
-
-.tree{
-    position: absolute;
-}
-
-.svg{
-    position: absolute;
-    z-index: -1;
-}
+@import 'src/styles/colors';
 
 .header-container{
     display: flex;
@@ -33,9 +12,20 @@
         margin-left: 1rem;
         width: 30%;
     }
-    .button{
+    .header-button{
         margin-left: 1rem;
         margin-top: 2rem;
         height: 50%;
+    }
+}
+
+.welcome{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 10%;
+    transform: scale(1.5);
+    .title{
+        font-size: xx-large;
     }
 }

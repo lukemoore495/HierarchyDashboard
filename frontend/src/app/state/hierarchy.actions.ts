@@ -1,6 +1,6 @@
-import { createAction, props } from "@ngrx/store";
-import { Hierarchy, HierarchyListItem } from "../Hierarchy";
-import { HierarchyRequest } from "../hierarchy.service";
+import { createAction, props } from '@ngrx/store';
+import { Hierarchy, HierarchyListItem } from '../Hierarchy';
+import { HierarchyRequest } from '../hierarchy.service';
 
 export const createHierarchy = createAction(
     '[Hierarchies] Create Hierarchy',

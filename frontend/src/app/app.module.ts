@@ -14,26 +14,28 @@ import { HierarchicalViewModule } from './hierarchical-view/hierarchical-view.mo
 import { DashModule } from './dash/dash.module';
 import { NavModule } from './nav/nav.module';
 import { SensitivityAnalysisModule } from './sensitivity-analysis/sensitivity-analysis.module';
+import { RankChartModule } from './rank-chart/rank-chart.module';
 
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    StoreModule.forRoot({hierarchies: HierarchyReducer}),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot([HierarchyEffects]),
-    ImportanceValueModule,
-    HierarchicalViewModule,
-    SensitivityAnalysisModule,
-    DashModule,
-    NavModule,
-    HttpClientModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        StoreModule.forRoot({hierarchies: HierarchyReducer}),
+        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+        EffectsModule.forRoot([HierarchyEffects]),
+        ImportanceValueModule,
+        HierarchicalViewModule,
+        SensitivityAnalysisModule,
+        RankChartModule,
+        DashModule,
+        NavModule,
+        HttpClientModule
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

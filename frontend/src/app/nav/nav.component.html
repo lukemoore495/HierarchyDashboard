@@ -2,7 +2,7 @@
   <mat-sidenav #drawer class="sidenav" fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="(isHandset$ | async) === false">
+      [opened]="!(isHandset$ | async) && hasHierarchies">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
       <a class="link" mat-list-item *ngFor="let item of menuItems" [routerLink]="'/'+item.route" routerLinkActive="active-link">
@@ -23,7 +23,7 @@
         aria-label="Toggle sidenav"
         mat-icon-button
         (click)="drawer.toggle()"
-        *ngIf="!(isHandset$ | async)">
+        *ngIf="!(isHandset$ | async) && hasHierarchies">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
       <span>Hierarchy Dashboard</span>
