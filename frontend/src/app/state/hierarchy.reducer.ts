@@ -3,6 +3,7 @@ import { Hierarchy, HierarchyListItem } from '../Hierarchy';
 import * as HierarchyActions from './hierarchy.actions';
 import RRRHierarchy from '../../assets/staticFiles/RRRHierarchy.json';
 import SimpleHierarchy from '../../assets/staticFiles/SimpleHierarchy.json';
+import CarHierarchy from '../../assets/staticFiles/DemoExample.json';
 
 export interface HierarchyState {
     selectedHierarchy: Hierarchy | null;
@@ -73,6 +74,8 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         //Remove this once we have alternatives in the backend
         if(hierarchy.name === 'RRR Hierarchy'){
             hierarchy.alternatives = (RRRHierarchy as Hierarchy).alternatives;
+        } else if (hierarchy.name === 'Car') {
+            hierarchy.alternatives = (CarHierarchy as Hierarchy).alternatives;
         }
         
         const alternative = hierarchy.alternatives ? hierarchy.alternatives[0] : null;

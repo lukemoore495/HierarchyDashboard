@@ -38,18 +38,18 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
                 }
 
                 if(!measurement[0]){
-                    this.updateChartData([], []);
+                    this.clearChartData();
                     this.updateLabel('');
                     this.chart.update();
                     return;
                 }
 
-            this.chartNewMeasurement(measurement[0]);
-            if(measurement[1]?.name){
-                this.updateLabel(measurement[1].name);
-            }
-            this.chart.update();
-        })
+                this.chartNewMeasurement(measurement[0]);
+                if(measurement[1]?.name){
+                    this.updateLabel(measurement[1].name);
+                }
+                this.chart.update();
+            });
     }
 
     chartNewMeasurement(measurement : Measurement) {
@@ -77,16 +77,34 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
 
         const pointIndex = insertValuePoint(measurement.measure, measurement.value);
 
-        this.updateChartData(xAxis, yAxis);
         this.setPointColors(xAxis.length, pointIndex);
+
+        this.lineChartData = {
+            datasets: [
+                {
+                    data: yAxis,
+                    label: '',
+                    backgroundColor: 'rgba(148,159,177,0.2)',
+                    borderColor: this.primaryColorString,
+                    pointBackgroundColor: this.backgroundColors,
+                    pointBorderColor: this.backgroundColors,
+                    pointHoverBackgroundColor: this.hoverColorString,
+                    pointHoverBorderColor: this.hoverBorderColors,
+                    fill: 'origin',
+                }
+            ],
+            labels: xAxis
+        };
     }
 
-    updateChartData(xAxis: string[], yAxis: number[]){
-        this.lineChartData.labels = xAxis;
-        this.lineChartData.datasets[0].data = yAxis;
+    clearChartData(){
+        this.lineChartData.labels = [];
+        this.lineChartData.datasets[0].data = [];
     }
 
     setPointColors(chartLength: number, valuePointIndex: number){
+        this.backgroundColors = [];
+        this.hoverBorderColors = [];
         for(let i = 0; i < chartLength; i++){
             if(i === valuePointIndex){
                 this.backgroundColors.push(this.accentColorString);
