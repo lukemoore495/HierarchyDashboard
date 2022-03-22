@@ -1,0 +1,39 @@
+<table>
+  <thead>
+    <ng-container *ngFor="let h of header">
+      <th>{{ h }}</th>
+    </ng-container>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let weight of weights; let i = index">
+      <tr>
+        <td>{{ weight.name }}</td>
+        <td>{{ weight.value }}</td>
+        <td *ngIf="i == 0">ratio</td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+
+<div [formGroup]="form">
+  <ng-container *ngFor="let weight of weights; let i = index; count as count">
+    <ng-container *ngFor="let x of [].constructor(count); let j = index">
+      <mat-card class="card" *ngIf="i < j">
+        <div class="oval">
+          <p class="weight-name">{{ weight.name }}</p>
+        </div>
+        <ngx-slider
+          [options]="options"
+          formControlName="{{ weight.id.toString() }}{{
+            this.weights[j].id.toString()
+          }}"
+          class="pairwise-slider"
+        >
+        </ngx-slider>
+        <div class="oval">
+          <p class="weight-name">{{ weights[j].name }}</p>
+        </div>
+      </mat-card>
+    </ng-container>
+  </ng-container>
+</div>

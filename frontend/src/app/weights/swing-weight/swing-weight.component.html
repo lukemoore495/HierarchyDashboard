@@ -1,0 +1,13 @@
+<div class="table">
+  <mat-grid-list cols="3" rowHeight="5:3">
+    <h1 class="mat-h1">Swing Weight</h1>
+    <ng-container *ngFor="let item of [].constructor(9); let i = index">
+      <mat-grid-tile>{{ i + 1 }}</mat-grid-tile>
+    </ng-container>
+  </mat-grid-list>
+</div>
+<div class="options">
+  <div *ngFor="let child of children" class="example-box" cdkDrag>
+    {{ child.name }}
+  </div>
+</div>

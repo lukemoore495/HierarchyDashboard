@@ -1,0 +1,65 @@
+::selection {
+  background: #5f74a0;
+  color: #fff;
+}
+::-moz-selection {
+  background: #5f74a0;
+  color: #fff;
+}
+::-webkit-selection {
+  background: #5f74a0;
+  color: #fff;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+thead {
+  cursor: pointer;
+  background: #c9dff0;
+}
+thead tr th {
+  font-weight: bold;
+  padding: 12px 30px;
+  padding-left: 42px;
+}
+thead tr th span {
+  padding-right: 20px;
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+}
+
+thead tr th.headerSortUp,
+thead tr th.headerSortDown {
+  background: #acc8dd;
+}
+
+tbody tr {
+  color: #555;
+}
+tbody tr td {
+  text-align: center;
+  padding: 15px 10px;
+}
+tbody tr td.lalign {
+  text-align: left;
+}
+
+.oval {
+  width: 160px;
+  height: 80px;
+  background: #673ab7;
+  border-radius: 50%;
+  line-height: 80px;
+  text-align: center;
+  display: inline-block;
+  margin: 2 auto;
+}
+
+ngx-slider {
+  width: 70%;
+  margin: 3%;
+  padding-bottom: 2%;
+}

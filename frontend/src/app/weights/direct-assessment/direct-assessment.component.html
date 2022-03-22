@@ -1,0 +1,13 @@
+<div [formGroup]="form">
+  <div *ngFor="let weight of weights; let i = index">
+    <mat-form-field class="" appearance="fill">
+      <mat-label>{{ weight.name }}</mat-label>
+      <input type="number" matInput [formControlName]="weight.id" />
+      <mat-error
+        *ngIf="getFormControl(weight.id.toString())?.errors?.['required']"
+      >
+        Please enter a valid value
+      </mat-error>
+    </mat-form-field>
+  </div>
+</div>

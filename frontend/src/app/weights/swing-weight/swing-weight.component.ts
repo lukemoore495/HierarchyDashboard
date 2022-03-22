@@ -1,20 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { HierarchyState } from '../state/hierarchy.reducer';
-import { Hierarchy, Node} from '../Hierarchy';
-import { getSelectedHierarchy } from '../state';
+import { HierarchyState } from '../../state/hierarchy.reducer';
+import { Hierarchy, Node } from '../../Hierarchy';
+import { getSelectedHierarchy } from '../../state';
 import { Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 
 @Component({
-    selector: 'app-importance-value',
-    templateUrl: './importance-value.component.html',
-    styleUrls: ['./importance-value.component.scss']
+    selector: 'app-swing-weight',
+    templateUrl: './swing-weight.component.html',
+    styleUrls: ['./swing-weight.component.scss']
 })
-export class ImportanceValueComponent implements OnInit, OnDestroy {
+export class SwingWeightComponent implements OnInit, OnDestroy {
     node: Node | null = null;
     nodes: Node[] = [];
     id: string | null = null;
@@ -24,12 +23,12 @@ export class ImportanceValueComponent implements OnInit, OnDestroy {
     constructor(private route: ActivatedRoute, private router: Router, private store: Store<HierarchyState>) {
         const sub = this.store.select(getSelectedHierarchy)
             .subscribe(hierarchy => {
-                if(!hierarchy) {
+                if (!hierarchy) {
                     return;
                 }
 
                 this.nodes = this.getAllNodes(hierarchy);
-                if(this.id) {
+                if (this.id) {
                     this.node = this.getNodeById(this.id);
                     this.children = this.node?.children ?? [];
                 }
@@ -39,12 +38,12 @@ export class ImportanceValueComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         const id = this.route.snapshot.paramMap.get('id');
-        if(!id) {
+        if (!id) {
             this.router.navigate(['/hierarchicalView']);
             return;
         }
         this.id = id;
-        if(this.nodes.length > 0) {
+        if (this.nodes.length > 0) {
             this.node = this.getNodeById(this.id);
             this.children = this.node?.children ?? [];
         }
