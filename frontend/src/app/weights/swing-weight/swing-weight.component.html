@@ -11,10 +11,20 @@
         <mat-grid-tile>{{ item }}</mat-grid-tile>
       </ng-container>
     </mat-grid-list>
+    <div class="buttons">
+      <button mat-raised-button color="accent" class="button">
+        <mat-icon>save</mat-icon>
+        Save
+      </button>
+      <button mat-raised-button color="accent" class="button">
+        <mat-icon>edit</mat-icon>
+        Edit Matrix
+      </button>
+    </div>
   </div>
+</div> 
   <div class="options">
-      <table mat-table [dataSource]="children" class="table">
-    
+      <table mat-table [dataSource]="children" class="table">   
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Measure Name </th>
           <td mat-cell *matCellDef="let node"> 
@@ -35,5 +45,4 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-    </div>
-</div>  
+    </div> 
