@@ -123,7 +123,10 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
 
     ngAfterViewInit(){
         if(this.isTopLevel) {
-            this.selectFirstMeasurement();
+            //A hack to work with change detection in afterViewInit. Couldn't find another solution.
+            setTimeout(() => {
+                this.selectFirstMeasurement();
+            }, 0);
         }
     }
 
@@ -234,7 +237,9 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     }
 
     selectFirstMeasurement(){
-        if(!this.measurementNode)
+        if(!this.measurementNode || 
+            !this.measurementNode.children[0] || 
+            !this.measurementNode.children[0].measurements[0])
             return;
 
         const firstMeasurementId = this.measurementNode.children[0].measurements[0].id;

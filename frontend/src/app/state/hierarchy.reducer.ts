@@ -74,7 +74,7 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         //Remove this once we have alternatives in the backend
         if(hierarchy.name === 'RRR Hierarchy'){
             hierarchy.alternatives = (RRRHierarchy as Hierarchy).alternatives;
-        } else if (hierarchy.name === 'Car') {
+        } else if (hierarchy.name === 'Best Car') {
             hierarchy.alternatives = (CarHierarchy as Hierarchy).alternatives;
         }
         
@@ -98,8 +98,7 @@ export const HierarchyReducer = createReducer<HierarchyState>(
     on(HierarchyActions.setSelectedAlternative, (state, action): HierarchyState => {
         return {
             ...state,
-            selectedAlternativeId: action.selectedAlternativeId,
-            selectedMeasurementId: null
+            selectedAlternativeId: action.selectedAlternativeId
         };
     }),
     on(HierarchyActions.setSelectedMeasurement, (state, action): HierarchyState => {

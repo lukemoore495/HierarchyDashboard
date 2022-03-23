@@ -17,7 +17,7 @@ export class NavComponent implements OnInit {
     hasHierarchies = false;
 
     menuItems = [
-        { title: 'Hierarchical View', route: 'hierarchicalView', icon: 'pageview' },
+        { title: 'Hierarchy Viewer', route: 'hierarchicalView', icon: 'pageview' },
         { title: 'alternatives', route: 'alternatives', icon: 'query_stats' },
         { title: 'Rank', route: 'rank', icon: 'stacked_bar_chart' },
         { title: 'Sensitivity Analysis', route: 'sensitivityAnalysis', icon: 'ssid_chart' }];

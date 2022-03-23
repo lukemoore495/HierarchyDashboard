@@ -1,6 +1,6 @@
 {
     "id": "",
-    "name": "Car",
+    "name": "Best Car",
     "description": "demo example",
     "nodes": [
         {
@@ -16,7 +16,7 @@
                 },
                 {
                     "id": "",
-                    "name": "Resale Value (After 3 Years)",
+                    "name": "Resale Value % (After 3 Years)",
                     "type": "Percentage"
                 }
             ]
@@ -29,7 +29,7 @@
             "measurements": [
                 {
                     "id": "",
-                    "name": "Fuel Economy",
+                    "name": "Fuel Economy (mpg)",
                     "type": "Number"
                 },
                 {

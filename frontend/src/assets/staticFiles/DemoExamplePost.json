@@ -1,5 +1,5 @@
 {
-    "name": "Car",
+    "name": "Best Car",
     "description": "demo example",
     "nodes": [
         {
@@ -12,7 +12,7 @@
                     "measurementType": "Number"
                 },
                 {
-                    "measurementName": "Resale Value (After 3 Years)",
+                    "measurementName": "Resale Value % (After 3 Years)",
                     "measurementType": "Percentage"
                 }
             ]
@@ -23,7 +23,7 @@
             "children":[],
             "measurements": [
                 {
-                    "measurementName": "Fuel Economy",
+                    "measurementName": "Fuel Economy (mpg)",
                     "measurementType": "Number"
                 },
                 {
