@@ -6,6 +6,10 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { MatSliderChange } from '@angular/material/slider';
 import { HierarchyService } from '../hierarchy.service';
 import { SensitivityAnalysis, SensitivityAnalysisReport } from './SensitivityAnalysis';
+import { Store } from '@ngrx/store';
+import { HierarchyState } from '../state/hierarchy.reducer';
+import { getSelectedHierarchy } from '../state';
+import { map } from 'rxjs';
 
 @Component({
     selector: 'app-sensitivity-analysis',
@@ -18,12 +22,20 @@ export class SensitivityAnalysisComponent implements OnInit {
     @Input() width: string | undefined;
     sliderValue: number | null = 0.2;
     sensitivityAnalysisReport: SensitivityAnalysisReport | null = null;
+    nodeNames: string[] = [];
 
-    constructor(private hierarchyService: HierarchyService) { }
+    constructor(private hierarchyService: HierarchyService, private store: Store<HierarchyState>) {
+        store.select(getSelectedHierarchy)
+            .pipe(
+                map(hierarchy => hierarchy?.nodes.map(node => node.name)),
+            )
+            .subscribe(names => this.nodeNames = names ?? []);
+    }
 
     ngOnInit(): void {
         Chart.register(annotationPlugin);
-        this.hierarchyService.getSensitivityAnalysis('someId')
+        //this.hierarchyService.getSensitivityAnalysis('someId')
+        this.hierarchyService.getFakeSensitivityAnalysis(this.nodeNames)
             .subscribe(analysis => {
                 this.sensitivityAnalysisReport = analysis;
                 const sensitiviyAnalysis = analysis.report.find(x => x.globalValue === this.sliderValue);
@@ -53,7 +65,7 @@ export class SensitivityAnalysisComponent implements OnInit {
 
     setChartValues(sensitivityAnalysis: SensitivityAnalysis): void {
         this.lineChartData.datasets = [];
-        for (let i = 0; i < sensitivityAnalysis.data.length; i++) {
+        for (let i = 0; i < this.nodeNames.length; i++) {
             const label = sensitivityAnalysis.data[i].name;
             const data = sensitivityAnalysis.data[i].data;
 

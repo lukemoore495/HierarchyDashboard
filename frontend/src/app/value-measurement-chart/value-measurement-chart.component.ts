@@ -55,9 +55,10 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
     chartNewMeasurement(measurement : Measurement) {
 
         const insertValuePoint = (measure: number, value: number) : number => {
-            xAxis.push(measure.toString());
+            if(!xAxis.some(x => x === measure.toString())) {
+                xAxis.push(measure.toString());
+            }
             xAxis = xAxis.sort((first, second) => Number(first) - Number(second));
-    
             const pointIndex = xAxis.indexOf(measure.toString());
             yAxis = this.insert(yAxis, pointIndex, value);
             return pointIndex;
@@ -121,7 +122,8 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
     }
 
     insert(arr : any[], insertAt: number, value : any) : any[]{
-        arr.splice(insertAt, 0, value);
+        const duplicateCount = arr.filter(x => x===value).length;
+        arr.splice(insertAt, duplicateCount, value);
         return arr;
     }
 

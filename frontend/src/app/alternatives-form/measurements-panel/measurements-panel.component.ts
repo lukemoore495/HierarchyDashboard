@@ -9,13 +9,14 @@ import { Store } from '@ngrx/store';
 import { getSelectedAlternative, getSelectedMeasurementId } from 'src/app/state';
 import * as HierarchyActions from '../../state/hierarchy.actions';
 import { MatSelectionList } from '@angular/material/list';
+import { AfterViewInit } from '@angular/core';
 
 @Component({
     selector: 'app-measurements-panel',
     templateUrl: './measurements-panel.component.html',
     styleUrls: ['./measurements-panel.component.scss']
 })
-export class MeasurementsPanelComponent implements OnInit, OnDestroy {
+export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() measurementNode: Node | null = null;
     @Input() parentIsSelected?: Observable<boolean>;
     @Output() measurementResultEvent: EventEmitter<Measurement[]>;
@@ -29,6 +30,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     alternativeMeasurements: Measurement[] = [];
     measurementDefinitions: MeasurementDefinition[] = [];
     alternativeChanged = false;
+    isTopLevel = false;
 
     constructor(private fb: FormBuilder, private store: Store<HierarchyState>) { 
         const sub = this.store.select(getSelectedAlternative)
@@ -50,6 +52,8 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.isTopLevel = this.measurementNode?.weight === 1;
+        
         const nodes : Node[] = Object.assign([], this.measurementNode?.children);
         for(const node of nodes) {
             const measurementFields = node.measurements ?? [];
@@ -115,6 +119,12 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.deselectMeasurement();
         this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
+
+    ngAfterViewInit(){
+        if(this.isTopLevel) {
+            this.selectFirstMeasurement();
+        }
     }
 
     setFormValues(measurements: Measurement[]){

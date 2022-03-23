@@ -59,7 +59,7 @@
             "name": "Malibu Classic",
             "measurements": [
                 {                   
-                    "measurementDefinitionId": "1",
+                    "measurementDefinitionId": "41",
                     "measure": 20320,
                     "value": 0.97,
                     "valueFunctionData": [
@@ -96,7 +96,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "2",
+                    "measurementDefinitionId": "42",
                     "measure": 41,
                     "value": 0.62,
                     "valueFunctionData": [
@@ -133,7 +133,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "3",
+                    "measurementDefinitionId": "43",
                     "measure": 28,
                     "value": 0.8,
                     "valueFunctionData": [                               
@@ -170,7 +170,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "4",
+                    "measurementDefinitionId": "44",
                     "measure": 219,
                     "value": 0.23,
                     "valueFunctionData": [                               
@@ -206,7 +206,7 @@
                     }]
                 },
                 {                   
-                    "measurementDefinitionId": "5",
+                    "measurementDefinitionId": "45",
                     "measure": 2,
                     "value": 0.4,
                     "valueFunctionData": [
@@ -237,7 +237,7 @@
             "name": "Accord",
             "measurements": [
                 {                   
-                    "measurementDefinitionId": "1",
+                    "measurementDefinitionId": "41",
                     "measure": 26605,
                     "value": 0.34,
                     "valueFunctionData": [
@@ -274,7 +274,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "2",
+                    "measurementDefinitionId": "42",
                     "measure": 49,
                     "value": 0.78,
                     "valueFunctionData": [
@@ -311,7 +311,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "3",
+                    "measurementDefinitionId": "43",
                     "measure": 29,
                     "value": 0.9,
                     "valueFunctionData": [                               
@@ -347,7 +347,7 @@
                     }]
                 },
                 {                   
-                    "measurementDefinitionId": "4",
+                    "measurementDefinitionId": "44",
                     "measure": 271,
                     "value": 0.97,
                     "valueFunctionData": [                               
@@ -383,7 +383,7 @@
                         }]
                 },
                 {                   
-                    "measurementDefinitionId": "5",
+                    "measurementDefinitionId": "45",
                     "measure": 3,
                     "value": 0.6,
                     "valueFunctionData": [
@@ -414,7 +414,7 @@
             "name": "Gallant",
             "measurements": [
                 {                   
-                    "measurementDefinitionId": "1",
+                    "measurementDefinitionId": "41",
                     "measure": 27449,
                     "value": 0.245,
                     "valueFunctionData": [
@@ -451,7 +451,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "2",
+                    "measurementDefinitionId": "42",
                     "measure": 32,
                     "value": 0.44,
                     "valueFunctionData": [
@@ -488,7 +488,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "3",
+                    "measurementDefinitionId": "43",
                     "measure": 25,
                     "value": 0.5,
                     "valueFunctionData": [                               
@@ -524,7 +524,7 @@
                     }]
                 },
                 {                   
-                    "measurementDefinitionId": "4",
+                    "measurementDefinitionId": "44",
                     "measure": 258,
                     "value": 0.79,
                     "valueFunctionData": [                               
@@ -561,7 +561,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "5",
+                    "measurementDefinitionId": "45",
                     "measure": 3,
                     "value": 0.6,
                     "valueFunctionData": [
@@ -592,7 +592,7 @@
             "name": "Fussion",
             "measurements": [
                 {                   
-                    "measurementDefinitionId": "1",
+                    "measurementDefinitionId": "41",
                     "measure": 25852,
                     "value": 0.425,
                     "valueFunctionData": [
@@ -629,7 +629,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "2",
+                    "measurementDefinitionId": "42",
                     "measure": 33,
                     "value": 0.46,
                     "valueFunctionData": [
@@ -666,7 +666,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "3",
+                    "measurementDefinitionId": "43",
                     "measure": 27,
                     "value": 0.7,
                     "valueFunctionData": [                               
@@ -702,7 +702,7 @@
                     }]
                 },
                 {                   
-                    "measurementDefinitionId": "4",
+                    "measurementDefinitionId": "44",
                     "measure": 263,
                     "value": 0.857,
                     "valueFunctionData": [                               
@@ -739,7 +739,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "5",
+                    "measurementDefinitionId": "45",
                     "measure": 4,
                     "value": 0.8,
                     "valueFunctionData": [
@@ -770,7 +770,7 @@
             "name": "Altima",
             "measurements": [
                 {                   
-                    "measurementDefinitionId": "1",
+                    "measurementDefinitionId": "41",
                     "measure": 25680,
                     "value": 0.468,
                     "valueFunctionData": [
@@ -807,7 +807,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "2",
+                    "measurementDefinitionId": "42",
                     "measure": 28,
                     "value": 0.36,
                     "valueFunctionData": [
@@ -844,7 +844,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "3",
+                    "measurementDefinitionId": "43",
                     "measure": 26,
                     "value": 0.6,
                     "valueFunctionData": [                               
@@ -881,7 +881,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "4",
+                    "measurementDefinitionId": "44",
                     "measure": 270,
                     "value": 0.957,
                     "valueFunctionData": [                               
@@ -918,7 +918,7 @@
                     ]
                 },
                 {                   
-                    "measurementDefinitionId": "5",
+                    "measurementDefinitionId": "45",
                     "measure": 4,
                     "value": 0.8,
                     "valueFunctionData": [
