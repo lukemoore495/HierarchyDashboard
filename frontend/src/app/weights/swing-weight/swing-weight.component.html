@@ -1,0 +1,48 @@
+<div class="grid">
+    <div class="row-container">
+          <h3 *ngFor="let row of rows" class="row">{{row}}</h3>
+    </div>
+  <div class="grid-container">
+      <div class="column-container">
+        <h3 *ngFor="let column of columns" class="column">{{column}}</h3>
+    </div>
+    <mat-grid-list class="grid-list" cols="3" rowHeight="5:3">
+      <ng-container *ngFor="let item of matrix">
+        <mat-grid-tile>{{ item }}</mat-grid-tile>
+      </ng-container>
+    </mat-grid-list>
+    <div class="buttons">
+      <button mat-raised-button color="accent" class="button">
+        <mat-icon>save</mat-icon>
+        Save
+      </button>
+      <button mat-raised-button color="accent" class="button">
+        <mat-icon>edit</mat-icon>
+        Edit Matrix
+      </button>
+    </div>
+  </div>
+</div> 
+  <div class="options">
+      <table mat-table [dataSource]="children" class="table">   
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Measure Name </th>
+          <td mat-cell *matCellDef="let node"> 
+            <div class="table-text">
+              {{node.name}}
+            </div>
+            <div class="example-box" cdkDrag>
+              {{ node.name }}
+            </div>
+          </td>
+        </ng-container>
+    
+        <ng-container matColumnDef="weight">
+          <th mat-header-cell *matHeaderCellDef> Local Weight </th>
+          <td mat-cell *matCellDef="let node"> {{node.weight}} </td>
+        </ng-container>
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div> 

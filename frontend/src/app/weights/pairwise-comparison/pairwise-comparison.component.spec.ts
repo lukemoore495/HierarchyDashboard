@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ImportanceValueComponent } from './importance-value.component';
+import { PairwiseComparisonComponent } from './pairwise-comparison.component';
 
-describe('ImportanceValueComponent', () => {
-  let component: ImportanceValueComponent;
-  let fixture: ComponentFixture<ImportanceValueComponent>;
+describe('PairwiseComparisonComponent', () => {
+  let component: PairwiseComparisonComponent;
+  let fixture: ComponentFixture<PairwiseComparisonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ImportanceValueComponent ]
+      declarations: [ PairwiseComparisonComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ImportanceValueComponent);
+    fixture = TestBed.createComponent(PairwiseComparisonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

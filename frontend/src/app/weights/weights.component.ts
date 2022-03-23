@@ -1,37 +1,35 @@
-import { Component } from '@angular/core';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { HierarchyState } from '../state/hierarchy.reducer';
-import { Hierarchy, Node} from '../Hierarchy';
-import { getSelectedHierarchy } from '../state';
-import { Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
+import { HierarchyState } from '../state/hierarchy.reducer';
+import { Store } from '@ngrx/store';
+import { getSelectedHierarchy } from '../state';
+import { Hierarchy, Node } from '../Hierarchy';
 
 @Component({
-    selector: 'app-importance-value',
-    templateUrl: './importance-value.component.html',
-    styleUrls: ['./importance-value.component.scss']
+    selector: 'app-weights',
+    templateUrl: './weights.component.html',
+    styleUrls: ['./weights.component.scss']
 })
-export class ImportanceValueComponent implements OnInit, OnDestroy {
-    node: Node | null = null;
+export class WeightsComponent implements OnInit, OnDestroy{
+    node$ = new BehaviorSubject<Node | null>(null);
     nodes: Node[] = [];
     id: string | null = null;
     subscriptions: Subscription[] = [];
-    children: Node[] = [];
 
     constructor(private route: ActivatedRoute, private router: Router, private store: Store<HierarchyState>) {
         const sub = this.store.select(getSelectedHierarchy)
             .subscribe(hierarchy => {
-                if(!hierarchy) {
+                if (!hierarchy) {
                     return;
                 }
 
                 this.nodes = this.getAllNodes(hierarchy);
-                if(this.id) {
-                    this.node = this.getNodeById(this.id);
-                    this.children = this.node?.children ?? [];
+                if (this.id) {
+                    const newNode = this.getNodeById(this.id);
+                    this.node$.next(newNode);
                 }
             });
         this.subscriptions.push(sub);
@@ -39,14 +37,14 @@ export class ImportanceValueComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         const id = this.route.snapshot.paramMap.get('id');
-        if(!id) {
+        if (!id) {
             this.router.navigate(['/hierarchicalView']);
             return;
         }
         this.id = id;
-        if(this.nodes.length > 0) {
-            this.node = this.getNodeById(this.id);
-            this.children = this.node?.children ?? [];
+        if (this.nodes.length > 0) {
+            const newNode = this.getNodeById(this.id);
+            this.node$.next(newNode);
         }
     }
 
@@ -79,9 +77,5 @@ export class ImportanceValueComponent implements OnInit, OnDestroy {
 
     getNodeById(id: string): Node | null {
         return this.nodes.find(node => node.id === id) ?? null;
-    }
-
-    drop(event: CdkDragDrop<string[]>) {
-        moveItemInArray(this.children, event.previousIndex, event.currentIndex);
     }
 }

@@ -9,7 +9,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { HierarchyReducer } from './state/hierarchy.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { HierarchyEffects } from './state/hierarchy.effects';
-import { ImportanceValueModule } from './importance-value/importance-value.module';
+import { WeightsModule } from './weights/weights.module';
 import { HierarchicalViewModule } from './hierarchical-view/hierarchical-view.module';
 import { DashModule } from './dash/dash.module';
 import { NavModule } from './nav/nav.module';
@@ -24,10 +24,10 @@ import { RankChartModule } from './rank-chart/rank-chart.module';
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
-        StoreModule.forRoot({hierarchies: HierarchyReducer}),
+        StoreModule.forRoot({ hierarchies: HierarchyReducer }),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
         EffectsModule.forRoot([HierarchyEffects]),
-        ImportanceValueModule,
+        WeightsModule,
         HierarchicalViewModule,
         SensitivityAnalysisModule,
         RankChartModule,
