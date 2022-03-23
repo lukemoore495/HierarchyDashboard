@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Options, LabelType } from '@angular-slider/ngx-slider';
-import { AbstractControl, FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Input } from '@angular/core';
+import { Node } from '../../Hierarchy';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-pairwise-comparison',
@@ -8,7 +11,10 @@ import { AbstractControl, FormControl, FormBuilder, FormGroup, Validators } from
     styleUrls: ['./pairwise-comparison.component.scss']
 })
 export class PairwiseComparisonComponent implements OnInit {
-
+    @Input() node$?: Observable<Node | null>;
+    node: Node | null = null;
+    children: Node[] = [];
+    displayedColumns: string[] = ['name', 'weight'];
     form: FormGroup;
 
     constructor(private fb: FormBuilder) {
@@ -16,30 +22,25 @@ export class PairwiseComparisonComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.weights.forEach((weight, index) => {
-            [...Array(this.weights.length).keys()].forEach(i => {
+        if(!this.node$){
+            return;
+        }
+
+        this.node$
+            .subscribe(node => {
+                this.node = node;
+                this.children = node?.children ?? [];
+            });
+
+        this.children = this.node?.children ?? [];
+        this.children.forEach((weight, index) => {
+            [...Array(this.children.length).keys()].forEach(i => {
                 if (index < i) {
-                    this.form.addControl(weight.id.toString() + this.weights[i].id.toString(), new FormControl(1, Validators.required));
+                    this.form.addControl(weight.id.toString() + this.children[i].id.toString(), new FormControl(1, Validators.required));
                 }
-            })
-        })
+            });
+        });
     };
-
-    weights: Array<{ id: number, name: string, value: number }> = [
-        { id: 0, name: 'Security', value: 0 },
-        { id: 1, name: 'Justice', value: 0 },
-        { id: 2, name: 'Economic Opportunities', value: 0 },
-        { id: 3, name: 'Education', value: 0 },
-        { id: 4, name: 'Socio Economic', value: 0 },
-    ];
-
-    header: Array<string> = [
-        'Measure Name',
-        'Local Weight',
-        'Consistency Ratio'
-    ];
-
-    sliderControl: FormControl = new FormControl();
 
     options: Options = {
         showTicksValues: true,
@@ -65,6 +66,7 @@ export class PairwiseComparisonComponent implements OnInit {
             { value: 9, legend: 'Extremely Favor' },
             { value: 10 },
         ],
+
         translate: (value: number, label: LabelType): string => {
             // hide even values
             if (value % 2 == 0) {

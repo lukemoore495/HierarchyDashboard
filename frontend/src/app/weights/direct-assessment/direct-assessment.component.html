@@ -1,13 +1,33 @@
-<div [formGroup]="form">
-  <div *ngFor="let weight of weights; let i = index">
-    <mat-form-field class="" appearance="fill">
-      <mat-label>{{ weight.name }}</mat-label>
-      <input type="number" matInput [formControlName]="weight.id" />
+<div class="table-container">
+  <table mat-table [dataSource]="children" class="table">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Measure Name </th>
+      <td mat-cell *matCellDef="let node"> {{node.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="weight">
+      <th mat-header-cell *matHeaderCellDef> Local Weight </th>
+      <td mat-cell *matCellDef="let node"> {{node.weight}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+<div [formGroup]="form" class="form">
+    <mat-form-field *ngFor="let node of children; let i = index" class="field" appearance="fill">
+      <mat-label>{{ node.name }}</mat-label>
+      <input type="number" matInput [formControlName]="node.id" />
       <mat-error
-        *ngIf="getFormControl(weight.id.toString())?.errors?.['required']"
-      >
+        *ngIf="getFormControl(node.id.toString())?.errors?.['required']">
         Please enter a valid value
       </mat-error>
     </mat-form-field>
+  <div class="save-button">
+    <button mat-raised-button color="accent">
+      <mat-icon>save</mat-icon>
+      Save
+    </button>
   </div>
 </div>

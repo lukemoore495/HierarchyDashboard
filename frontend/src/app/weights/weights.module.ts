@@ -11,6 +11,9 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
 
 
 @NgModule({
@@ -20,6 +23,19 @@ import { MatCardModule } from '@angular/material/card';
         PairwiseComparisonComponent,
         SwingWeightComponent
     ],
-    imports: [CommonModule, MatTabsModule, MatGridListModule, DragDropModule, MatInputModule, FormsModule, ReactiveFormsModule, NgxSliderModule, MatCardModule],
+    imports: [
+        CommonModule, 
+        MatTabsModule, 
+        MatGridListModule, 
+        DragDropModule, 
+        MatInputModule, 
+        FormsModule, 
+        ReactiveFormsModule, 
+        NgxSliderModule, 
+        MatCardModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTableModule
+    ],
 })
 export class WeightsModule { }

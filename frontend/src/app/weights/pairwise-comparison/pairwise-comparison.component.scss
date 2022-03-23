@@ -1,65 +1,69 @@
-::selection {
-  background: #5f74a0;
-  color: #fff;
-}
-::-moz-selection {
-  background: #5f74a0;
-  color: #fff;
-}
-::-webkit-selection {
-  background: #5f74a0;
-  color: #fff;
+@import 'src/styles/colors';
+
+
+::ng-deep {
+  .slider .ngx-slider .ngx-slider-bar {
+    width: 100%;
+  }
+  .slider .ngx-slider .ngx-slider-pointer {
+    background-color: map-get($primary, 300);
+  }
+
+  .slider .ngx-slider .ngx-slider-pointer.ngx-slider-active::after {
+    background-color: map-get($background, 100);
+  }
+
+  .slider .ngx-slider .ngx-slider-selection {
+    background-color: map-get($accent, 700);
+  }
+
+  .slider .ngx-slider .ngx-slider-min {
+    background-color: map-get($accent, 700);
+  }
+  
+  .slider .ngx-slider .ngx-slider-tick {
+    background: map-get($background, 500);
+  }
+
+  .slider .ngx-slider .ngx-slider-tick.ngx-slider-selected {
+    background: map-get($accent, 700);
+  }
 }
 
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
+.table-container{
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .table {
+    width: 80%;
+  }
 }
 
-thead {
-  cursor: pointer;
-  background: #c9dff0;
-}
-thead tr th {
-  font-weight: bold;
-  padding: 12px 30px;
-  padding-left: 42px;
-}
-thead tr th span {
-  padding-right: 20px;
-  background-repeat: no-repeat;
-  background-position: 100% 100%;
-}
-
-thead tr th.headerSortUp,
-thead tr th.headerSortDown {
-  background: #acc8dd;
-}
-
-tbody tr {
-  color: #555;
-}
-tbody tr td {
-  text-align: center;
-  padding: 15px 10px;
-}
-tbody tr td.lalign {
-  text-align: left;
+.form{
+  padding: 2rem;
 }
 
 .oval {
-  width: 160px;
-  height: 80px;
-  background: #673ab7;
+  width: 12rem;
+  height: 5rem;
+  background: map-get($primary, 300);
   border-radius: 50%;
-  line-height: 80px;
+  line-height: 5rem;
   text-align: center;
   display: inline-block;
-  margin: 2 auto;
 }
 
-ngx-slider {
-  width: 70%;
-  margin: 3%;
-  padding-bottom: 2%;
+.slider-parent{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin: 3rem;
+
+  .slider-container {
+    min-height: 0;
+    min-width: 0;
+    width: 100%;
+    margin: 1rem;
+  }
 }
