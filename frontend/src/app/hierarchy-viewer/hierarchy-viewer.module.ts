@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { HierarchicalViewComponent } from './hierarchical-view.component';
+import { HierarchyViewerComponent } from './hierarchy-viewer.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -12,7 +12,7 @@ import { HierarchyTreeComponent } from './hierarchy-tree/hierarchy-tree.componen
 
 @NgModule({
     declarations: [
-        HierarchicalViewComponent,
+        HierarchyViewerComponent,
         HierarchyTreeComponent
     ],
     imports: [
@@ -26,7 +26,7 @@ import { HierarchyTreeComponent } from './hierarchy-tree/hierarchy-tree.componen
         RouterModule
     ],
     exports: [
-        HierarchicalViewComponent
+        HierarchyViewerComponent
     ]
 })
-export class HierarchicalViewModule { }
+export class HierarchyViewerModule { }

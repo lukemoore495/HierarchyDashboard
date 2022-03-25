@@ -1,0 +1,7 @@
+<form>
+    <mat-accordion *ngIf="measurementNodes">
+        <div *ngFor="let node of measurementNodes">
+            <app-measurements-panel [measurementNode]="node" (measurementResultEvent)="saveMeasurements($event)" [isTopLevel]="node.name === topLevelName"></app-measurements-panel>
+        </div>
+    </mat-accordion>
+</form>

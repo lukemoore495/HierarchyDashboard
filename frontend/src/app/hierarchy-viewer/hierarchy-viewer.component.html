@@ -14,10 +14,10 @@
     </button>
 
     <!-- This is a short term hack to save RRRHierarchy into the db -->
-    <!-- <button mat-raised-button color="accent" class="header-button" (click)="createHierarchy()">
+    <button mat-raised-button color="accent" class="header-button" (click)="createHierarchy()">
         <mat-icon>download</mat-icon>
         Import RRRHierarchy
-    </button> -->
+    </button>
 </div>
 <app-hierarchy-tree *ngIf="selectedHierarchy" [hierarchy]="selectedHierarchy"></app-hierarchy-tree>
 <ng-container *ngIf="hierarchies$ | async as hierarchies">

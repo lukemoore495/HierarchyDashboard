@@ -7,7 +7,7 @@ import { OnDestroy } from '@angular/core';
 import { HierarchyState } from 'src/app/state/hierarchy.reducer';
 import { Store } from '@ngrx/store';
 import { getSelectedAlternative, getSelectedMeasurementId } from 'src/app/state';
-import * as HierarchyActions from '../../state/hierarchy.actions';
+import * as HierarchyActions from '../../../state/hierarchy.actions';
 import { MatSelectionList } from '@angular/material/list';
 import { AfterViewInit } from '@angular/core';
 
@@ -19,6 +19,7 @@ import { AfterViewInit } from '@angular/core';
 export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() measurementNode: Node | null = null;
     @Input() parentIsSelected?: Observable<boolean>;
+    @Input() isTopLevel = false;
     @Output() measurementResultEvent: EventEmitter<Measurement[]>;
     @Output() childNodeOpened: EventEmitter<void>;
     @Output() closed: EventEmitter<void>;
@@ -30,7 +31,6 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     alternativeMeasurements: Measurement[] = [];
     measurementDefinitions: MeasurementDefinition[] = [];
     alternativeChanged = false;
-    isTopLevel = false;
 
     constructor(private fb: FormBuilder, private store: Store<HierarchyState>) { 
         const sub = this.store.select(getSelectedAlternative)
@@ -51,9 +51,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
         this.$parentNodeOpened = new BehaviorSubject<boolean>(true);
     }
 
-    ngOnInit(): void {
-        this.isTopLevel = this.measurementNode?.weight === 1;
-        
+    ngOnInit(): void {        
         const nodes : Node[] = Object.assign([], this.measurementNode?.children);
         for(const node of nodes) {
             const measurementFields = node.measurements ?? [];

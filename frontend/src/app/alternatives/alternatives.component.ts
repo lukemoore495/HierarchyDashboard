@@ -11,11 +11,11 @@ import { Observable, Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 
 @Component({
-    selector: 'app-dash',
-    templateUrl: './dash.component.html',
-    styleUrls: ['./dash.component.scss']
+    selector: 'app-alternatives',
+    templateUrl: './alternatives.component.html',
+    styleUrls: ['./alternatives.component.scss']
 })
-export class DashComponent implements OnDestroy{
+export class AlternativesComponent implements OnDestroy{
     card1 = 'Value Function';
     card2 = 'Alternatives';
     alternatives$?:Observable<Alternative[]>;

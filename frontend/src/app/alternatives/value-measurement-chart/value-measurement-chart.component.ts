@@ -1,11 +1,11 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ChartConfiguration, ChartType } from 'chart.js';
-import { getSelectedMeasurement, getSelectedMeasurementDefinition } from '../state';
-import { HierarchyState } from '../state/hierarchy.reducer';
+import { getSelectedMeasurement, getSelectedMeasurementDefinition } from '../../state';
+import { HierarchyState } from '../../state/hierarchy.reducer';
 import { BaseChartDirective } from 'ng2-charts';
 import { AfterViewInit } from '@angular/core';
-import { Measurement } from '../Hierarchy';
+import { Measurement } from '../../Hierarchy';
 import { combineLatest } from 'rxjs';
 
 @Component({
