@@ -1,0 +1,44 @@
+<mat-tab-group (selectedIndexChange)="myTabSelectedIndexChange($event)">
+    [selectedIndex]="selectedTab.value">
+    <mat-tab label="Import">
+        <div class="tab-container">
+            <div mat-dialog-content>
+                <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+                <div class="file-upload">
+
+                    {{fileName || "No file uploaded yet."}}
+
+                    <button mat-raised-button color="accent" class="upload-btn" (click)="fileUpload.click()">
+                        <mat-icon>attach_file</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Export">
+        <div class="tab-container">
+            <mat-label>
+                <ng-template #loading>
+                    <p class="loading">Loading</p>
+                </ng-template>
+                <ng-template #error>
+                    <p class="error">Something went wrong, please try again</p>
+                </ng-template>
+                <ng-container *ngIf="this.data.hierarchy; else error">
+                    <ng-container *ngIf="downloadJsonHref; else loading">
+                        <p>Ready</p>
+                    </ng-container>
+                </ng-container>
+            </mat-label>
+        </div>
+    </mat-tab>
+</mat-tab-group>
+<div mat-dialog-actions>
+    <button mat-button (click)="closeDialog()" cdkFocusInitial>Cancel</button>
+    <a title="Export" [href]="downloadJsonHref" [download]="downloadJsonName">
+        <ng-container *ngIf="downloadJsonHref">
+            <button mat-button (click)="doAction()" color="primary">{{tabs[selectedTabIndex]}}</button>
+        </ng-container>
+    </a>
+</div>
