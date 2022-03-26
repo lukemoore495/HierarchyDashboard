@@ -24,9 +24,9 @@ export const HierarchyReducer = createReducer<HierarchyState>(
     initialState,
     on(HierarchyActions.createHierarchySuccess, (state, action): HierarchyState => {
         const hierarchies = [...state.Hierarchies];
-        
+
         const existingHierarchyIndex = hierarchies.findIndex(x => x.id === action.hierarchy.id);
-        if(existingHierarchyIndex !== -1) {
+        if (existingHierarchyIndex !== -1) {
             hierarchies.splice(existingHierarchyIndex);
         }
 
@@ -37,11 +37,11 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         });
 
         //Remove this once we have alternatives in the backend
-        const hierarchy = {...action.hierarchy};
-        if(hierarchy.name === 'RRR Hierarchy'){
+        const hierarchy = { ...action.hierarchy };
+        if (hierarchy.name === 'RRR Hierarchy') {
             hierarchy.alternatives = (RRRHierarchy as Hierarchy).alternatives;
         }
-        
+
         return {
             ...state,
             Hierarchies: hierarchies,
@@ -67,14 +67,14 @@ export const HierarchyReducer = createReducer<HierarchyState>(
             error: action.error
         };
     }),
-    on(HierarchyActions.setSelectedHierarchySuccess, (state, action): HierarchyState => { 
-        const hierarchy = {...action.hierarchy};  
+    on(HierarchyActions.setSelectedHierarchySuccess, (state, action): HierarchyState => {
+        const hierarchy = { ...action.hierarchy };
 
         //Remove this once we have alternatives in the backend
-        if(hierarchy.name === 'RRR Hierarchy'){
+        if (hierarchy.name === 'RRR Hierarchy') {
             hierarchy.alternatives = (RRRHierarchy as Hierarchy).alternatives;
         }
-        
+
         const alternative = hierarchy.alternatives ? hierarchy.alternatives[0] : null;
         return {
             ...state,
@@ -103,6 +103,24 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         return {
             ...state,
             selectedMeasurementId: action.selectedMeasurementId
+        };
+    }),
+    on(HierarchyActions.deleteHierarchySuccess, (state, action): HierarchyState => {
+
+        const hierarchies = state.Hierarchies.filter(x => x.id !== action.hierarchyId);
+
+        return {
+            ...state,
+            Hierarchies: hierarchies,
+            selectedHierarchy: null,
+            selectedAlternativeId: null,
+            selectedMeasurementId: null
+        };
+    }),
+    on(HierarchyActions.deleteHierarchyFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
         };
     })
 );

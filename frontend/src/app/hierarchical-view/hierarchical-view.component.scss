@@ -1,31 +1,78 @@
-@import 'src/styles/colors';
+@import "src/styles/colors";
 
-.header-container{
-    display: flex;
-    align-items: left;
-    flex-direction: row;
-    margin-top: 1rem;
+.header-container {
+  display: flex;
+  align-items: left;
+  flex-direction: row;
+  margin-top: 1rem;
 
-    .select{
-        font-size: x-large;
-        text-align: center;
-        margin-left: 1rem;
-        width: 30%;
-    }
-    .header-button{
-        margin-left: 1rem;
-        margin-top: 2rem;
-        height: 50%;
-    }
+  .select {
+    font-size: x-large;
+    text-align: center;
+    margin-left: 1rem;
+    width: 30%;
+  }
+  .header-button {
+    margin-left: 1rem;
+    margin-top: 2rem;
+    height: 50%;
+  }
 }
 
-.welcome{
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 10%;
-    transform: scale(1.5);
-    .title{
-        font-size: xx-large;
-    }
+.welcome {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 10%;
+  transform: scale(1.5);
+  .title {
+    font-size: xx-large;
+  }
+}
+
+.dialog-full-width {
+  width: 100%;
+}
+
+.tab-container {
+  padding: 5%;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-upload {
+  display: flex;
+}
+
+.upload-button {
+  float: right;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  width: 30%;
+}
+
+.loading:after {
+  content: " .";
+  animation: dots 1s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%,
+  20% {
+    color: white;
+    text-shadow: 0.25em 0 0 white, 0.5em 0 0 white;
+  }
+  40% {
+    color: black;
+    text-shadow: 0.25em 0 0 white, 0.5em 0 0 white;
+  }
+  60% {
+    text-shadow: 0.25em 0 0 black, 0.5em 0 0 white;
+  }
+  80%,
+  100% {
+    text-shadow: 0.25em 0 0 black, 0.5em 0 0 black;
+  }
 }

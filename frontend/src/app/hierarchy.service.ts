@@ -30,7 +30,7 @@ export interface MeasurementDefinitionRequest {
 export class HierarchyService {
     root = 'http://localhost:4200/api';
 
-    constructor(private http: HttpClient){ }
+    constructor(private http: HttpClient) { }
 
     getHierarchies(): Observable<HierarchyListItem[]> {
         const url = this.root + '/hierarchy/ascending_id';
@@ -47,7 +47,14 @@ export class HierarchyService {
         return this.http.post<Hierarchy>(url, hierarchy);
     }
 
-    getSensitivityAnalysis(parentNodeId: string): Observable<SensitivityAnalysisReport>{
+    deleteHierarchy(hierarchyId: string): Observable<string> {
+        const url = this.root + '/hierarchy/' + hierarchyId;
+        return this.http.delete<string>(url);
+
+        // Select another hierarchy or show welcome screen
+    }
+
+    getSensitivityAnalysis(parentNodeId: string): Observable<SensitivityAnalysisReport> {
         return of(this.staticSensitivityAnalysisReport);
     }
 
