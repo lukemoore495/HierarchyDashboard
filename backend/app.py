@@ -4,7 +4,7 @@ from pathlib import Path
 import os
 import sys
 
-from models.hierarchy import Hierarchy, Node, Measurement
+from models.hierarchy import Hierarchy, Node
 from models.shared import db
 
 def get_config_path():
@@ -61,6 +61,10 @@ def create_hierarchy():
 
 
 # To add a node to the root of the hierarchy, send 0 for parent_id
+# TODO: Broken due to current init line 40
+# Hierarchy is assigned to ease create_hierarchy()
+# You don't have to commit to generate a hierarchy id anymore.
+# However, adding to an already created hierarchy is apparently tricky.
 @app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
 def create_node(hierarchy_id, parent_id):
     data = request.get_json()
@@ -68,32 +72,19 @@ def create_node(hierarchy_id, parent_id):
     if parent_id == 0:
         parent_id = None
 
-    if "icon" in data:
-        icon = data["icon"]
-    else:
-        icon = None
+    parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id).first()
 
-    new_node = Node.create(
-        data,
-        hierarchy_id=hierarchy_id,
-        parent_id=parent_id,
-        icon=icon
-    )
+    # TODO: Double check with Luke that this is okay
+    if not parent:
+        abort(204, description="Resource not found")
+    
+    print(data)
+    new_node = parent.create(data)
 
-    return jsonify(new_node.to_dict()), 201
+    db.session.add(new_node)
+    db.session.commit()
 
-
-@app.route("/hierarchy/<hierarchy_id>/node/<node_id>/measurement", methods=['POST'])
-def create_measurement(hierarchy_id, node_id):
-    data = request.get_json()
-
-    new_measurement = Measurement.create(
-        data,
-        hierarchy_id=hierarchy_id,
-        node_id=node_id,
-    )
-
-    return jsonify(new_measurement.to_dict()), 201
+    return jsonify(parent.to_dict()), 201
 
 
 @app.route("/hierarchy/ascending_id", methods=['GET'])
@@ -119,7 +110,7 @@ def get_all_hierarchies_descending():
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['GET'])
 def get_one_hierarchy(hierarchy_id):
-    hierarchy = Hierarchy.get(hierarchy_id)
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
     
     if not hierarchy:
         abort(404, description="Resource not found")
@@ -157,20 +148,6 @@ def delete_node(node_id):
     message = f"Node {node_id} Deleted"
     return jsonify({"message": message}), 200
 
-
-@app.route("/measurement/<measurement_id>", methods=['DELETE'])
-def delete_measurement(measurement_id):
-    measurement = Measurement.get(measurement_id)
-
-    # measurement does not exist, return 404
-    if not measurement:
-        abort(404, description="Resource not found")
-
-    db.session.delete(measurement)
-    db.session.commit()
-
-    message = f"Measurement {measurement_id} Deleted"
-    return jsonify({"message": message}), 200
 
 if __name__ == "__main__":
     # Create the database if it doesn't exist

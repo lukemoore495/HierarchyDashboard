@@ -35,7 +35,8 @@ class Node(db.Model):
         # IMPORTANT: Populates the hiearchy_id field of all nodes
         # Leads to all of them showing up in the Hierarchy tree list
         if parent:
-            self.hierarchy=parent.hierarchy
+            self.hierarchy = parent.hierarchy
+        
 
         # Data Fields
         self.name=name
@@ -80,62 +81,52 @@ class Node(db.Model):
 
         return node_dict
             
-    @classmethod
-    def create(cls, node_data, hierarchy_id, parent_id=None, icon=None):
+    def create(self, data):
+        # Check for optional parameters
+        # TODO: Weight isn't optional.
+        icon = None
+        weight = None
+        is_measurement = False
+        measurement_type = None
+        value_function = None
+
+        if 'icon' in data:
+            icon = data['icon']
+        if 'weight' in data:
+            weight = data['weight']
+        if 'measurementType' in data:
+            is_measurement = True
+            measurement_type = data['measurementType']
+        if 'value_function' in data:
+            value_function = data['value_function']
+            
+        # Create child node
         new_node = Node(
-            hierarchy_id=hierarchy_id,
-            parent_id=parent_id,
-            name=node_data["name"],
-            weight=node_data["weight"],
+            name=data['name'],
+            parent=self,
             icon=icon,
+            weight=weight,
+            is_measurement=is_measurement,
+            measurement_type=measurement_type,
+            value_function=value_function,
         )
 
-        db.session.add(new_node)
-        db.session.commit() # node now has a unique id
-
+        # Check for child nodes in children and measurments
+        children = []
+        if 'children' in data:
+            children += data['children']
+        if 'measurements' in data:
+            children += data['measurements']
+        # If they exist, add them to the current node.
+        if children:
+                new_node.create_tree(children)
+        
         return new_node
 
     # Takes a list of nodes that have separated nodes and measurements
     def create_tree(self, nodes_lst):
         for node in nodes_lst:
-            # Check for optional parameters
-            # TODO: Weight isn't optional.
-            icon = None
-            weight = None
-            is_measurement = False
-            measurement_type = None
-            value_function = None
-
-            if 'icon' in node:
-                icon = node['icon']
-            if 'weight' in node:
-                weight = node['weight']
-            if 'measurementType' in node:
-                is_measurement = True
-                measurement_type = node['measurementType']
-            if 'value_function' in node:
-                value_function = node['value_function']
-
-            # Create child node
-            new_node = Node(
-                name=node['name'],
-                parent=self,
-                icon=icon,
-                weight=weight,
-                is_measurement=is_measurement,
-                measurement_type=measurement_type,
-                value_function=value_function,
-            )
-
-            # Check for child nodes in children and measurments
-            children = []
-            if 'children' in node:
-                children += node['children']
-            if 'measurements' in node:
-                children += node['measurements']
-            # If they exist, add them to the current node.
-            if children:
-                new_node.create_tree(children)
+           self.create(node)
 
 
     @classmethod
