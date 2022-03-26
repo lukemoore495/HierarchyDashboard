@@ -87,7 +87,6 @@ export class HierarchicalViewComponent implements OnDestroy {
         dialogRef.afterClosed().subscribe(result => {
 
             if (result != null && result.event == 'Delete') {
-                console.log(result);
                 this.deleteHierarchy();
                 this.selectedHierarchy = null;
             }
@@ -183,7 +182,6 @@ export class ImportExportHierarchyDialog {
     }
 
     generateDownloadJsonUri() {
-        console.log(this.data.hierarchy);
         var theJSON = JSON.stringify(this.data.hierarchy);
         var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(theJSON));
         this.downloadJsonHref = uri;
