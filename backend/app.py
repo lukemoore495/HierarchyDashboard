@@ -38,14 +38,26 @@ def create_hierarchy():
     # Get data from .json sent with request
     data = request.get_json()
 
-    # Create Hierarchy
-    new_hierarchy = Hierarchy.create(data)
+    # Create hierarchy
+    hierarchy = Hierarchy(
+        name=data["name"],
+        description=data["description"]
+    )
 
-    # Parse and create Nodes
+    # Create root of tree and associate it with hierarchy.
+    root = Node("root")
+    hierarchy.nodes.append(root)
+
+    # Parse nodes and create tree
     nodes_lst = data["nodes"]
-    Node.create_nodes(nodes_lst, new_hierarchy.id)
+    if nodes_lst: # Check that it isn't an empty list
+        root.create_tree(nodes_lst)
 
-    return jsonify(new_hierarchy.to_dict()), 201
+    # Commit changes to DB
+    db.session.add(hierarchy)
+    db.session.commit()
+
+    return "Success",201
 
 
 # To add a node to the root of the hierarchy, send 0 for parent_id
