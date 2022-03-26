@@ -14,17 +14,21 @@ class Hierarchy(db.Model):
     
     name = db.Column(db.String())
 
-    tree = db.relationship(
+    nodes = db.relationship(
         "Node",
         cascade="all, delete",
-        backref=db.backref("hierarchy"),
+        backref=db.backref("hierarchy"), # Allows the population of the hiearchy_id field below
         )
 
     def __init__(self, name):
         self.name = name
 
     def __repr__(self):
-        return f'Hierarchy: {self.id}, Name: {self.name}, Tree: {self.tree}'
+        return f'Hierarchy: {self.id}, Name: {self.name}, Nodes: {self.nodes}'
+
+    # Assumes the root node is the first node in the list
+    def dump(self, _indent=0):
+        return repr(self) + "\n\nTree:\n" + self.nodes[0].dump()
 
 
 # Use this to model the tree structure
@@ -48,6 +52,8 @@ class Node(db.Model):
         self.name=name
         self.parent=parent
 
+        # IMPORTANT: Populates the hiearchy_id field of all nodes
+        # Leads to all of them showing up in the Hierarchy tree list
         if parent:
             self.hierarchy=parent.hierarchy
 
@@ -70,7 +76,7 @@ if __name__ == "__main__":
 
     hierarchy = Hierarchy("test")
     root = Node("root")
-    hierarchy.tree.append(root)
+    hierarchy.nodes.append(root)
     # db.session.add(hierarchy)
     # db.session.commit()
 
@@ -89,6 +95,7 @@ if __name__ == "__main__":
     children = new_root.children
 
     print(root.dump())
+    print(hierarchy.dump())
 
     # print(root_id)
     # for child in children:
