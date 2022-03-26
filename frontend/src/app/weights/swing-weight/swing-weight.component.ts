@@ -15,14 +15,16 @@ export class SwingWeightComponent implements OnInit{
     childrenNames: string[] = [];
     emptyDrop: string[][] = [];
     displayedColumns: string[] = ['name', 'weight'];
-    matrix =  ['100', '75', '50', 
-        '75', '50', '25', 
-        '50', '25', '10'];
-    columns =  ['High', 'Medium', 'Low'];
-    rows =  ['High', 'Medium', 'Low'];
+    matrix =  ['1000', '440', '230', '100', 
+        '750', '380', '210', '90', 
+        '500', '300', '170', '70',
+        '250', '170', '100', '50'];
+    numberOfColumns = 4;
+    columnLabels =  ['Extremely Important', 'Very Important', 'Important', 'Less Important'];
+    rowLabels =  ['Very High', 'High', 'Medium', 'Low'];
 
     ngOnInit(): void {
-        for(let i = 0; i < 9; i++){
+        for(let i = 0; i < this.matrix.length; i++){
             this.emptyDrop.push([]);
         }
 
