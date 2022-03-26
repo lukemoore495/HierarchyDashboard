@@ -2,12 +2,29 @@ from .shared import db
 from .node import Node, Measurement
 
 class Hierarchy(db.Model):
-    __tablename__ = "hierarchy"
+    __tablename__ = 'hierarchy'
     id = db.Column(db.Integer, primary_key=True)
     
-    name = db.Column(db.String(50))
-    description = db.Column(db.String(200))
-    nodes = db.relationship("Node", cascade="all, delete")
+    name = db.Column(db.String())
+    description = db.Column(db.String())
+
+    # Currently contains all nodes in the tree
+    nodes = db.relationship(
+        "Node",
+        cascade="all, delete",
+        backref=db.backref("hierarchy"), # Allows the population of the hiearchy_id field below
+        )
+
+    def __init__(self, name, description):
+        self.name = name
+        self.description=description
+
+    def __repr__(self):
+        return f'Hierarchy: {self.id}, Name: {self.name}, Nodes: {self.nodes}'
+
+    # Assumes the root node is the first node in the list
+    def dump(self):
+        return repr(self) + "\n\nTree:\n" + self.nodes[0].dump()
 
     @classmethod
     def create(cls, hierarchy_data):

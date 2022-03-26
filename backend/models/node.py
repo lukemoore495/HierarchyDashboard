@@ -2,18 +2,99 @@ from .shared import db
 from .measurement import Measurement
 
 
+# https://docs.sqlalchemy.org/en/14/orm/self_referential.html
+# https://docs.sqlalchemy.org/en/14/orm/examples.html#examples-adjacencylist
 class Node(db.Model):
-    __tablename__ = "node"
-    id = db.Column(db.Integer, primary_key=True)
-    hierarchy_id = db.Column(db.Integer, db.ForeignKey("hierarchy.id"), nullable=False)
-    parent_id = db.Column(db.Integer, db.ForeignKey("node.id"))
+    __tablename__ = 'node'
 
-    name = db.Column(db.String(50))
-    icon = db.Column(db.String(50))
+    # Identifiers
+    id = db.Column(db.Integer, primary_key=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey("node.id"))
+    hierarchy_id = db.Column(db.Integer, db.ForeignKey("hierarchy.id"), nullable=False)
+
+    # Data Fields
+    name = db.Column(db.String(), nullable=False)
+    icon = db.Column(db.String())
     weight = db.Column(db.Float)
 
-    children = db.relationship("Node", cascade="all, delete")
-    measurements = db.relationship("Measurement", cascade="all, delete")
+    # For Measurements
+    type = db.Column(db.String())
+    value_function = db.Column(db.String)
+
+    # Child Nodes, can be measurements or sub-objectives
+    children = db.relationship(
+        "Node",
+        cascade="all, delete-orphan",
+        backref=db.backref("parent",remote_side=id),
+        )
+
+    def __init__(self, name, parent=None, icon=None, weight=None, type=None, value_function=None):
+        # Identifiers
+        self.parent=parent
+        # IMPORTANT: Populates the hiearchy_id field of all nodes
+        # Leads to all of them showing up in the Hierarchy tree list
+        if parent:
+            self.hierarchy=parent.hierarchy
+
+        # Data Fields
+        self.name=name
+        self.icon=icon
+        self.weight=weight
+
+        # For Measurements
+        self.type=type
+        self.value_function=value_function
+
+    def __repr__(self):
+        return f'Node: {self.id}, Name: {self.name}, Hierarchy: {self.hierarchy_id}'
+
+    def dump(self, _indent=0):
+        return (
+            "    " * _indent
+            + repr(self)
+            + "\n"
+            + "".join(c.dump(_indent + 1) for c in self.children)
+        )
+
+    # Takes a list of nodes that have separated nodes and measurements
+    def create_tree(self, nodes_lst):
+        for node in nodes_lst:
+            # Check for optional parameters
+            # TODO: Weight isn't optional.
+            icon = None
+            weight = None
+            type = None
+            value_function = None
+
+            if 'icon' in node:
+                icon = node['icon']
+            if 'weight' in node:
+                weight = node['weight']
+            if 'type' in node:
+                type = node['type']
+            if 'value_function' in node:
+                value_function = node['value_function']
+
+            # Create child node
+            new_node = Node(
+                name=node['name'],
+                parent=self,
+                icon=icon,
+                weight=weight,
+                type=type,
+                value_function=value_function,
+            )
+
+            # Check for child nodes in children and measurments
+            children = []
+            if 'children' in node:
+                children += node['children']
+            if 'measurements' in node:
+                children += node['measurements']
+            # If they exist, add them to the current node.
+            if children:
+                new_node.create_tree(children)
+            
 
     @classmethod
     def create(cls, node_data, hierarchy_id, parent_id=None, icon=None):

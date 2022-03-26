@@ -14,6 +14,7 @@ class Hierarchy(db.Model):
     
     name = db.Column(db.String())
 
+    # Currently contains all nodes in the tree
     nodes = db.relationship(
         "Node",
         cascade="all, delete",
@@ -27,7 +28,7 @@ class Hierarchy(db.Model):
         return f'Hierarchy: {self.id}, Name: {self.name}, Nodes: {self.nodes}'
 
     # Assumes the root node is the first node in the list
-    def dump(self, _indent=0):
+    def dump(self):
         return repr(self) + "\n\nTree:\n" + self.nodes[0].dump()
 
 
@@ -36,12 +37,22 @@ class Hierarchy(db.Model):
 # https://docs.sqlalchemy.org/en/14/orm/examples.html#examples-adjacencylist
 class Node(db.Model):
     __tablename__ = 'node'
+
+    # Identifiers
     id = db.Column(db.Integer, primary_key=True)
     parent_id = db.Column(db.Integer, db.ForeignKey("node.id"))
     hierarchy_id = db.Column(db.Integer, db.ForeignKey("hierarchy.id"), nullable=False)
 
+    # Data Fields
     name = db.Column(db.String())
+    icon = db.Column(db.String())
+    weight = db.Column(db.Float)
 
+    # For Measurements
+    type = db.Column(db.String())
+    value_function = db.Column(db.String)
+
+    # Child Nodes, can be measurements or sub-objectives
     children = db.relationship(
         "Node",
         cascade="all, delete-orphan",
