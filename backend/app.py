@@ -57,7 +57,7 @@ def create_hierarchy():
     db.session.add(hierarchy)
     db.session.commit()
 
-    return "Success",201
+    return hierarchy.to_dict(), 201
 
 
 # To add a node to the root of the hierarchy, send 0 for parent_id
