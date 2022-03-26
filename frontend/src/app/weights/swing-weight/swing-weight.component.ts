@@ -14,7 +14,7 @@ export class SwingWeightComponent implements OnInit{
     node: Node | null = null;
     children: Node[] = [];
     childrenNames: string[] = [];
-    emptyDrop: string[][] = [];
+    emptyDrop: Node[][] = [];
     displayedColumns: string[] = ['name', 'weight'];
     matrix =  ['1000', '440', '230', '100', 
         '750', '380', '210', '90', 
@@ -36,16 +36,16 @@ export class SwingWeightComponent implements OnInit{
         this.node$
             .subscribe(node => {
                 this.node = node;
-                this.children = node?.children ?? [];
+                this.children = node?.children ? [...node.children] : [];
                 this.childrenNames = this.children.map(node => node.name);
             });
     }
 
-    drop(event: CdkDragDrop<string[]>) {
+    drop(event: CdkDragDrop<Node[]>) {
         if (event.previousContainer === event.container) {
             moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         } else {
-            transferArrayItem(
+            transferArrayItem<Node>(
                 event.previousContainer.data,
                 event.container.data,
                 event.previousIndex,
@@ -58,13 +58,14 @@ export class SwingWeightComponent implements OnInit{
         const swingWeights: SwingWeight[] = [];
         this.emptyDrop.forEach((dropList, index) => {
             if(dropList.length > 0){
-                const nodeIds = dropList.map(name => this.children.find(node => node.name === name)?.id);
                 swingWeights.push({
                     swingValue: Number(this.matrix[index]),
-                    nodeIds: nodeIds as string[]
+                    nodeIds: dropList.map(node => node.id)
                 });
             }
         });
+
+        //replace with an api call in the future
         console.log(swingWeights);
     }
 }

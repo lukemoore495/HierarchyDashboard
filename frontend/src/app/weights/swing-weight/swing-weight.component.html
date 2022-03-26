@@ -21,7 +21,7 @@
               </div>
               <div class="drop-container">
                 <div class="drop-list" [id]="i.toString()" cdkDropList [cdkDropListData]="emptyDrop[i]" (cdkDropListDropped)="drop($event)">
-                  <div class="drag-box" *ngFor="let item of emptyDrop[i]" cdkDrag>{{item}}</div>
+                  <div class="drag-box" *ngFor="let item of emptyDrop[i]" cdkDrag>{{item?.name}}</div>
                 </div>
               </div>
             </mat-grid-tile>
@@ -57,9 +57,9 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
-    <div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="childrenNames" class="starting-drop-list"
+    <div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="children" class="starting-drop-list"
       (cdkDropListDropped)="drop($event)">
-      <div class="drag-box" *ngFor="let item of childrenNames" cdkDrag>{{item}}</div>
+      <div class="drag-box" *ngFor="let item of children" cdkDrag>{{item.name}}</div>
     </div>
   </div>
 </ng-container>
