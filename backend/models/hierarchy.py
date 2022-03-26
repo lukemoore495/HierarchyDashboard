@@ -26,6 +26,20 @@ class Hierarchy(db.Model):
     def dump(self):
         return repr(self) + "\n\nTree:\n" + self.nodes[0].dump()
 
+    def to_dict(self, get_nodes=True):
+        hier_dict = {
+            "id": str(self.id),
+            "name": self.name,
+            "description": self.description,
+        }
+
+        # Get tree as dict
+        if get_nodes:
+            root = Node.query.filter_by(parent_id=None, hierarchy_id=self.id).first()
+            hier_dict["nodes"] = root.to_dict()['children'] # Don't return root node
+
+        return hier_dict
+
     @classmethod
     def create(cls, hierarchy_data):
         new_hierarchy = Hierarchy(
@@ -41,19 +55,6 @@ class Hierarchy(db.Model):
     @classmethod
     def get(cls, hierarchy_id):
         return Hierarchy.query.filter_by(id=hierarchy_id).first()
-    
-    def to_dict(self, get_nodes=True):
-        hier_dict = {
-            "id": str(self.id),
-            "name": self.name,
-            "description": self.description,
-        }
-
-        # Parse nodes and add list of dicts to hier_dict
-        if get_nodes:
-            hier_dict["nodes"] = Node.get_list(self.id, None)
-
-        return hier_dict
     
     @classmethod
     def get_list(cls, get_nodes):
