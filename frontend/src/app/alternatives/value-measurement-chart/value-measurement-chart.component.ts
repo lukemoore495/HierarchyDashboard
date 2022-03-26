@@ -1,11 +1,11 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ChartConfiguration, ChartType } from 'chart.js';
-import { getSelectedMeasurement, getSelectedMeasurementDefinition } from '../state';
-import { HierarchyState } from '../state/hierarchy.reducer';
+import { getSelectedMeasurement, getSelectedMeasurementDefinition } from '../../state';
+import { HierarchyState } from '../../state/hierarchy.reducer';
 import { BaseChartDirective } from 'ng2-charts';
 import { AfterViewInit } from '@angular/core';
-import { Measurement } from '../Hierarchy';
+import { Measurement } from '../../Hierarchy';
 import { combineLatest } from 'rxjs';
 
 @Component({
@@ -38,26 +38,27 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
                 }
 
                 if(!measurement[0]){
-                    this.updateChartData([], []);
+                    this.clearChartData();
                     this.updateLabel('');
                     this.chart.update();
                     return;
                 }
 
-            this.chartNewMeasurement(measurement[0]);
-            if(measurement[1]?.name){
-                this.updateLabel(measurement[1].name);
-            }
-            this.chart.update();
-        })
+                this.chartNewMeasurement(measurement[0]);
+                if(measurement[1]?.name){
+                    this.updateLabel(measurement[1].name);
+                }
+                this.chart.update();
+            });
     }
 
     chartNewMeasurement(measurement : Measurement) {
 
         const insertValuePoint = (measure: number, value: number) : number => {
-            xAxis.push(measure.toString());
+            if(!xAxis.some(x => x === measure.toString())) {
+                xAxis.push(measure.toString());
+            }
             xAxis = xAxis.sort((first, second) => Number(first) - Number(second));
-    
             const pointIndex = xAxis.indexOf(measure.toString());
             yAxis = this.insert(yAxis, pointIndex, value);
             return pointIndex;
@@ -77,16 +78,34 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
 
         const pointIndex = insertValuePoint(measurement.measure, measurement.value);
 
-        this.updateChartData(xAxis, yAxis);
         this.setPointColors(xAxis.length, pointIndex);
+
+        this.lineChartData = {
+            datasets: [
+                {
+                    data: yAxis,
+                    label: '',
+                    backgroundColor: 'rgba(148,159,177,0.2)',
+                    borderColor: this.primaryColorString,
+                    pointBackgroundColor: this.backgroundColors,
+                    pointBorderColor: this.backgroundColors,
+                    pointHoverBackgroundColor: this.hoverColorString,
+                    pointHoverBorderColor: this.hoverBorderColors,
+                    fill: 'origin',
+                }
+            ],
+            labels: xAxis
+        };
     }
 
-    updateChartData(xAxis: string[], yAxis: number[]){
-        this.lineChartData.labels = xAxis;
-        this.lineChartData.datasets[0].data = yAxis;
+    clearChartData(){
+        this.lineChartData.labels = [];
+        this.lineChartData.datasets[0].data = [];
     }
 
     setPointColors(chartLength: number, valuePointIndex: number){
+        this.backgroundColors = [];
+        this.hoverBorderColors = [];
         for(let i = 0; i < chartLength; i++){
             if(i === valuePointIndex){
                 this.backgroundColors.push(this.accentColorString);
@@ -103,7 +122,8 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
     }
 
     insert(arr : any[], insertAt: number, value : any) : any[]{
-        arr.splice(insertAt, 0, value);
+        const duplicateCount = arr.filter(x => x===value).length;
+        arr.splice(insertAt, duplicateCount, value);
         return arr;
     }
 

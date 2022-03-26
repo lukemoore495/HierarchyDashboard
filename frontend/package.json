@@ -12,7 +12,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "package": "electron-forge package",
-    "make": "python -m PyInstaller -F ../backend/app.py && electron-forge make"
+    "make": "python -m PyInstaller -F ../backend/app.py && electron-forge make",
+    "make-backend": "python -m PyInstaller -F ../backend/app.py"
   },
   "private": true,
   "dependencies": {

@@ -6,16 +6,15 @@ import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { AlternativesComponent } from './alternatives.component';
 
-import { DashComponent } from './dash.component';
-
-describe('DashComponent', () => {
-  let component: DashComponent;
-  let fixture: ComponentFixture<DashComponent>;
+describe('AlternativesComponent', () => {
+  let component: AlternativesComponent;
+  let fixture: ComponentFixture<AlternativesComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [DashComponent],
+      declarations: [AlternativesComponent],
       imports: [
         NoopAnimationsModule,
         LayoutModule,
@@ -29,7 +28,7 @@ describe('DashComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DashComponent);
+    fixture = TestBed.createComponent(AlternativesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

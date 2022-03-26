@@ -7,17 +7,19 @@ import { OnDestroy } from '@angular/core';
 import { HierarchyState } from 'src/app/state/hierarchy.reducer';
 import { Store } from '@ngrx/store';
 import { getSelectedAlternative, getSelectedMeasurementId } from 'src/app/state';
-import * as HierarchyActions from '../../state/hierarchy.actions';
+import * as HierarchyActions from '../../../state/hierarchy.actions';
 import { MatSelectionList } from '@angular/material/list';
+import { AfterViewInit } from '@angular/core';
 
 @Component({
     selector: 'app-measurements-panel',
     templateUrl: './measurements-panel.component.html',
     styleUrls: ['./measurements-panel.component.scss']
 })
-export class MeasurementsPanelComponent implements OnInit, OnDestroy {
+export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() measurementNode: Node | null = null;
     @Input() parentIsSelected?: Observable<boolean>;
+    @Input() isTopLevel = false;
     @Output() measurementResultEvent: EventEmitter<Measurement[]>;
     @Output() childNodeOpened: EventEmitter<void>;
     @Output() closed: EventEmitter<void>;
@@ -49,7 +51,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
         this.$parentNodeOpened = new BehaviorSubject<boolean>(true);
     }
 
-    ngOnInit(): void {
+    ngOnInit(): void {        
         const nodes : Node[] = Object.assign([], this.measurementNode?.children);
         for(const node of nodes) {
             const measurementFields = node.measurements ?? [];
@@ -115,6 +117,15 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         this.deselectMeasurement();
         this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
+
+    ngAfterViewInit(){
+        if(this.isTopLevel) {
+            //A hack to work with change detection in afterViewInit. Couldn't find another solution.
+            setTimeout(() => {
+                this.selectFirstMeasurement();
+            }, 0);
+        }
     }
 
     setFormValues(measurements: Measurement[]){
@@ -224,7 +235,9 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy {
     }
 
     selectFirstMeasurement(){
-        if(!this.measurementNode)
+        if(!this.measurementNode || 
+            !this.measurementNode.children[0] || 
+            !this.measurementNode.children[0].measurements[0])
             return;
 
         const firstMeasurementId = this.measurementNode.children[0].measurements[0].id;
