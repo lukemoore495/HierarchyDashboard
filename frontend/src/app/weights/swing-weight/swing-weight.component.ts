@@ -2,6 +2,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Component, Input, OnInit } from '@angular/core';
 import { Node } from '../../Hierarchy';
 import { Observable } from 'rxjs';
+import { SwingWeight } from './SwingWeight';
 
 @Component({
     selector: 'app-swing-weight',
@@ -41,7 +42,6 @@ export class SwingWeightComponent implements OnInit{
     }
 
     drop(event: CdkDragDrop<string[]>) {
-        console.log(event.container);
         if (event.previousContainer === event.container) {
             moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
         } else {
@@ -52,5 +52,19 @@ export class SwingWeightComponent implements OnInit{
                 event.currentIndex,
             );
         }
+    }
+
+    onSave(){
+        const swingWeights: SwingWeight[] = [];
+        this.emptyDrop.forEach((dropList, index) => {
+            if(dropList.length > 0){
+                const nodeIds = dropList.map(name => this.children.find(node => node.name === name)?.id);
+                swingWeights.push({
+                    swingValue: Number(this.matrix[index]),
+                    nodeIds: nodeIds as string[]
+                });
+            }
+        });
+        console.log(swingWeights);
     }
 }
