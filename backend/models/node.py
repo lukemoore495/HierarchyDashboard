@@ -18,6 +18,7 @@ class Node(db.Model):
     weight = db.Column(db.Float)
 
     # For Measurements
+    is_measurement = db.Column(db.Boolean)
     measurement_type = db.Column(db.String())
     value_function = db.Column(db.String)
 
@@ -28,7 +29,7 @@ class Node(db.Model):
         backref=db.backref("parent",remote_side=id),
         )
 
-    def __init__(self, name, parent=None, icon=None, weight=None, measurement_type=None, value_function=None):
+    def __init__(self, name, parent=None, icon=None, weight=None, is_measurement=False, measurement_type=None, value_function=None):
         # Identifiers
         self.parent=parent
         # IMPORTANT: Populates the hiearchy_id field of all nodes
@@ -42,6 +43,7 @@ class Node(db.Model):
         self.icon=icon
 
         # For Measurements
+        self.is_measurement=is_measurement
         self.measurement_type=measurement_type
         self.value_function=value_function
 
@@ -64,6 +66,7 @@ class Node(db.Model):
             'weight': self.weight,
             'icon': self.icon,
 
+            'isMeasurement': self.is_measurement,
             'measurementType': self.measurement_type,
             'value_function': self.value_function,
 
@@ -99,6 +102,7 @@ class Node(db.Model):
             # TODO: Weight isn't optional.
             icon = None
             weight = None
+            is_measurement = False
             measurement_type = None
             value_function = None
 
@@ -106,8 +110,9 @@ class Node(db.Model):
                 icon = node['icon']
             if 'weight' in node:
                 weight = node['weight']
-            if 'measurement_type' in node:
-                measurement_type = node['measurement_type']
+            if 'measurementType' in node:
+                is_measurement = True
+                measurement_type = node['measurementType']
             if 'value_function' in node:
                 value_function = node['value_function']
 
@@ -117,6 +122,7 @@ class Node(db.Model):
                 parent=self,
                 icon=icon,
                 weight=weight,
+                is_measurement=is_measurement,
                 measurement_type=measurement_type,
                 value_function=value_function,
             )
