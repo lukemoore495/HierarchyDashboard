@@ -1,5 +1,5 @@
 from .shared import db
-from .node import Node, Measurement
+from .node import Node
 
 class Hierarchy(db.Model):
     __tablename__ = 'hierarchy'
@@ -39,22 +39,6 @@ class Hierarchy(db.Model):
             hier_dict["nodes"] = root.to_dict()['children'] # Don't return root node
 
         return hier_dict
-
-    @classmethod
-    def create(cls, hierarchy_data):
-        new_hierarchy = Hierarchy(
-            name=hierarchy_data["name"],
-            description=hierarchy_data["description"],
-        )
-
-        db.session.add(new_hierarchy)
-        db.session.commit() # hierarchy now has a unique id
-
-        return new_hierarchy
-    
-    @classmethod
-    def get(cls, hierarchy_id):
-        return Hierarchy.query.filter_by(id=hierarchy_id).first()
     
     @classmethod
     def get_list(cls, get_nodes):
