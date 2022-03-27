@@ -26,7 +26,7 @@ class Node(db.Model):
     children = db.relationship(
         "Node",
         cascade="all, delete-orphan",
-        backref=db.backref("parent",remote_side=id),
+        backref=db.backref("parent",remote_side=[id]),
         )
 
     def __init__(self, name, parent=None, icon=None, weight=None, is_measurement=False, measurement_type=None, value_function=None):
@@ -34,6 +34,8 @@ class Node(db.Model):
         self.parent=parent
         # IMPORTANT: Populates the hiearchy_id field of all nodes
         # Leads to all of them showing up in the Hierarchy tree list
+        # print(f"HERE1: {parent}")
+        # print(f"HERE2: {parent.hierarchy}")
         if parent:
             self.hierarchy = parent.hierarchy
         
@@ -62,6 +64,7 @@ class Node(db.Model):
     def to_dict(self):
         node_dict = {
             'id': str(self.id),
+            # 'hierarchy_id': self.hierarchy_id, # Things break when this isn't included
 
             'name': self.name,
             'weight': self.weight,
@@ -126,7 +129,7 @@ class Node(db.Model):
     # Takes a list of nodes that have separated nodes and measurements
     def create_tree(self, nodes_lst):
         for node in nodes_lst:
-           self.create(node)
+            self.create(node)
 
 
     @classmethod

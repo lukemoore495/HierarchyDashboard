@@ -78,7 +78,7 @@ def create_node(hierarchy_id, parent_id):
     if not parent:
         abort(204, description="Resource not found")
     
-    print(data)
+    print(f"HERE0: {parent.hierarchy}")
     new_node = parent.create(data)
 
     db.session.add(new_node)
