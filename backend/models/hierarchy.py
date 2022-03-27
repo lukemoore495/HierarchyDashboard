@@ -1,4 +1,4 @@
-from .shared import db
+from .shared import db # Allows the models to be split out into separate files.
 from .node import Node
 
 class Hierarchy(db.Model):
