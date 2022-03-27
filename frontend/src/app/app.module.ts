@@ -10,8 +10,8 @@ import { HierarchyReducer } from './state/hierarchy.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { HierarchyEffects } from './state/hierarchy.effects';
 import { WeightsModule } from './weights/weights.module';
-import { HierarchicalViewModule } from './hierarchical-view/hierarchical-view.module';
-import { DashModule } from './dash/dash.module';
+import { HierarchyViewerModule } from './hierarchy-viewer/hierarchy-viewer.module';
+import { AlternativesModule } from './alternatives/alternatives.module';
 import { NavModule } from './nav/nav.module';
 import { SensitivityAnalysisModule } from './sensitivity-analysis/sensitivity-analysis.module';
 import { RankChartModule } from './rank-chart/rank-chart.module';
@@ -28,10 +28,10 @@ import { RankChartModule } from './rank-chart/rank-chart.module';
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
         EffectsModule.forRoot([HierarchyEffects]),
         WeightsModule,
-        HierarchicalViewModule,
+        HierarchyViewerModule,
         SensitivityAnalysisModule,
         RankChartModule,
-        DashModule,
+        AlternativesModule,
         NavModule,
         HttpClientModule
     ],

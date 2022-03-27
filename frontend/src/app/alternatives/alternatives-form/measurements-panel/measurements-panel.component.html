@@ -1,5 +1,5 @@
 <div [formGroup]="form" *ngIf="measurementNode as node">
-    <mat-expansion-panel *ngIf="hasChildren(node)" (opened)="onPanelOpen()" (closed)="onPanelClose()">
+    <mat-expansion-panel *ngIf="hasChildren(node)" (opened)="onPanelOpen()" (closed)="onPanelClose()" [expanded]="isTopLevel">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 {{node.name}}

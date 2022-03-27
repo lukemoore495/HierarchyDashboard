@@ -17,11 +17,11 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { DatePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-hierarchical-view',
-    templateUrl: './hierarchical-view.component.html',
-    styleUrls: ['./hierarchical-view.component.scss']
+    selector: 'app-hierarchy-viewer',
+    templateUrl: './hierarchy-viewer.component.html',
+    styleUrls: ['./hierarchy-viewer.component.scss']
 })
-export class HierarchicalViewComponent implements OnDestroy {
+export class HierarchyViewerComponent implements OnDestroy {
     selectedHierarchy: Hierarchy | null = null;
     subscriptions: Subscription[] = [];
     hierarchies$?: Observable<HierarchyListItem[]>;
@@ -109,7 +109,7 @@ export class HierarchicalViewComponent implements OnDestroy {
 @Component({
     selector: 'create-hierarchy-dialog',
     templateUrl: 'createHierarchy.dialog.html',
-    styleUrls: ['./hierarchical-view.component.scss']
+    styleUrls: ['./hierarchy-viewer.component.scss']
 })
 export class CreateHierarchyDialog {
 
@@ -130,7 +130,7 @@ export class CreateHierarchyDialog {
 @Component({
     selector: 'delete-hierarchy-dialog',
     templateUrl: 'deleteHierarchy.dialog.html',
-    styleUrls: ['./hierarchical-view.component.scss']
+    styleUrls: ['./hierarchy-viewer.component.scss']
 })
 export class DeleteHierarchyDialog {
 
@@ -150,7 +150,7 @@ export class DeleteHierarchyDialog {
 @Component({
     selector: 'import-export-hierarchy-dialog',
     templateUrl: 'importExportHierarchy.dialog.html',
-    styleUrls: ['./hierarchical-view.component.scss']
+    styleUrls: ['./hierarchy-viewer.component.scss']
 })
 export class ImportExportHierarchyDialog {
     tabs: string[] = ['Import', 'Export'];

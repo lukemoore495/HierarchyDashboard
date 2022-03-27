@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
-import { HierarchicalViewComponent, CreateHierarchyDialog, DeleteHierarchyDialog, ImportExportHierarchyDialog } from './hierarchical-view.component';
+import { HierarchyViewerComponent, CreateHierarchyDialog, DeleteHierarchyDialog, ImportExportHierarchyDialog } from './hierarchy-viewer.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
@@ -16,7 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
     declarations: [
-        HierarchicalViewComponent,
+        HierarchyViewerComponent,
         HierarchyTreeComponent,
         CreateHierarchyDialog,
         DeleteHierarchyDialog,
@@ -37,9 +37,7 @@ import { MatTabsModule } from '@angular/material/tabs';
         MatInputModule,
         MatTabsModule
     ],
-    exports: [
-        HierarchicalViewComponent
-    ],
+    exports: [HierarchyViewerComponent],
     entryComponents: [CreateHierarchyDialog, DeleteHierarchyDialog, ImportExportHierarchyDialog]
 })
-export class HierarchicalViewModule { }
+export class HierarchyViewerModule { }

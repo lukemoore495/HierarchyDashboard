@@ -103,7 +103,8 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
                 total: total
             });
         });
-        ranks.sort((a, b) => a.total - b.total);
+
+        ranks.sort((a, b) => b.total - a.total);
         return ranks;
     }
 

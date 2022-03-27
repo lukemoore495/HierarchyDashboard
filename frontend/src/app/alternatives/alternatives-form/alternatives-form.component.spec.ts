@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HierarchicalViewComponent } from './hierarchical-view.component';
+import { AlternativesFormComponent } from './alternatives-form.component';
 
-describe('HierarchicalViewComponent', () => {
-    let component: HierarchicalViewComponent;
-    let fixture: ComponentFixture<HierarchicalViewComponent>;
+describe('AlternativesComponent', () => {
+    let component: AlternativesFormComponent;
+    let fixture: ComponentFixture<AlternativesFormComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [ HierarchicalViewComponent ]
+            declarations: [ AlternativesFormComponent ]
         })
             .compileComponents();
     });
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(HierarchicalViewComponent);
+        fixture = TestBed.createComponent(AlternativesFormComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
