@@ -5,7 +5,7 @@ import os
 import sys
 
 from models.hierarchy import Hierarchy, Node
-from models.shared import db
+from models.shared import db # Allows the models to be split out into separate files.
 
 def get_config_path():
     if hasattr(sys, "_MEIPASS"):
@@ -32,7 +32,6 @@ db.init_app(app)
 
 
 # routes
-# TODO Add checks that hierarchies/nodes exist before adding subordinate resources
 @app.route("/hierarchy", methods=['POST'])
 def create_hierarchy():
     # Get data from .json sent with request
@@ -72,7 +71,7 @@ def create_node(hierarchy_id, parent_id):
 
     # TODO: Double check with Luke that this is okay
     if not parent:
-        abort(204, description="Resource not found")
+        abort(404, description="Resource not found")
     
     new_node = parent.create(data)
 
