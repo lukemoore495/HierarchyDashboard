@@ -76,6 +76,7 @@ def create_node(hierarchy_id, parent_id):
     
     new_node = parent.create(data)
 
+    # Commit changes to DB
     db.session.add(new_node)
     db.session.commit()
 
@@ -116,7 +117,7 @@ def get_one_hierarchy(hierarchy_id):
 # TODO Reduce the code duplication in the DELETE Routes
 @app.route("/hierarchy/<hierarchy_id>", methods=['DELETE'])
 def delete_hierarchy(hierarchy_id):
-    hierarchy = Hierarchy.get(hierarchy_id)
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
 
     # hierarchy does not exist, return 404
     if not hierarchy:
@@ -131,7 +132,7 @@ def delete_hierarchy(hierarchy_id):
 
 @app.route("/node/<node_id>", methods=['DELETE'])
 def delete_node(node_id):
-    node = Node.get(node_id)
+    node = Node.query.filter_by(id=node_id).first()
 
     # node does not exist, return 404
     if not node:

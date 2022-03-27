@@ -1,5 +1,4 @@
 from .shared import db
-from .measurement import Measurement
 
 
 # https://docs.sqlalchemy.org/en/14/orm/self_referential.html
@@ -30,13 +29,15 @@ class Node(db.Model):
         )
 
     def __init__(self, name, parent=None, icon=None, weight=None, is_measurement=False, measurement_type=None, value_function=None):
-        # Identifiers
-        self.parent=parent
         # IMPORTANT: Populates the hiearchy_id field of all nodes
         # Leads to all of them showing up in the Hierarchy tree list
+        # SUPER IMPORTANT: Accessing parent.hierarchy here
+        # populates the hierarchy field, allowing create_node() to function
+        # If it's accessed after self.parent=parent, it fails.
         if parent:
             self.hierarchy = parent.hierarchy
-        
+        # Identifiers
+        self.parent=parent
 
         # Data Fields
         self.name=name
@@ -70,7 +71,6 @@ class Node(db.Model):
             'isMeasurement': self.is_measurement,
             'measurementType': self.measurement_type,
             'value_function': self.value_function,
-
         }
 
         children_list = []
@@ -127,38 +127,3 @@ class Node(db.Model):
     def create_tree(self, nodes_lst):
         for node in nodes_lst:
             self.create(node)
-
-
-    @classmethod
-    def create_nodes(cls, nodes_lst, hierarchy_id, parent_id=None):
-        for node_data in nodes_lst:
-            # Check if icon exists
-            if "icon" in node_data:
-                icon = node_data["icon"]
-            else:
-                icon = None
-
-            node = Node.create(node_data, hierarchy_id, parent_id, icon)
-
-            if node_data["children"] == []:
-                Measurement.create_measurements(node_data["measurements"], hierarchy_id, node.id)
-            else:
-                Node.create_nodes(node_data["children"], hierarchy_id, node.id)
-
-    @classmethod
-    def get(cls, node_id):
-        return Node.query.filter_by(id=node_id).first()
-
-    @classmethod
-    def get_all(cls, hierarchy_id, parent_id):
-        return Node.query.filter_by(hierarchy_id=hierarchy_id, parent_id=parent_id)
-
-    @classmethod
-    def get_list(cls, hierarchy_id, parent_id):
-        nodes = Node.get_all(hierarchy_id, parent_id)
-        node_list = []
-
-        for node in nodes:
-            node_list.append(node.to_dict())
-            
-        return node_list
