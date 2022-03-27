@@ -61,10 +61,6 @@ def create_hierarchy():
 
 
 # To add a node to the root of the hierarchy, send 0 for parent_id
-# TODO: Broken due to current init line 40
-# Hierarchy is assigned to ease create_hierarchy()
-# You don't have to commit to generate a hierarchy id anymore.
-# However, adding to an already created hierarchy is apparently tricky.
 @app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
 def create_node(hierarchy_id, parent_id):
     data = request.get_json()
@@ -78,7 +74,6 @@ def create_node(hierarchy_id, parent_id):
     if not parent:
         abort(204, description="Resource not found")
     
-    print(f"HERE0: {parent.hierarchy}")
     new_node = parent.create(data)
 
     db.session.add(new_node)
