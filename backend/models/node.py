@@ -1,8 +1,6 @@
 from .shared import db # Allows the models to be split out into separate files.
 
 
-# https://docs.sqlalchemy.org/en/14/orm/self_referential.html
-# https://docs.sqlalchemy.org/en/14/orm/examples.html#examples-adjacencylist
 class Node(db.Model):
     """
     A class used to generate a table of Nodes.
