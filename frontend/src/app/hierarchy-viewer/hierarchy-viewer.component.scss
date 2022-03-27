@@ -35,22 +35,18 @@
 }
 
 .tab-container {
-  padding: 5%;
+  padding: 10%;
 }
 
-.file-input {
+.input-hidden {
   display: none;
 }
 
-.file-upload {
-  display: flex;
-}
-
-.upload-button {
+.upload-btn {
   float: right;
   margin-top: 1rem;
-  margin-left: 1rem;
-  width: 30%;
+  margin-right: 1rem;
+  width: 10%;
 }
 
 .loading:after {

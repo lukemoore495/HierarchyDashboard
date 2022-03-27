@@ -8,15 +8,13 @@
         <mat-icon>add</mat-icon>
         Create Hierarchy
     </button>
-    <button mat-raised-button color="warn" class="header-button">
-        <mat-icon>delete</mat-icon>
-        Delete Hierarchy
-    </button>
 
-    <button mat-raised-button color="accent" class="header-button" (click)="deleteHierarchyDialog()">
-        <mat-icon>delete</mat-icon>
-        Delete Hierarchy
-    </button>
+    <ng-container *ngIf="selectedHierarchy">
+        <button mat-raised-button color="warn" class="header-button" (click)="deleteHierarchyDialog()">
+            <mat-icon>delete</mat-icon>
+            Delete Hierarchy
+        </button>
+    </ng-container>
 
     <button mat-raised-button color="accent" class="header-button" (click)="importExportHierarchyDialog()">
         <mat-icon>import_export</mat-icon>

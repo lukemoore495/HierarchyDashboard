@@ -11,10 +11,7 @@ import SimpleHierarchy from '../../assets/staticFiles/SimpleHierarchyPost.json';
 import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
-import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-hierarchy-viewer',
@@ -42,14 +39,6 @@ export class HierarchyViewerComponent implements OnDestroy {
         this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
-    createHierarchy(name: string, description: string) {
-        this.selectedHierarchy = null;
-        let hierarchyRequest: HierarchyRequest = {
-            name: name, description: description, nodes: [], alternatives: []
-        };
-        this.store.dispatch(createHierarchy({ hierarchy: hierarchyRequest }));
-    }
-
     importRRRHierarchy() {
         this.selectedHierarchy = null;
         this.store.dispatch(createHierarchy({ hierarchy: RRRHierarchy }));
@@ -73,7 +62,11 @@ export class HierarchyViewerComponent implements OnDestroy {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result != null && result.event == 'Create') {
-                this.createHierarchy(result.name, result.description);
+                this.selectedHierarchy = null;
+                let hierarchyRequest: HierarchyRequest = {
+                    name: result.name, description: result.description, nodes: [], alternatives: []
+                };
+                this.store.dispatch(createHierarchy({ hierarchy: hierarchyRequest }));
             }
         });
     }
@@ -100,7 +93,20 @@ export class HierarchyViewerComponent implements OnDestroy {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result != null && result.event == 'Import') {
-                const importFile = result.file;
+                const importFile: File = result.file;
+
+                const fileReader = new FileReader();
+                fileReader.readAsText(importFile, "UTF-8");
+                fileReader.onload = () => {
+                    const hierarchyRequest: HierarchyRequest = JSON.parse(fileReader.result as string);
+                    this.selectedHierarchy = null;
+
+                    //The exported file contains ids and icons, so we need to fix that on import or export
+                    this.store.dispatch(createHierarchy({ hierarchy: hierarchyRequest }));
+                }
+                fileReader.onerror = (error) => {
+                    console.log(error);
+                }
             }
         });
     }
@@ -112,11 +118,9 @@ export class HierarchyViewerComponent implements OnDestroy {
     styleUrls: ['./hierarchy-viewer.component.scss']
 })
 export class CreateHierarchyDialog {
-
     constructor(
         public dialogRef: MatDialogRef<CreateHierarchyDialog>,
         @Inject(MAT_DIALOG_DATA) public data: any) { }
-
 
     doAction() {
         this.dialogRef.close({ event: 'Create', name: this.data.name, description: this.data.description });
@@ -176,16 +180,13 @@ export class ImportExportHierarchyDialog {
 
     onFileSelected(event: any) {
         this.file = event.target.files[0];
-        if (this.file) {
-            this.fileName = this.file.name;
-        }
+        this.fileName = this.file ? this.file.name : '';
     }
 
     generateDownloadJsonUri() {
         var theJSON = JSON.stringify(this.data.hierarchy);
-        var uri = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(theJSON));
-        this.downloadJsonHref = uri;
-        this.downloadJsonName = "Hierarchy" + this.getDateTime() + ".json";
+        this.downloadJsonHref = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(theJSON));
+        this.downloadJsonName = this.data.hierarchy.name + this.getDateTime() + ".json";
     }
 
     doAction() {
