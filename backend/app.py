@@ -7,6 +7,7 @@ import sys
 from models.hierarchy import Hierarchy, Node
 from models.shared import db # Allows the models to be split out into separate files.
 
+
 def get_config_path():
     if hasattr(sys, "_MEIPASS"):
         abs_home = os.path.abspath(os.path.expanduser("~"))
