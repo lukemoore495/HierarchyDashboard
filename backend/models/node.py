@@ -7,6 +7,9 @@ class Node(db.Model):
     Nodes are used to model Hierarchy trees that consist of objectives,
     sub-objectives, and terminating in measurements.
 
+    Based off of SQLALchemy's adjacency_list.py:
+    https://docs.sqlalchemy.org/en/14/_modules/examples/adjacency_list/adjacency_list.html
+
     ...
 
     Attributes
