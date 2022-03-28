@@ -4,6 +4,8 @@ from .shared import db # Allows the models to be split out into separate files.
 class Node(db.Model):
     """
     A class used to generate a table of Nodes.
+    Nodes are used to model Hierarchy trees consisting of objectives,
+    sub-objectives, and terminating in measurements.
 
     ...
 
@@ -15,6 +17,8 @@ class Node(db.Model):
         Unique identifier for the node's parent.
     hierarchy_id : int
         Unique identifier for the hierarchy the node belongs to.
+    name : str
+        The name of the node.
     icon : str
         String to store the icon the frontend uses for the node.
     weight : float
@@ -114,7 +118,6 @@ class Node(db.Model):
 
     def __repr__(self):
         """Return a string representation of a node."""
-
         return f'Node: {self.id}, Name: {self.name}, Hierarchy: {self.hierarchy_id}'
 
     def dump(self, _indent=0):
