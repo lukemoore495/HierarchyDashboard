@@ -3,7 +3,9 @@ from .node import Node
 
 class Hierarchy(db.Model):
     """
-    A class used to generate a table of Nodes.
+    A class used to generate a table of Hierarchies.
+    A Hierarchy object can be thought of as a collection of tables
+    containing the data of the hierarchy.
 
     ...
 
@@ -37,7 +39,7 @@ class Hierarchy(db.Model):
     nodes = db.relationship(
         "Node",
         cascade="all, delete",
-        backref=db.backref("hierarchy"), # Allows the population of the hiearchy_id field below
+        backref=db.backref("hierarchy"), # Allows the population of the hiearchy_id field in nodes
         )
 
     def __init__(self, name, description):
@@ -94,7 +96,7 @@ class Hierarchy(db.Model):
         Parameters
         ----------
         get_nodes : bool
-            Flag to deterimine of nodes are returned or not.
+            Flag to deterimine if nodes are returned or not.
         
         Returns
         -------

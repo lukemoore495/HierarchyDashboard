@@ -7,6 +7,7 @@ import sys
 from models.hierarchy import Hierarchy, Node
 from models.shared import db # Allows the models to be split out into separate files.
 
+
 def get_config_path():
     if hasattr(sys, "_MEIPASS"):
         abs_home = os.path.abspath(os.path.expanduser("~"))
@@ -28,6 +29,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database_path
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = 0
 app.config["JSON_SORT_KEYS"] = False
 
+# initialize the app using the same db that's in shared.py
 db.init_app(app)
 
 
