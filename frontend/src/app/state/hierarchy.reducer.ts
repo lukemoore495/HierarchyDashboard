@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { Hierarchy, HierarchyListItem } from '../Hierarchy';
+import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
 import * as HierarchyActions from './hierarchy.actions';
 import RRRHierarchy from '../../assets/staticFiles/RRRHierarchy.json';
 import CarHierarchy from '../../assets/staticFiles/DemoExample.json';
@@ -118,5 +118,88 @@ export const HierarchyReducer = createReducer<HierarchyState>(
             ...state,
             error: action.error
         };
-    })
+    }),
+    on(HierarchyActions.createNodeSuccess, (state, action): HierarchyState => {
+        if(!state.selectedHierarchy){
+            return {...state};
+        }
+        const copyHierarchy: Hierarchy = {...state.selectedHierarchy};
+        return {
+            ...state,
+            selectedHierarchy: addNodeToHierarchy(copyHierarchy, action.parentId, action.node)
+        };
+    }),
+    on(HierarchyActions.createNodeFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
+    on(HierarchyActions.deleteNodeSuccess, (state, action): HierarchyState => {
+        if(!state.selectedHierarchy){
+            return {...state};
+        }
+        const copyHierarchy: Hierarchy = {...state.selectedHierarchy};
+        return {
+            ...state,
+            selectedHierarchy: removeNodeFromHierarchy(copyHierarchy, action.nodeId)
+        };
+    }),
+    on(HierarchyActions.deleteNodeFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
 );
+
+function addNode(node: Node, parentId: string, newNode: Node) : Node {
+    if(node.id === parentId){
+        const children = [...node.children];
+        children.push(newNode);
+        return {...node, children: children};
+    }
+
+    const children: Node[] = [];
+    node.children.forEach(child => children.push(addNode(child, parentId, newNode)));
+    return {...node, children: children};
+}
+
+function deleteNode(node: Node, nodeId: string) : Node {
+    if(!node.children || node.children.length === 0)
+        return node;
+
+    const nodeIndex = node.children.findIndex(child => child.id === nodeId);
+    if(nodeIndex !== -1){
+        const children = [...node.children];
+        children.splice(nodeIndex);
+        return {...node, children: children};
+    }
+
+    const children: Node[] = [];
+    node.children.forEach(child => children.push(deleteNode(child, nodeId)));
+    return {...node, children: children};
+}
+
+function addNodeToHierarchy(hierarchy: Hierarchy, parentId: string, newNode: Node) : Hierarchy {
+    const nodes: Node[] = [];
+    for(const node of hierarchy.nodes){
+        nodes.push(addNode(node, parentId, newNode));
+    }
+    return {...hierarchy, nodes: nodes};
+}
+
+function removeNodeFromHierarchy(hierarchy: Hierarchy, nodeId: string) : Hierarchy {
+    const nodeIndex = hierarchy.nodes.findIndex(node => node.id === nodeId);
+    if(nodeIndex !== -1){
+        const nodes = [...hierarchy.nodes];
+        nodes.splice(nodeIndex);
+        return {...hierarchy, nodes: nodes};
+    }
+
+    const nodes: Node[] = [];
+    for(const node of hierarchy.nodes){
+        nodes.push(deleteNode(node, nodeId));
+    }
+    return {...hierarchy, nodes: nodes};
+}

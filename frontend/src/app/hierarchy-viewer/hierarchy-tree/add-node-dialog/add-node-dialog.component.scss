@@ -1,0 +1,14 @@
+.column {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
+
+.row{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    .checkbox {
+        margin-left: 2rem;
+    }
+}

@@ -1,7 +1,11 @@
 import { Component, ElementRef, Input, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { Hierarchy, MeasurementDefinition, Node } from 'src/app/Hierarchy';
+import { Hierarchy, MeasurementDefinition, MeasurementType, Node } from 'src/app/Hierarchy';
 import { OnInit } from '@angular/core';
 import { TreeNode } from './TreeNode';
+import { AddNodeDialogComponent } from './add-node-dialog/add-node-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteNodeDialogComponent } from './delete-node-dialog/delete-node-dialog.component';
+import { CreateNodeData } from './add-node-dialog/CreateNode';
 
 @Component({
     selector: 'app-hierarchy-tree',
@@ -19,7 +23,7 @@ export class HierarchyTreeComponent implements OnInit{
     @ViewChildren('nodes') private nodes?: QueryList<ElementRef<HTMLDivElement>>;
     @ViewChild('svg') svg?: ElementRef;
 
-    constructor(private renderer: Renderer2) {}
+    constructor(private renderer: Renderer2, private dialog: MatDialog) {}
 
     ngOnInit(){
         if(!this.hierarchy) {
@@ -391,6 +395,14 @@ export class HierarchyTreeComponent implements OnInit{
         line.setAttributeNS(null, 'y2', svgP2.y);
         line.setAttributeNS(null, 'stroke', 'black');
         this.renderer.appendChild(this.svg?.nativeElement, line);
+    }
+
+    openAddNodeDialog(nodeId: string) {
+        this.dialog.open(AddNodeDialogComponent, {data: { hierarchyId: this.hierarchy?.id, parentId: nodeId } as CreateNodeData});
+    }
+
+    openDeleteNodeDialog(nodeId: string) {
+        this.dialog.open(DeleteNodeDialogComponent, {data: nodeId });
     }
 
 }

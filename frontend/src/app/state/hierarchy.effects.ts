@@ -58,4 +58,28 @@ export class HierarchyEffects {
                 )
             );
     });
+    createNode$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.createNode),
+                mergeMap(action => this.hierarchyService.createNode(action.hierarchyId, action.parentId, action.node)
+                    .pipe(
+                        map(node => HierarchyActions.createNodeSuccess({parentId: action.parentId, node: node})),
+                        catchError(error => of(HierarchyActions.createNodeFailure({error})))
+                    )
+                )
+            );
+    });
+    deleteNode$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.deleteNode),
+                mergeMap(action => this.hierarchyService.deleteNode(action.nodeId)
+                    .pipe(
+                        map(_ => HierarchyActions.deleteNodeSuccess({nodeId: action.nodeId})),
+                        catchError(error => of(HierarchyActions.deleteNodeFailure({error})))
+                    )
+                )
+            );
+    });
 }

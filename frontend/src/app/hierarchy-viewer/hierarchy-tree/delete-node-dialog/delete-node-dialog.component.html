@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>
+    Delete Node
+</h1>
+<mat-dialog-content>
+    <p>Are you sure you want to delete this Node?</p>
+    <p>All child nodes will also be deleted.</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="closeDialog()" cdkFocusInitial>Cancel</button>
+    <button mat-button (click)="doAction()" color="warn">Delete</button>
+</mat-dialog-actions> 

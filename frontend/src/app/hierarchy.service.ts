@@ -52,7 +52,17 @@ export class HierarchyService {
         return this.http.delete<string>(url);
     }
 
-    getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport> {
+    createNode(hierarchyId: string, parentId: string, node: NodeRequest): Observable<Node> {
+        const url = this.root + `/hierarchy/${hierarchyId}/node/${parentId}`;
+        return this.http.post<Node>(url, node);
+    }
+
+    deleteNode(nodeId: string): Observable<string> {
+        const url = this.root + `/node/${nodeId}`;
+        return this.http.delete<string>(url);
+    }
+
+    getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport>{
         return of(this.getFakeSensitivityAnalysisData(nodeNames));
     }
 
