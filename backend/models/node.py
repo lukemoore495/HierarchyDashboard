@@ -4,7 +4,7 @@ from .shared import db # Allows the models to be split out into separate files.
 class Node(db.Model):
     """
     A class used to generate a table of Nodes.
-    Nodes are used to model Hierarchy trees consisting of objectives,
+    Nodes are used to model Hierarchy trees that consist of objectives,
     sub-objectives, and terminating in measurements.
 
     ...
@@ -12,11 +12,11 @@ class Node(db.Model):
     Attributes
     ----------
     id : int
-        Unique identifer for the node.
+        Node's unique id.
     parent_id : int
-        Unique identifier for the node's parent.
+        Parent node's unique id.
     hierarchy_id : int
-        Unique identifier for the hierarchy the node belongs to.
+        Id of the hierarchy the node belongs to.
     name : str
         The name of the node.
     icon : str
@@ -26,11 +26,11 @@ class Node(db.Model):
     is_measurement : bool
         Flag for frontend.
     measurement_type : str
-        String representing the type of measurement.
+        String representing the measurement's type.
     value_function : str
-        String representing the value function associated with the measurement.
+        String representing the measurement's value function.
     parent : Node
-        Parent the node. Root nodes have no parent.
+        Parent node. Root nodes have no parent.
     children : Iterable
         The node's children.
 
@@ -42,10 +42,10 @@ class Node(db.Model):
         Returns a dictionary representation of the node and its children.
     create(data):
         Adds a child node to the node that calls it.
-        Recursively creates all children of the child node.
+        Recursively creates all children of the added child node if they exist.
     create_tree(nodes_lst)
-        Adds all child nodes given in a list to the node that calls it.
-        Recursively creates all children of childrens.
+        Adds all nodes in the given list as children to the node that calls it.
+        Recursively creates all children of the nodes in the list if they exist.
     """
     __tablename__ = 'node'
 
@@ -122,7 +122,7 @@ class Node(db.Model):
 
     def dump(self, _indent=0):
         """
-        Return a string representation of a node and it's children.
+        Return a formatted string representation of a node and it's children.
 
         Parameters
         ----------
@@ -177,7 +177,7 @@ class Node(db.Model):
     def create(self, data):
         """
         Adds a child node to the node that calls it.
-        Recursively creates all children of the child node.
+        Recursively creates all children of the added child node if they exist.
 
         Parameters
         ----------
@@ -233,8 +233,8 @@ class Node(db.Model):
 
     def create_tree(self, nodes_lst):
         """
-        Adds all child nodes given in a list to the node that calls it.
-        Recursively creates all children of childrens.
+        Adds all nodes in the given list as children to the node that calls it.
+        Recursively creates all children of the nodes in the list if they exist.
 
         Parameters
         ----------
