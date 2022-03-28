@@ -1,0 +1,74 @@
+@import 'src/styles/colors';
+
+
+::ng-deep {
+  .slider .ngx-slider .ngx-slider-bar {
+    width: 100%;
+  }
+  .slider .ngx-slider .ngx-slider-pointer {
+    background-color: map-get($primary, 300);
+  }
+
+  .slider .ngx-slider .ngx-slider-pointer.ngx-slider-active::after {
+    background-color: map-get($background, 100);
+  }
+
+  .slider .ngx-slider .ngx-slider-selection {
+    background-color: map-get($accent, 700);
+  }
+
+  .slider .ngx-slider .ngx-slider-min {
+    background-color: map-get($accent, 700);
+  }
+  
+  .slider .ngx-slider .ngx-slider-tick {
+    background: map-get($background, 500);
+  }
+
+  .slider .ngx-slider .ngx-slider-tick.ngx-slider-selected {
+    background: map-get($accent, 700);
+  }
+}
+
+.table-container{
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .table {
+    width: 80%;
+  }
+}
+
+.form{
+  padding: 2rem;
+  .save-button {  
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.oval {
+  width: 12rem;
+  height: 5rem;
+  background: map-get($primary, 300);
+  border-radius: 50%;
+  line-height: 5rem;
+  text-align: center;
+  display: inline-block;
+}
+
+.slider-parent{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin: 3rem;
+
+  .slider-container {
+    min-height: 0;
+    min-width: 0;
+    width: 100%;
+    margin: 1rem;
+  }
+}

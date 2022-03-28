@@ -1,0 +1,60 @@
+@import 'src/styles/colors';
+
+.grid-container {
+  margin: 20px;
+}
+
+.dashboard-card {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border: 2px solid map-get($accent, 700);
+
+  &.scroll {
+    overflow: auto;
+  }
+}
+
+.more-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+}
+
+.dashboard-card-content {
+  text-align: center;
+}
+
+.rank{
+  display: flex;
+  align-items: stretch;
+  flex-direction: stretch;
+  padding-top: 2rem;
+  app-rank-chart{
+    flex: 1;
+  }
+}
+
+.value-measurement{
+  height: 75%;
+  width: 75%;
+  padding-left: 10%;
+}
+
+.alternative-header{
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  .title{
+    margin-right: 2rem;
+  }
+  .select {
+    font-size: larger;
+  }
+  .button{
+    margin-left: 2rem;
+  }
+}
+

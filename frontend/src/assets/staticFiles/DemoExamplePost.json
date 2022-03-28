@@ -1,0 +1,48 @@
+{
+    "name": "Best Car",
+    "description": "demo example",
+    "nodes": [
+        {
+            "name": "Cost",
+            "weight": 0.400,
+            "children":[],
+            "measurements": [
+                {
+                    "measurementName": "Initial Cost",
+                    "measurementType": "Number"
+                },
+                {
+                    "measurementName": "Resale Value % (After 3 Years)",
+                    "measurementType": "Percentage"
+                }
+            ]
+        },
+        {
+            "name": "Performance",
+            "weight": 0.400,
+            "children":[],
+            "measurements": [
+                {
+                    "measurementName": "Fuel Economy (mpg)",
+                    "measurementType": "Number"
+                },
+                {
+                    "measurementName": "Horsepower",
+                    "measurementType": "Number"
+                }
+            ]
+        },
+        {
+            "name": "Styling",
+            "weight": 0.200,
+            "children":[],
+            "measurements": [
+                {
+                    "measurementName": "Star Rating",
+                    "measurementType": "Number"
+                }
+            ]
+        }
+    ],
+    "alternatives": []
+}

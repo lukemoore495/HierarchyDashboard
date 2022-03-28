@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashComponent } from './dash/dash.component';
-import { HierarchicalViewComponent } from './hierarchical-view/hierarchical-view.component';
-import { ImportanceValueComponent } from './importance-value/importance-value.component';
+import { AlternativesComponent } from './alternatives/alternatives.component';
+import { HierarchyViewerComponent } from './hierarchy-viewer/hierarchy-viewer.component';
+import { WeightsComponent } from './weights/weights.component';
 import { RankChartComponent } from './rank-chart/rank-chart.component';
 import { SensitivityAnalysisComponent } from './sensitivity-analysis/sensitivity-analysis.component';
 
 const routes: Routes = [
-    { path: 'alternatives', component: DashComponent },
+    { path: 'alternatives', component: AlternativesComponent },
     { path: 'rank', component: RankChartComponent },
-    { path: 'weights/:id',component: ImportanceValueComponent },
-    { path: 'hierarchicalView', component: HierarchicalViewComponent },
+    { path: 'weights/:id', component: WeightsComponent },
+    { path: 'hierarchyViewer', component: HierarchyViewerComponent },
     { path: 'sensitivityAnalysis', component: SensitivityAnalysisComponent },
-    { path: '**', redirectTo: 'hierarchicalView'}
+    { path: '**', redirectTo: 'hierarchyViewer' }
 ];
 
 @NgModule({

@@ -1,0 +1,28 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    .form{
+        flex: 1.5;
+        margin-top: 3rem;
+        margin-left: 10%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .field{
+            width: 80%;
+        }
+
+        .save-button{
+            margin-left: 62%;
+        }
+    }
+
+    .table-container{
+        flex: 1;
+        margin-top: 3rem;
+        display: flex;
+        flex-direction: column;
+        margin-right: 30%;
+    }
+}
