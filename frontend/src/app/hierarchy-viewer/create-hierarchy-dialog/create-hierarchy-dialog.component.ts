@@ -1,5 +1,11 @@
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { Actions, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { HierarchyRequest } from 'src/app/hierarchy.service';
+import { createHierarchy, createHierarchySuccess } from 'src/app/state/hierarchy.actions';
+import { HierarchyState } from 'src/app/state/hierarchy.reducer';
+import { CreateHierarchyForm } from './CreateHierarchyForm';
 
 @Component({
     selector: 'app-create-hierarchy-dialog',
@@ -7,16 +13,30 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     styleUrls: ['./create-hierarchy-dialog.component.scss']
 })
 export class CreateHierarchyDialogComponent {
+    form: CreateHierarchyForm;
 
     constructor(
         public dialogRef: MatDialogRef<CreateHierarchyDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any) { }
+        private store: Store<HierarchyState>,
+        private actions$: Actions) { 
+        this.form = {
+            name: '',
+            description: ''
+        };
+    }
 
     doAction() {
-        this.dialogRef.close({ event: 'Create', name: this.data.name, description: this.data.description });
+        const hierarchyRequest: HierarchyRequest = {
+            name: this.form.name, description: this.form.description, nodes: [], alternatives: []
+        };
+        this.store.dispatch(createHierarchy({ hierarchy: hierarchyRequest }));
+        this.actions$
+            .pipe(
+                ofType(createHierarchySuccess)
+            ).subscribe(_ => this.dialogRef.close());
     }
 
     closeDialog() {
-        this.dialogRef.close({ event: 'Cancel' });
+        this.dialogRef.close();
     }
 }

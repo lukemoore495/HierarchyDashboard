@@ -1,6 +1,12 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { Actions, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { Hierarchy } from 'src/app/Hierarchy';
+import { HierarchyRequest } from 'src/app/hierarchy.service';
+import { createHierarchy, createHierarchySuccess } from 'src/app/state/hierarchy.actions';
+import { HierarchyState } from 'src/app/state/hierarchy.reducer';
 
 @Component({
     selector: 'app-import-export-hierarchy-dialog',
@@ -16,42 +22,66 @@ export class ImportExportHierarchyDialogComponent {
     file: File | null = null;
     fileName = '';
 
+    constructor(private sanitizer: DomSanitizer,
+        public dialogRef: MatDialogRef<ImportExportHierarchyDialogComponent>,
+        @Inject(MAT_DIALOG_DATA) public hierarchy: Hierarchy,
+        private store: Store<HierarchyState>,
+        private actions$: Actions) {
+    }
+
     myTabSelectedIndexChange(index: number) {
         this.selectedTabIndex = index;
 
         // Current tab is export, downloadJsonHref has not been set and a hierarchy has been passed in
-        if (index == 1 && this.downloadJsonHref == null && this.data.hierarchy != null) {
+        if (index == 1 && this.downloadJsonHref == null && this.hierarchy != null) {
             this.generateDownloadJsonUri();
         }
     }
 
-    constructor(private sanitizer: DomSanitizer,
-        public dialogRef: MatDialogRef<ImportExportHierarchyDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
-    }
-
-    onFileSelected(event: any) {
-        this.file = event.target.files[0];
-        this.fileName = this.file ? this.file.name : '';
+    onFileSelected(event: Event) {
+        const element = event.currentTarget as HTMLInputElement;
+        if(element.files && element.files.length > 0){
+            this.file = element.files[0];
+            this.fileName = this.file ? this.file.name : '';
+        }
     }
 
     generateDownloadJsonUri() {
-        const theJSON = JSON.stringify(this.data.hierarchy);
+        const theJSON = JSON.stringify(this.hierarchy);
         this.downloadJsonHref = this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=UTF-8,' + encodeURIComponent(theJSON));
-        this.downloadJsonName = this.data.hierarchy.name + this.getDateTime() + '.json';
-    }
-
-    doAction() {
-        if (this.selectedTabIndex == 0) {
-            this.dialogRef.close({ event: 'Import', file: this.file });
-        }
-        else {
-            this.dialogRef.close({ event: 'Export' });
-        }
+        this.downloadJsonName = this.hierarchy.name + this.getDateTime() + '.json';
     }
 
     closeDialog() {
-        this.dialogRef.close({ event: 'Cancel' });
+        this.dialogRef.close();
+    }
+
+    doAction() {
+        if (this.selectedTabIndex == 0 && this.file) {
+            this.importFile(this.file);
+        } else {
+            this.closeDialog();
+        }
+    }
+
+    importFile(file: File){
+        const importFile: File = file;
+        const fileReader = new FileReader();
+        fileReader.readAsText(importFile, 'UTF-8');
+        fileReader.onload = () => {
+            const hierarchyRequest: HierarchyRequest = JSON.parse(fileReader.result as string);
+            //The exported file contains ids and icons, so we need to fix that on export in the future
+            this.store.dispatch(createHierarchy({ hierarchy: hierarchyRequest }));
+        };
+        fileReader.onerror = (error) => {
+            //provide better errors in the future
+            console.log(error);
+        };
+
+        this.actions$
+            .pipe(
+                ofType(createHierarchySuccess)
+            ).subscribe(_ => this.closeDialog());
     }
 
     getDateTime(): string {

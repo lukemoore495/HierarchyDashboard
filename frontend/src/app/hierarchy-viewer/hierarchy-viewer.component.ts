@@ -1,16 +1,17 @@
-import { HierarchyRequest } from './../hierarchy.service';
-import { Component, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, ComponentRef, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Hierarchy, HierarchyListItem } from '../Hierarchy';
 import { getHierarchies, getSelectedHierarchy } from '../state';
-import { createHierarchy, deleteHierarchy, setSelectedHierarchy } from '../state/hierarchy.actions';
+import { setSelectedHierarchy } from '../state/hierarchy.actions';
 import { HierarchyState } from '../state/hierarchy.reducer';
 import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import { ImportExportHierarchyDialogComponent } from './import-export-hierarchy-dialog/import-export-hierarchy-dialog.component';
 import { DeleteHierarchyDialogComponent } from './delete-hierarchy-dialog/delete-hierarchy-dialog.component';
 import { CreateHierarchyDialogComponent } from './create-hierarchy-dialog/create-hierarchy-dialog.component';
+import { HierarchyTreeComponent } from './hierarchy-tree/hierarchy-tree.component';
+import { DeleteHierarchyData } from './delete-hierarchy-dialog/DeleteHierarchyData';
 
 @Component({
     selector: 'app-hierarchy-viewer',
@@ -22,11 +23,18 @@ export class HierarchyViewerComponent implements OnDestroy {
     subscriptions: Subscription[] = [];
     hierarchies$?: Observable<HierarchyListItem[]>;
 
-    constructor(public dialog: MatDialog, private store: Store<HierarchyState>, private renderer: Renderer2) {
+    @ViewChild('treeContainer', {read: ViewContainerRef}) treeContainer?: ViewContainerRef;
+    tree: ComponentRef<HierarchyTreeComponent> | null = null;
+
+    constructor(public dialog: MatDialog, private store: Store<HierarchyState>) {
         const selectedHierarchySub = this.store.select(getSelectedHierarchy)
             .subscribe(hierarchy => {
+                if(hierarchy?.id != this.selectedHierarchy?.id){
+                    this.removeTree();
+                }
                 if (hierarchy) {
                     this.selectedHierarchy = hierarchy;
+                    this.createTree();
                     return;
                 }
             });
@@ -40,70 +48,43 @@ export class HierarchyViewerComponent implements OnDestroy {
         this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
-    deleteHierarchy() {
-        if (this.selectedHierarchy) {
-            this.store.dispatch(deleteHierarchy({ hierarchyId: this.selectedHierarchy.id }));
-        }
-    }
-
     onSelect(event: MatSelectChange) {
-        this.selectedHierarchy = null;
         this.store.dispatch(setSelectedHierarchy({ selectedHierarchyId: event.value }));
     }
 
     createHierarchyDialog() {
-        const dialogRef = this.dialog.open(CreateHierarchyDialogComponent, {
-            data: { name: '', description: '' }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-            if (result != null && result.event == 'Create') {
-                this.selectedHierarchy = null;
-                const hierarchyRequest: HierarchyRequest = {
-                    name: result.name, description: result.description, nodes: [], alternatives: []
-                };
-                this.store.dispatch(createHierarchy({ hierarchy: hierarchyRequest }));
-            }
-        });
+        this.dialog.open(CreateHierarchyDialogComponent);
     }
 
     deleteHierarchyDialog() {
-
-        const dialogRef = this.dialog.open(DeleteHierarchyDialogComponent, {
-            data: { name: this.selectedHierarchy ? this.selectedHierarchy.name : '' }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-
-            if (result != null && result.event == 'Delete') {
-                this.deleteHierarchy();
-                this.selectedHierarchy = null;
-            }
+        this.dialog.open(DeleteHierarchyDialogComponent, {
+            data: { 
+                id: this.selectedHierarchy?.id, 
+                name: this.selectedHierarchy?.name 
+            } as DeleteHierarchyData
         });
     }
 
     importExportHierarchyDialog() {
-        const dialogRef = this.dialog.open(ImportExportHierarchyDialogComponent, {
-            data: { name: '', description: '', hierarchy: this.selectedHierarchy }
+        this.dialog.open(ImportExportHierarchyDialogComponent, {
+            data: this.selectedHierarchy 
         });
+    }
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result != null && result.event == 'Import') {
-                const importFile: File = result.file;
-
-                const fileReader = new FileReader();
-                fileReader.readAsText(importFile, 'UTF-8');
-                fileReader.onload = () => {
-                    const hierarchyRequest: HierarchyRequest = JSON.parse(fileReader.result as string);
-                    this.selectedHierarchy = null;
-
-                    //The exported file contains ids and icons, so we need to fix that on import or export
-                    this.store.dispatch(createHierarchy({ hierarchy: hierarchyRequest }));
-                };
-                fileReader.onerror = (error) => {
-                    console.log(error);
-                };
-            }
-        });
+    createTree() {
+        const component = this.treeContainer?.createComponent(HierarchyTreeComponent);
+        if(!component){
+            return;
+        }
+        component.instance.hierarchy = this.selectedHierarchy;
+        this.tree = component ?? null;
+    }
+    
+    removeTree() {  
+        if (this.tree) {
+            this.treeContainer?.clear();
+            this.tree.destroy();
+            this.tree = null;
+        }
     }
 }
