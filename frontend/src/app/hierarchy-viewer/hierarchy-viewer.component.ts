@@ -1,16 +1,16 @@
 import { HierarchyRequest } from './../hierarchy.service';
-import { Component, OnDestroy, Renderer2, Inject } from '@angular/core';
+import { Component, OnDestroy, Renderer2 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Hierarchy, HierarchyListItem } from '../Hierarchy';
 import { getHierarchies, getSelectedHierarchy } from '../state';
 import { createHierarchy, deleteHierarchy, setSelectedHierarchy } from '../state/hierarchy.actions';
 import { HierarchyState } from '../state/hierarchy.reducer';
-import RRRHierarchy from '../../assets/staticFiles/RRRHierarchyPost.json';
 import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { ImportExportHierarchyDialogComponent } from './import-export-hierarchy-dialog/import-export-hierarchy-dialog.component';
+import { DeleteHierarchyDialogComponent } from './delete-hierarchy-dialog/delete-hierarchy-dialog.component';
+import { CreateHierarchyDialogComponent } from './create-hierarchy-dialog/create-hierarchy-dialog.component';
 
 @Component({
     selector: 'app-hierarchy-viewer',
@@ -52,7 +52,7 @@ export class HierarchyViewerComponent implements OnDestroy {
     }
 
     createHierarchyDialog() {
-        const dialogRef = this.dialog.open(CreateHierarchyDialog, {
+        const dialogRef = this.dialog.open(CreateHierarchyDialogComponent, {
             data: { name: '', description: '' }
         });
 
@@ -69,7 +69,7 @@ export class HierarchyViewerComponent implements OnDestroy {
 
     deleteHierarchyDialog() {
 
-        const dialogRef = this.dialog.open(DeleteHierarchyDialog, {
+        const dialogRef = this.dialog.open(DeleteHierarchyDialogComponent, {
             data: { name: this.selectedHierarchy ? this.selectedHierarchy.name : '' }
         });
 
@@ -83,7 +83,7 @@ export class HierarchyViewerComponent implements OnDestroy {
     }
 
     importExportHierarchyDialog() {
-        const dialogRef = this.dialog.open(ImportExportHierarchyDialog, {
+        const dialogRef = this.dialog.open(ImportExportHierarchyDialogComponent, {
             data: { name: '', description: '', hierarchy: this.selectedHierarchy }
         });
 
@@ -105,108 +105,5 @@ export class HierarchyViewerComponent implements OnDestroy {
                 };
             }
         });
-    }
-}
-
-@Component({
-    selector: 'create-hierarchy-dialog',
-    templateUrl: 'createHierarchy.dialog.html',
-    styleUrls: ['./hierarchy-viewer.component.scss']
-})
-export class CreateHierarchyDialog {
-    constructor(
-        public dialogRef: MatDialogRef<CreateHierarchyDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: any) { }
-
-    doAction() {
-        this.dialogRef.close({ event: 'Create', name: this.data.name, description: this.data.description });
-    }
-
-    closeDialog() {
-        this.dialogRef.close({ event: 'Cancel' });
-    }
-}
-
-@Component({
-    selector: 'delete-hierarchy-dialog',
-    templateUrl: 'deleteHierarchy.dialog.html',
-    styleUrls: ['./hierarchy-viewer.component.scss']
-})
-export class DeleteHierarchyDialog {
-
-    constructor(
-        public dialogRef: MatDialogRef<DeleteHierarchyDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: any) { }
-
-    doAction() {
-        this.dialogRef.close({ event: 'Delete' });
-    }
-
-    closeDialog() {
-        this.dialogRef.close({ event: 'Cancel' });
-    }
-}
-
-@Component({
-    selector: 'import-export-hierarchy-dialog',
-    templateUrl: 'importExportHierarchy.dialog.html',
-    styleUrls: ['./hierarchy-viewer.component.scss']
-})
-export class ImportExportHierarchyDialog {
-    tabs: string[] = ['Import', 'Export'];
-    selectedTabIndex = 0;
-    downloadJsonHref: SafeUrl | null = null;
-    downloadJsonName: string | null = null;
-    file: File | null = null;
-    fileName = '';
-
-    myTabSelectedIndexChange(index: number) {
-        this.selectedTabIndex = index;
-
-        // Current tab is export, downloadJsonHref has not been set and a hierarchy has been passed in
-        if (index == 1 && this.downloadJsonHref == null && this.data.hierarchy != null) {
-            this.generateDownloadJsonUri();
-        }
-    }
-
-    constructor(private sanitizer: DomSanitizer,
-        public dialogRef: MatDialogRef<ImportExportHierarchyDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: any) {
-    }
-
-    onFileSelected(event: any) {
-        this.file = event.target.files[0];
-        this.fileName = this.file ? this.file.name : '';
-    }
-
-    generateDownloadJsonUri() {
-        const theJSON = JSON.stringify(this.data.hierarchy);
-        this.downloadJsonHref = this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=UTF-8,' + encodeURIComponent(theJSON));
-        this.downloadJsonName = this.data.hierarchy.name + this.getDateTime() + '.json';
-    }
-
-    doAction() {
-        if (this.selectedTabIndex == 0) {
-            this.dialogRef.close({ event: 'Import', file: this.file });
-        }
-        else {
-            this.dialogRef.close({ event: 'Export' });
-        }
-    }
-
-    closeDialog() {
-        this.dialogRef.close({ event: 'Cancel' });
-    }
-
-    getDateTime(): string {
-        const d = new Date();
-        const mo = d.getMonth() + 1;
-        const yr = d.getFullYear();
-        const dt = d.getDate();
-        const h = d.getHours();
-        const m = d.getMinutes();
-        const s = d.getSeconds();
-
-        return ('_' + mo + '-' + dt + '-' + yr + '-' + h + '-' + m + '-' + s);
     }
 }

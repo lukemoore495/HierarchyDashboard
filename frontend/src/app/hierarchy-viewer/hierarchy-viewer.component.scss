@@ -30,30 +30,6 @@
   }
 }
 
-.dialog-full-width {
-  width: 100%;
-}
-
-.tab-container {
-  padding: 10%;
-}
-
-.input-hidden {
-  display: none;
-}
-
-.upload-btn {
-  float: right;
-  margin-top: 1rem;
-  margin-right: 1rem;
-  width: 10%;
-}
-
-.loading:after {
-  content: " .";
-  animation: dots 1s steps(5, end) infinite;
-}
-
 @keyframes dots {
   0%,
   20% {
