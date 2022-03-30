@@ -40,7 +40,6 @@ export class HierarchyViewerComponent implements OnDestroy {
             });
         this.subscriptions.push(selectedHierarchySub);
 
-
         this.hierarchies$ = this.store.select(getHierarchies);
     }
 
