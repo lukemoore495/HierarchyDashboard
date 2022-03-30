@@ -50,8 +50,6 @@ export class HierarchyService {
     deleteHierarchy(hierarchyId: string): Observable<string> {
         const url = this.root + '/hierarchy/' + hierarchyId;
         return this.http.delete<string>(url);
-
-        // Select another hierarchy or show welcome screen
     }
 
     getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport> {

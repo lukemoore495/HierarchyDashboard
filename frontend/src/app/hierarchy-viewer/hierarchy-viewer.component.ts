@@ -7,7 +7,6 @@ import { getHierarchies, getSelectedHierarchy } from '../state';
 import { createHierarchy, deleteHierarchy, setSelectedHierarchy } from '../state/hierarchy.actions';
 import { HierarchyState } from '../state/hierarchy.reducer';
 import RRRHierarchy from '../../assets/staticFiles/RRRHierarchyPost.json';
-import SimpleHierarchy from '../../assets/staticFiles/SimpleHierarchyPost.json';
 import { MatSelectChange } from '@angular/material/select';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -24,24 +23,21 @@ export class HierarchyViewerComponent implements OnDestroy {
     hierarchies$?: Observable<HierarchyListItem[]>;
 
     constructor(public dialog: MatDialog, private store: Store<HierarchyState>, private renderer: Renderer2) {
-        const sub = this.store.select(getSelectedHierarchy)
+        const selectedHierarchySub = this.store.select(getSelectedHierarchy)
             .subscribe(hierarchy => {
                 if (hierarchy) {
                     this.selectedHierarchy = hierarchy;
+                    return;
                 }
             });
-        this.subscriptions.push(sub);
+        this.subscriptions.push(selectedHierarchySub);
+         
 
         this.hierarchies$ = this.store.select(getHierarchies);
     }
 
     ngOnDestroy(): void {
         this.subscriptions.forEach(sub => sub.unsubscribe());
-    }
-
-    importRRRHierarchy() {
-        this.selectedHierarchy = null;
-        this.store.dispatch(createHierarchy({ hierarchy: RRRHierarchy }));
     }
 
     deleteHierarchy() {
@@ -57,13 +53,13 @@ export class HierarchyViewerComponent implements OnDestroy {
 
     createHierarchyDialog() {
         const dialogRef = this.dialog.open(CreateHierarchyDialog, {
-            data: { name: "", description: "" }
+            data: { name: '', description: '' }
         });
 
         dialogRef.afterClosed().subscribe(result => {
             if (result != null && result.event == 'Create') {
                 this.selectedHierarchy = null;
-                let hierarchyRequest: HierarchyRequest = {
+                const hierarchyRequest: HierarchyRequest = {
                     name: result.name, description: result.description, nodes: [], alternatives: []
                 };
                 this.store.dispatch(createHierarchy({ hierarchy: hierarchyRequest }));
@@ -74,7 +70,7 @@ export class HierarchyViewerComponent implements OnDestroy {
     deleteHierarchyDialog() {
 
         const dialogRef = this.dialog.open(DeleteHierarchyDialog, {
-            data: { name: this.selectedHierarchy ? this.selectedHierarchy.name : "" }
+            data: { name: this.selectedHierarchy ? this.selectedHierarchy.name : '' }
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -88,7 +84,7 @@ export class HierarchyViewerComponent implements OnDestroy {
 
     importExportHierarchyDialog() {
         const dialogRef = this.dialog.open(ImportExportHierarchyDialog, {
-            data: { name: "", description: "", hierarchy: this.selectedHierarchy }
+            data: { name: '', description: '', hierarchy: this.selectedHierarchy }
         });
 
         dialogRef.afterClosed().subscribe(result => {
@@ -96,17 +92,17 @@ export class HierarchyViewerComponent implements OnDestroy {
                 const importFile: File = result.file;
 
                 const fileReader = new FileReader();
-                fileReader.readAsText(importFile, "UTF-8");
+                fileReader.readAsText(importFile, 'UTF-8');
                 fileReader.onload = () => {
                     const hierarchyRequest: HierarchyRequest = JSON.parse(fileReader.result as string);
                     this.selectedHierarchy = null;
 
                     //The exported file contains ids and icons, so we need to fix that on import or export
                     this.store.dispatch(createHierarchy({ hierarchy: hierarchyRequest }));
-                }
+                };
                 fileReader.onerror = (error) => {
                     console.log(error);
-                }
+                };
             }
         });
     }
@@ -158,7 +154,7 @@ export class DeleteHierarchyDialog {
 })
 export class ImportExportHierarchyDialog {
     tabs: string[] = ['Import', 'Export'];
-    selectedTabIndex: number = 0;
+    selectedTabIndex = 0;
     downloadJsonHref: SafeUrl | null = null;
     downloadJsonName: string | null = null;
     file: File | null = null;
@@ -184,9 +180,9 @@ export class ImportExportHierarchyDialog {
     }
 
     generateDownloadJsonUri() {
-        var theJSON = JSON.stringify(this.data.hierarchy);
-        this.downloadJsonHref = this.sanitizer.bypassSecurityTrustUrl("data:text/json;charset=UTF-8," + encodeURIComponent(theJSON));
-        this.downloadJsonName = this.data.hierarchy.name + this.getDateTime() + ".json";
+        const theJSON = JSON.stringify(this.data.hierarchy);
+        this.downloadJsonHref = this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=UTF-8,' + encodeURIComponent(theJSON));
+        this.downloadJsonName = this.data.hierarchy.name + this.getDateTime() + '.json';
     }
 
     doAction() {
@@ -203,14 +199,14 @@ export class ImportExportHierarchyDialog {
     }
 
     getDateTime(): string {
-        var d = new Date();
-        var mo = d.getMonth() + 1;
-        var yr = d.getFullYear();
-        var dt = d.getDate();
-        var h = d.getHours();
-        var m = d.getMinutes();
-        var s = d.getSeconds();
+        const d = new Date();
+        const mo = d.getMonth() + 1;
+        const yr = d.getFullYear();
+        const dt = d.getDate();
+        const h = d.getHours();
+        const m = d.getMinutes();
+        const s = d.getSeconds();
 
-        return ("_" + mo + '-' + dt + '-' + yr + '-' + h + "-" + m + "-" + s);
+        return ('_' + mo + '-' + dt + '-' + yr + '-' + h + '-' + m + '-' + s);
     }
 }

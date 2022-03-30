@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { delay, map, shareReplay, skipWhile, take, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { HierarchyState } from '../state/hierarchy.reducer';
 import * as HierarchyActions from '../state/hierarchy.actions';
-import { getError, getHierarchies } from '../state';
+import { getError, getHierarchies, getSelectedHierarchy } from '../state';
+import { HierarchyListItem } from '../Hierarchy';
 
 @Component({
     selector: 'app-nav',
     templateUrl: './nav.component.html',
     styleUrls: ['./nav.component.scss']
 })
-export class NavComponent implements OnInit {
+export class NavComponent implements OnInit, OnDestroy {
     errorMessage$?: Observable<string>;
     hasHierarchies = false;
+    hierarchies: HierarchyListItem[] = [];
+    subscriptions: Subscription[] = [];
 
     menuItems = [
         { title: 'Hierarchy Viewer', route: 'hierarchicalView', icon: 'pageview' },
@@ -33,7 +36,8 @@ export class NavComponent implements OnInit {
     ngOnInit(): void {
         this.errorMessage$ = this.store.select(getError);
         this.store.dispatch(HierarchyActions.retrieveHierarchies());
-        this.store.select(getHierarchies)
+        const getHierarchies$ = this.store.select(getHierarchies);
+        const initialSelectSub = getHierarchies$
             .pipe(
                 delay(1000),
                 tap(x => {
@@ -50,5 +54,22 @@ export class NavComponent implements OnInit {
                     this.hasHierarchies = true;
                 }
             });
+        
+        const hierarchyListSub = getHierarchies$
+            .subscribe(hierarchies => this.hierarchies = hierarchies);
+        
+        const selectedHierarchySub = this.store.select(getSelectedHierarchy)
+            .subscribe(hierarchy => {
+                if (!hierarchy && this.hierarchies.length > 0) {
+                    this.store.dispatch(
+                        HierarchyActions.setSelectedHierarchy({selectedHierarchyId: this.hierarchies[0].id})
+                    );
+                }
+            });
+        this.subscriptions.push(initialSelectSub, hierarchyListSub, selectedHierarchySub);
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 }
