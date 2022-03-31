@@ -26,8 +26,6 @@ class Node(db.Model):
         String to store the icon the frontend uses for the node.
     weight : float
         Floating point value representing weight
-    is_measurement : bool
-        Flag for frontend.
     measurement_type : str
         String representing the measurement's type.
     value_function : str
@@ -63,7 +61,6 @@ class Node(db.Model):
     weight = db.Column(db.Float)
 
     # For Measurements
-    is_measurement = db.Column(db.Boolean)
     measurement_type = db.Column(db.String())
     value_function = db.Column(db.String)
 
@@ -74,7 +71,7 @@ class Node(db.Model):
         backref=db.backref("parent",remote_side=[id]),
         )
 
-    def __init__(self, name, parent=None, icon=None, weight=None, is_measurement=False, measurement_type=None, value_function=None):
+    def __init__(self, name, parent=None, icon=None, weight=None, measurement_type=None, value_function=None):
         """
         Parameters
         ----------
@@ -89,9 +86,6 @@ class Node(db.Model):
         weight : float, optional
             Floating point value representing weight
             (default is None)
-        is_measurement : bool, optional
-            Flag for frontend.
-            (default is False)
         measurement_type : str, optional
             String representing the type of measurement.
             (default is None)
@@ -115,7 +109,6 @@ class Node(db.Model):
         self.icon=icon
 
         # For Measurements
-        self.is_measurement=is_measurement
         self.measurement_type=measurement_type
         self.value_function=value_function
 
@@ -145,10 +138,16 @@ class Node(db.Model):
             + "".join(c.dump(_indent + 1) for c in self.children)
         )
 
-    def to_dict(self):
+    def to_dict(self, export=False):
         """
         Returns a dictionary representation of the node and its children.
         Formats the fields according to the Frontend's requirements.
+
+        Parameters
+        ----------
+        export : bool
+            True will return the nodes without id's
+            (default is False)
     
         Returns
         -------
@@ -157,21 +156,25 @@ class Node(db.Model):
         """
         # Fields renamed according to Frontend
         node_dict = {
-            'id': str(self.id),
-
             'name': self.name,
             'weight': self.weight,
             'icon': self.icon,
-
-            'isMeasurement': self.is_measurement,
-            'measurementType': self.measurement_type,
-            'value_function': self.value_function,
         }
+
+        if not export:
+            node_dict['id'] = str(self.id)
+
+        # Is a measurement node
+        if self.measurement_type:
+            node_dict['measurement'] = {
+                'measurementType': self.measurement_type,
+                'value_function': self.value_function
+            }
 
         # Create and append list of child nodes
         children_list = []
         for child in self.children:
-            children_list.append(child.to_dict())
+            children_list.append(child.to_dict(export))
         
         node_dict['children'] = children_list
 
@@ -196,7 +199,6 @@ class Node(db.Model):
         # TODO: Weight isn't optional. Work with Frontend.
         icon = None
         weight = None
-        is_measurement = False
         measurement_type = None
         value_function = None
 
@@ -205,7 +207,6 @@ class Node(db.Model):
         if 'weight' in data:
             weight = data['weight']
         if 'measurementType' in data:
-            is_measurement = True
             measurement_type = data['measurementType']
         if 'value_function' in data:
             value_function = data['value_function']
@@ -216,7 +217,6 @@ class Node(db.Model):
             parent=self,
             icon=icon,
             weight=weight,
-            is_measurement=is_measurement,
             measurement_type=measurement_type,
             value_function=value_function,
         )

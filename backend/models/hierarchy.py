@@ -64,26 +64,37 @@ class Hierarchy(db.Model):
         """Returns a formatted string representation of a hierarchy, including nodes."""
         return repr(self) + "\n\nTree:\n" + self.nodes[0].dump()
 
-    def to_dict(self, get_nodes=True):
+    def to_dict(self, get_nodes=True, export=False):
         """
         Returns a dictionary representation of the hierarchy and its tree.
         Formats the fields according to the Frontend's requirements.
-    
+
+        Parameters
+        ----------
+        get_nodes : bool
+            True will return all nodes in hierarchy format
+            (default is True)
+        export : bool
+            True will return the hierarchy and nodes without id's
+            (default is False)
+            
         Returns
         -------
         hier_dict : Dictionary
             Dictionary representation of the hierarchy
         """
         hier_dict = {
-            "id": str(self.id),
             "name": self.name,
             "description": self.description,
         }
 
+        if not export:
+            hier_dict['id'] = str(self.id)
+
         # Get tree as dict
         if get_nodes:
             root = Node.query.filter_by(parent_id=None, hierarchy_id=self.id).first()
-            hier_dict["nodes"] = root.to_dict()['children'] # Don't return root node
+            hier_dict["root"] = root.to_dict(export) # naming it root simplifies frontend
 
         return hier_dict
     

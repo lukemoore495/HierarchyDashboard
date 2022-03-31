@@ -24,7 +24,6 @@ app = Flask(__name__)
 # app configurations
 home_path = os.path.join(get_config_path(), "app.db")
 database_path = 'sqlite:///' + Path(home_path).as_posix()
-print(database_path)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_path
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = 0
 app.config["JSON_SORT_KEYS"] = False
@@ -45,13 +44,18 @@ def create_hierarchy():
         description=data["description"]
     )
 
-    # Create root of tree and associate it with hierarchy.
-    root = Node("root")
+    # Create root of tree and associate it with hierarchy. 
+    if "root" in data:
+        root_name = data["root"]["name"]
+        root = Node(root_name)
+    else:
+        root = Node(hierarchy.name)
+    
     hierarchy.nodes.append(root)
-
-    # Parse nodes and create tree
-    nodes_lst = data["nodes"]
-    if nodes_lst: # Check that it isn't an empty list
+   
+   # Parse nodes and create tree
+    nodes_lst = data["root"]["children"]
+    if nodes_lst:
         root.create_tree(nodes_lst)
 
     # Commit changes to DB
@@ -61,17 +65,13 @@ def create_hierarchy():
     return hierarchy.to_dict(), 201
 
 
-# To add a node to the root of the hierarchy, send 0 for parent_id
+# Will never not have a root node. If you do, things are messed
 @app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
 def create_node(hierarchy_id, parent_id):
     data = request.get_json()
 
-    if parent_id == 0:
-        parent_id = None
-
     parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id).first()
 
-    # TODO: Double check with Luke that this is okay
     if not parent:
         abort(404, description="Resource not found")
     
@@ -115,6 +115,16 @@ def get_one_hierarchy(hierarchy_id):
     return jsonify(hierarchy.to_dict()), 200
 
 
+@app.route("/hierarchy/<hierarchy_id>/export", methods=['GET'])
+def export_hierarchy(hierarchy_id):
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    
+    if not hierarchy:
+        abort(404, description="Resource not found")
+
+    return jsonify(hierarchy.to_dict(export=True)), 200
+
+
 # TODO Reduce the code duplication in the DELETE Routes
 @app.route("/hierarchy/<hierarchy_id>", methods=['DELETE'])
 def delete_hierarchy(hierarchy_id):
@@ -131,13 +141,18 @@ def delete_hierarchy(hierarchy_id):
     return jsonify({"message": message}), 200
 
 
-@app.route("/node/<node_id>", methods=['DELETE'])
-def delete_node(node_id):
+@app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['DELETE'])
+def delete_node(hierarchy_id, node_id):
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
     node = Node.query.filter_by(id=node_id).first()
 
     # node does not exist, return 404
-    if not node:
+    if not hierarchy or not node:
         abort(404, description="Resource not found")
+
+    root_node = hierarchy.nodes[0]
+    if root_node == node:
+        abort(405, description="Protected Resource")
 
     db.session.delete(node)
     db.session.commit()
