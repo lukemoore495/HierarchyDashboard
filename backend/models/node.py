@@ -61,7 +61,6 @@ class Node(db.Model):
     weight = db.Column(db.Float)
 
     # For Measurements
-    is_measurement = db.Column(db.Boolean)
     measurement_type = db.Column(db.String())
     value_function = db.Column(db.String)
 
@@ -110,7 +109,6 @@ class Node(db.Model):
         self.icon=icon
 
         # For Measurements
-        self.is_measurement=is_measurement
         self.measurement_type=measurement_type
         self.value_function=value_function
 
