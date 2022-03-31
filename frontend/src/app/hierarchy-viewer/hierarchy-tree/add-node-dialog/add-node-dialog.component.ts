@@ -40,6 +40,7 @@ export class AddNodeDialogComponent implements OnDestroy{
     }
 
     onSubmit() {
+        //needs to include measurements when they get refactored.
         const newNode: NodeRequest = {
             name: this.form.name,
             weight: 0,

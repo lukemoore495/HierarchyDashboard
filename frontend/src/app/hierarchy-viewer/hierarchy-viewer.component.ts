@@ -1,4 +1,4 @@
-import { Component, ComponentRef, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Hierarchy, HierarchyListItem } from '../Hierarchy';
@@ -18,10 +18,11 @@ import { DeleteHierarchyData } from './delete-hierarchy-dialog/DeleteHierarchyDa
     templateUrl: './hierarchy-viewer.component.html',
     styleUrls: ['./hierarchy-viewer.component.scss']
 })
-export class HierarchyViewerComponent implements OnDestroy {
+export class HierarchyViewerComponent implements AfterViewInit, OnDestroy {
     selectedHierarchy: Hierarchy | null = null;
     subscriptions: Subscription[] = [];
     hierarchies$?: Observable<HierarchyListItem[]>;
+    hierarchyDescription: string | null = null;
 
     @ViewChild('treeContainer', { read: ViewContainerRef }) treeContainer?: ViewContainerRef;
     tree: ComponentRef<HierarchyTreeComponent> | null = null;
@@ -33,14 +34,21 @@ export class HierarchyViewerComponent implements OnDestroy {
                     this.removeTree();
                 }
                 if (hierarchy) {
+                    this.removeTree();
                     this.selectedHierarchy = hierarchy;
                     this.createTree();
+                    this.hierarchyDescription = hierarchy.description;
                     return;
                 }
             });
         this.subscriptions.push(selectedHierarchySub);
 
         this.hierarchies$ = this.store.select(getHierarchies);
+    }
+    ngAfterViewInit(): void {
+        if(!this.tree){
+            this.createTree();
+        }
     }
 
     ngOnDestroy(): void {
