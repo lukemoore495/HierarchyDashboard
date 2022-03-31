@@ -172,7 +172,7 @@ function deleteNode(node: Node, nodeId: string) : Node {
     const nodeIndex = node.children.findIndex(child => child.id === nodeId);
     if(nodeIndex !== -1){
         const children = [...node.children];
-        children.splice(nodeIndex);
+        children.splice(nodeIndex, 1);
         return {...node, children: children};
     }
 
@@ -193,7 +193,7 @@ function removeNodeFromHierarchy(hierarchy: Hierarchy, nodeId: string) : Hierarc
     const nodeIndex = hierarchy.nodes.findIndex(node => node.id === nodeId);
     if(nodeIndex !== -1){
         const nodes = [...hierarchy.nodes];
-        nodes.splice(nodeIndex);
+        nodes.splice(nodeIndex, 1);
         return {...hierarchy, nodes: nodes};
     }
 

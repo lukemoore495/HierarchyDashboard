@@ -40,13 +40,17 @@ export class HierarchyViewerComponent implements AfterViewInit, OnDestroy {
                     this.hierarchyDescription = hierarchy.description;
                     return;
                 }
+                if(!hierarchy){
+                    this.removeTree();
+                }
             });
         this.subscriptions.push(selectedHierarchySub);
 
         this.hierarchies$ = this.store.select(getHierarchies);
     }
+    
     ngAfterViewInit(): void {
-        if(!this.tree){
+        if(!this.tree && this.selectedHierarchy){
             this.createTree();
         }
     }
