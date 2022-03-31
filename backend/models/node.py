@@ -168,7 +168,7 @@ class Node(db.Model):
         if self.measurement_type:
             node_dict['measurement'] = {
                 'measurementType': self.measurement_type,
-                'value_function': self.value_function
+                'valueFunction': self.value_function
             }
 
         # Create and append list of child nodes
@@ -206,11 +206,13 @@ class Node(db.Model):
             icon = data['icon']
         if 'weight' in data:
             weight = data['weight']
-        if 'measurementType' in data:
-            measurement_type = data['measurementType']
-        if 'value_function' in data:
-            value_function = data['value_function']
-            
+
+        if 'measurement' in data:
+            if 'measurementType' in data['measurement']:
+                measurement_type = data['measurement']['measurementType']
+            if 'valueFunction' in data['measurement']:
+                value_function = data['measurement']['valueFunction']
+                
         # Create child node
         new_node = Node(
             name=data['name'],
