@@ -1,53 +1,65 @@
-<div class="grid">
-  <div class="row-container">
-    <h3 *ngFor="let row of rows" class="row">{{ row }}</h3>
-  </div>
-  <div class="grid-container">
-    <div class="column-container">
-      <h3 *ngFor="let column of columns" class="column">{{ column }}</h3>
+<ng-container cdkDropListGroup>
+  <div class="grid">
+    <div class="grid-container">
+      <mat-grid-list [cols]="numberOfColumns + 1" rowHeight="10:3">
+
+        <mat-grid-tile rowspan="1" class="empty-label"></mat-grid-tile>
+        <ng-container *ngFor="let label of columnLabels; index as i">
+          <mat-grid-tile rowspan="1" class="outside-label">{{label}}</mat-grid-tile>
+        </ng-container>
+
+        <ng-container *ngFor="let item of matrix; index as i">
+          <ng-container *ngIf="i % numberOfColumns === 0">
+            <mat-grid-tile rowspan="2" class="outside-label">
+                {{rowLabels[(i/numberOfColumns)]}}
+            </mat-grid-tile>
+          </ng-container>
+          <ng-container>
+            <mat-grid-tile rowspan="2">
+              <div class="grid-label">
+                {{item}}
+              </div>
+              <div class="drop-container">
+                <div class="drop-list" [id]="i.toString()" cdkDropList [cdkDropListData]="emptyDrop[i]" (cdkDropListDropped)="drop($event)">
+                  <div class="drag-box" *ngFor="let item of emptyDrop[i]" cdkDrag>{{item?.name}}</div>
+                </div>
+              </div>
+            </mat-grid-tile>
+          </ng-container>
+        </ng-container>
+      </mat-grid-list>
+      <div class="buttons">
+        <button mat-raised-button color="accent" class="button" (click)="onSave()">
+          <mat-icon>save</mat-icon>
+          Save
+        </button>
+        <button mat-raised-button color="accent" class="button">
+          <mat-icon>edit</mat-icon>
+          Edit Matrix
+        </button>
+      </div>
     </div>
-    <mat-grid-list class="grid-list" cols="3" rowHeight="5:3">
-      <ng-container *ngFor="let item of matrix">
-        <mat-grid-tile>{{ item }}</mat-grid-tile>
+  </div>
+  <div class="options">
+    <table mat-table [dataSource]="children" class="table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Measure Name</th>
+        <td mat-cell *matCellDef="let node">
+          {{ node.name }}
+        </td>
       </ng-container>
-    </mat-grid-list>
-    <div class="buttons">
-      <button mat-raised-button color="accent" class="button">
-        <mat-icon>save</mat-icon>
-        Save
-      </button>
-      <button mat-raised-button color="accent" class="button">
-        <mat-icon>edit</mat-icon>
-        Edit Matrix
-      </button>
+
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef>Local Weight</th>
+        <td mat-cell *matCellDef="let node">{{ node.weight }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div cdkDropList cdkDropListOrientation="horizontal" [cdkDropListData]="children" class="starting-drop-list"
+      (cdkDropListDropped)="drop($event)">
+      <div class="drag-box" *ngFor="let item of children" cdkDrag>{{item.name}}</div>
     </div>
   </div>
-</div>
-<div class="options">
-  <table mat-table [dataSource]="children" class="table">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Measure Name</th>
-      <td mat-cell *matCellDef="let node">
-        <div class="table-text">
-          {{ node.name }}
-        </div>
-        <div
-          class="example-box"
-          id="{{ node.id }}"
-          cdkDrag
-          (cdkDragEnded)="onDragEnded($event)"
-        >
-          {{ node.name }}
-        </div>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="weight">
-      <th mat-header-cell *matHeaderCellDef>Local Weight</th>
-      <td mat-cell *matCellDef="let node">{{ node.weight }}</td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-  </table>
-</div>
+</ng-container>
