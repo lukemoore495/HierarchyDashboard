@@ -52,6 +52,11 @@ export class HierarchyService {
         return this.http.delete<string>(url);
     }
 
+    exportHierarchy(hierarchyId: string): Observable<HierarchyRequest> {
+        const url = this.root + `/hierarchy/${hierarchyId}/export` ;
+        return this.http.get<HierarchyRequest>(url);
+    }
+
     getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport> {
         return of(this.getFakeSensitivityAnalysisData(nodeNames));
     }
