@@ -16,7 +16,7 @@
             </div>
         </mat-dialog-content>
     </mat-tab>
-    <mat-tab label="Export"></mat-tab>
+    <mat-tab [disabled]="!hierarchy" label="Export"></mat-tab>
 </mat-tab-group>
 <mat-dialog-actions>
     <button mat-button (click)="closeDialog()" cdkFocusInitial>Cancel</button>

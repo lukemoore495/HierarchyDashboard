@@ -23,13 +23,13 @@ export class HierarchyViewerComponent implements OnDestroy {
     subscriptions: Subscription[] = [];
     hierarchies$?: Observable<HierarchyListItem[]>;
 
-    @ViewChild('treeContainer', {read: ViewContainerRef}) treeContainer?: ViewContainerRef;
+    @ViewChild('treeContainer', { read: ViewContainerRef }) treeContainer?: ViewContainerRef;
     tree: ComponentRef<HierarchyTreeComponent> | null = null;
 
     constructor(public dialog: MatDialog, private store: Store<HierarchyState>) {
         const selectedHierarchySub = this.store.select(getSelectedHierarchy)
             .subscribe(hierarchy => {
-                if(hierarchy?.id != this.selectedHierarchy?.id){
+                if (hierarchy?.id != this.selectedHierarchy?.id) {
                     this.removeTree();
                 }
                 if (hierarchy) {
@@ -39,7 +39,7 @@ export class HierarchyViewerComponent implements OnDestroy {
                 }
             });
         this.subscriptions.push(selectedHierarchySub);
-         
+
 
         this.hierarchies$ = this.store.select(getHierarchies);
     }
@@ -58,33 +58,34 @@ export class HierarchyViewerComponent implements OnDestroy {
 
     deleteHierarchyDialog() {
         this.dialog.open(DeleteHierarchyDialogComponent, {
-            data: { 
-                id: this.selectedHierarchy?.id, 
-                name: this.selectedHierarchy?.name 
+            data: {
+                id: this.selectedHierarchy?.id,
+                name: this.selectedHierarchy?.name
             } as DeleteHierarchyData
         });
     }
 
     importExportHierarchyDialog() {
         this.dialog.open(ImportExportHierarchyDialogComponent, {
-            data: this.selectedHierarchy 
+            data: this.selectedHierarchy
         });
     }
 
     createTree() {
         const component = this.treeContainer?.createComponent(HierarchyTreeComponent);
-        if(!component){
+        if (!component) {
             return;
         }
         component.instance.hierarchy = this.selectedHierarchy;
         this.tree = component ?? null;
     }
-    
-    removeTree() {  
+
+    removeTree() {
         if (this.tree) {
             this.treeContainer?.clear();
             this.tree.destroy();
             this.tree = null;
+            this.selectedHierarchy = null;
         }
     }
 }
