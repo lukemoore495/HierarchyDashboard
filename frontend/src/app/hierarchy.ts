@@ -8,7 +8,7 @@ export interface Hierarchy {
     id : string;
     name: string;
     description: string;
-    nodes: Node[];
+    root: Node;
     alternatives: Alternative[];
 }
 
@@ -17,21 +17,20 @@ export interface Node {
     name: string;
     weight: number;
     children: Node[];
-    icon?: string;
-    measurements: MeasurementDefinition[];
+    measurementDefinition?: MeasurementDefinition;
+    icon: string | null;
 }
 
 export interface MeasurementDefinition {
-    id: string;
-    name: string;
-    type: string;
+    measurementType: string | null;
     valueFunction?: ValueFunction;
+    valueFunctionData?: Point[];
 }
 
 export enum MeasurementType {
-    Number = "Number",
-    Percentage = "Percentage",
-    Boolean = "Boolean"
+    Number = 'Number',
+    Percentage = 'Percentage',
+    Boolean = 'Boolean'
 }
 
 export interface ValueFunction {
@@ -61,9 +60,15 @@ export interface Alternative {
 }
 
 export interface Measurement {
-    measurementDefinitionId: string;
+    nodeId: string;
     measure?: number;
-    value?: number;
+    localValue?: number;
+    globalValue?: number;
+
+    //This will be removed later and is only here to
+    //preserve demoing the value function chart. 
+    //Value function data belongs to the MeasurementDefinition
+    //since all alternatives use it.
     valueFunctionData?: Point[];
 }
 

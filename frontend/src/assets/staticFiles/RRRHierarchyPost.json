@@ -1,1648 +1,824 @@
 {
-    "id": "1",
     "name": "RRR Hierarchy",
     "description": "It's a big ol' hierarchy",
-    "nodes": [
-        {
-            "name": "Security",
-            "weight": 0.273,
-            "measurements": [],
-            "children": [
-                {
-                    "name": "Public Safety",
-                    "weight": 0.200,
-                    "icon": "security",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Freedom From Terror",
-                            "weight": 0.400,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "1",
-                                    "measurementName": "Number of Terrorist Attacks",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Secure Bus & Travel",
-                            "weight": 0.400,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "2",
-                                    "measurementName": "Percentage of People",
-                                    "measurementType": "Percentage"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Participation",
-                            "weight": 0.200,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "3",
-                                    "measurementName": "Women Vote",
-                                    "measurementType": "Boolean"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Minimum Extremist Threat",
-                    "weight": 0.200,
-                    "icon": "warning",
-                    "measurements": [],
-                    "children":[                        
-                        {
-                            "name": "DDR",
-                            "weight": 0.300,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "4",
-                                    "measurementName": "Number of People",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Gauge Pub Supp",
-                            "weight": 0.300,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "5",
-                                    "measurementName": "Percentage of Support",
-                                    "measurementType": "Percentage"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Narrative Shaping",
-                            "weight": 0.400,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "6",
-                                    "measurementName": "Optimistic Outlook",
-                                    "measurementType": "Boolean"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Military Cap",
-                    "weight": 0.600,
-                    "icon": "flag",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Equipment & Infrastructure",
-                            "weight": 0.350,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "7",
-                                    "measurementName": "International Trainers",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Mil Personnel",
-                            "weight": 0.350,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "8",
-                                    "measurementName": "Spending Budget",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Hybrid Warfare",
-                            "weight": 0.300,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "9",
-                                    "measurementName": "Badal",
-                                    "measurementType": "Boolean"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Justice",
-            "weight": 0.273,
-            "measurements": [],
-            "children":[
-                {
-                    "name": "Judicial System",
-                    "weight": 0.250,
-                    "icon": "gavel",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Defining Law",
-                            "weight": 0.400,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "10",
-                                    "measurementName": "Constitution",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Establishing Courts",
-                            "weight": 0.300,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "11",
-                                    "measurementName": "Faith in Courts",
-                                    "measurementType": "Percentage"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Trg Personnel",
-                            "weight": 0.300,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "12",
-                                    "measurementName": "Resolution Time",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Law Enforcement",
-                    "weight": 0.400,
-                    "icon": "people",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Infrastructure",
-                            "weight": 0.333,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "13",
-                                    "measurementName": "Comprehensive Plan",
-                                    "measurementType": "Boolean"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Interim Solution",
-                            "weight": 0.333,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "14",
-                                    "measurementName": "Opinion Poll",
-                                    "measurementType": "Percentage"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Indigenous Cap",
-                            "weight": 0.333,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "15",
-                                    "measurementName": "Crime Rate",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Correction Systems",
-                    "weight": 0.200,
-                    "icon": "location_city",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Infrastructure",
-                            "weight": 0.500,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "16",
-                                    "measurementName": "Prison Capacity",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Personnel",
-                            "weight": 0.500,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "17",
-                                    "measurementName": "Manning Level",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Accountability",
-                    "weight": 0.150,
-                    "icon": "pan_tool",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Laws",
-                            "weight": 0.500,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "18",
-                                    "measurementName": "Accountability Laws",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Courts",
-                            "weight": 0.500,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "19",
-                                    "measurementName": "Accountabilty Courts",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Economic Opportunities",
-            "weight": 0.182,
-            "measurements": [],
-            "children":[
-                {
-                    "name": "Economic Development",
-                    "weight": 0.300,
-                    "icon": "attach_money",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Policy Drafting",
-                            "weight": 0.333,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "20",
-                                    "measurementName": "Official Policy",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Market Economy",
-                            "weight": 0.333,
-                            "icon": "work",
-                            "measurements": [],
-                            "children":[
-                                {
-                                    "name": "International Trade",
-                                    "weight": 0.500,
-                                    "children":[],
-                                    "measurements": [
-                                        {
-                                            "id": "21",
-                                            "measurementName": "Fertilizer Imports",
+    "root": {
+        "name": "root",
+        "weight": 1,
+        "icon": null,
+        "children": [
+            {
+                "name": "Security",
+                "weight": 0.273,
+                "icon": null,
+                "children": [
+                    {
+                        "name": "Public Safety",
+                        "weight": 0.2,
+                        "icon": "security",
+                        "children": [
+                            {
+                                "name": "Freedom From Terror",
+                                "weight": 0.4,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Number of Terrorist Attacks",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
                                             "measurementType": "Number",
-                                            "valueFunction": {}
-                                        }
-                                    ]
-                                },
-                                {
-                                    "name": "Private Sector",
-                                    "weight": 0.500,
-                                    "children":[],
-                                    "measurements": [
-                                        {
-                                            "id": "22",
-                                            "measurementName": "Agriculture Exports",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Secure Bus & Travel",
+                                "weight": 0.4,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Percentage of People",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Percentage",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Participation",
+                                "weight": 0.2,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Women Vote",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Boolean",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Minimum Extremist Threat",
+                        "weight": 0.2,
+                        "icon": "warning",
+                        "children": [
+                            {
+                                "name": "DDR",
+                                "weight": 0.3,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Number of People",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
                                             "measurementType": "Number",
-                                            "valueFunction": {}
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Macro Economic",
-                            "weight": 0.333,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "23",
-                                    "measurementName": "GDP Growth",
-                                    "measurementType": "Percentage"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Economic Crime",
-                    "weight": 0.200,
-                    "icon": "money_off",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Grey Economy",
-                            "weight": 0.500,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "24",
-                                    "measurementName": "Opium production by area (hectares)",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Black Economy",
-                            "weight": 0.500,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "25",
-                                    "measurementName": "Child labor 12-14 yrs",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Economic Aid",
-                    "weight": 0.500,
-                    "icon": "local_hospital",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "International Loans",
-                            "weight": 0.500,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "26",
-                                    "measurementName": "Foreign Debt (Percentage of GDP)",
-                                    "measurementType": "Percentage"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Grants",
-                            "weight": 0.500,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "27",
-                                    "measurementName": "Foreign Aid in USD (Billions)",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Education",
-            "weight": 0.182,
-            "measurements": [],
-            "children":[
-                {
-                    "name": "Policy",
-                    "weight": 0.350,
-                    "icon": "description",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Modified Syllabus",
-                            "weight": 0.700,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "28",
-                                    "measurementName": "Curriculum",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Incentives",
-                            "weight": 0.300,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "29",
-                                    "measurementName": "Percentage of Child labor",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Education Infrastructure",
-                    "weight": 0.650,
-                    "icon": "school",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Schools",
-                            "weight": 0.400,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "30",
-                                    "measurementName": "Percentage Enrollment Boys Rural Areas",
-                                    "measurementType": "Percentage"
-                                },
-                                {
-                                    "id": "31",
-                                    "measurementName": "Percentage Enrollment (Girls in Rural Areas)",
-                                    "measurementType": "Percentage"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Professional Institutions",
-                            "weight": 0.300,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "32",
-                                    "measurementName": "Vocational Training per Thousand",
-                                    "measurementType": "Number"
-                                },
-                                {
-                                    "id": "33",
-                                    "measurementName": "Number of Universities",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Trainers",
-                            "weight": 0.300,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "34",
-                                    "measurementName": "Student Teacher Ratio",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "name": "Socio Economic",
-            "weight": 0.091,
-            "measurements": [],
-            "children":[
-                {
-                    "name": "Relieve Suffering",
-                    "weight": 0.600,
-                    "icon": "healing",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Water",
-                            "weight": 0.350,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "35",
-                                    "measurementName": "Availibity of Clean Water (Percentage)",
-                                    "measurementType": "Percentage"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Food",
-                            "weight": 0.350,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "36",
-                                    "measurementName": "Percentage of People Below Poverty Line",
-                                    "measurementType": "Percentage"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Shelter",
-                            "weight": 0.300,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "37",
-                                    "measurementName": "Number of IDPs (Millions)",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "Sustaining Life",
-                    "weight": 0.400,
-                    "icon": "nature_people",
-                    "measurements": [],
-                    "children":[
-                        {
-                            "name": "Medical",
-                            "weight": 0.700,
-                            "children":[],
-                            "measurements": [
-                                {
-                                    "id": "38",
-                                    "measurementName": "Doctors/1000",
-                                    "measurementType": "Number"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "Utilities",
-                            "weight": 0.300,
-                            "icon": "flash_on",
-                            "measurements": [],
-                            "children":[
-                                {
-                                    "name": "Power",
-                                    "weight": 0.500,
-                                    "children":[],
-                                    "measurements": [
-                                        {
-                                            "id": "39",
-                                            "measurementName": "Percentage with access to electricity",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Gauge Pub Supp",
+                                "weight": 0.3,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Percentage of Support",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
                                             "measurementType": "Percentage",
-                                            "valueFunction": {}
-                                        }
-                                    ]
-                                },
-                                {
-                                    "name": "Communications",
-                                    "weight": 0.500,
-                                    "children":[],
-                                    "measurements": [
-                                        {
-                                            "id": "40",
-                                            "measurementName": "Percentage of Access to Mobiles",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Narrative Shaping",
+                                "weight": 0.4,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Optimistic Outlook",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Boolean",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Military Cap",
+                        "weight": 0.6,
+                        "icon": "flag",
+                        "children": [
+                            {
+                                "name": "Equipment & Infrastructure",
+                                "weight": 0.35,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "International Trainers",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Mil Personnel",
+                                "weight": 0.35,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Spending Budget",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Hybrid Warfare",
+                                "weight": 0.3,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Badal",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Boolean",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Justice",
+                "weight": 0.273,
+                "icon": null,
+                "children": [
+                    {
+                        "name": "Judicial System",
+                        "weight": 0.25,
+                        "icon": "gavel",
+                        "children": [
+                            {
+                                "name": "Defining Law",
+                                "weight": 0.4,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Constitution",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Establishing Courts",
+                                "weight": 0.3,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Faith in Courts",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
                                             "measurementType": "Percentage",
-                                            "valueFunction": {}
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-    ],
-    "alternatives": [
-        {
-            "id": "1",
-            "name": "2006",
-            "rank": 1,
-            "measurements": [
-                {                   
-                    "measurementDefinitionId": "1",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "2",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "3",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "4",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "5",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "6",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "7",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "8",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "9",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "10",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "11",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "12",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "13",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "14",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "15",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "16",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "17",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "18",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "19",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "20",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },                {                   
-                    "measurementDefinitionId": "21",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "22",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "23",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "24",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "25",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "26",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "27",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "28",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "29",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "30",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "31",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "32",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "33",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "34",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "35",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "36",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "37",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "38",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "39",
-                    "measure": 13,
-                    "value": 0.5,
-                    "valueFunctionData": [
-                        {
-                            "x": 5, "y": 1.00
-                        },
-                        {
-                            "x": 10, "y": 0.8
-                        },
-                        {
-                            "x": 15, "y": 0.3
-                        },
-                        {
-                            "x": 20, "y": 0.2
-                        },
-                        {
-                            "x": 25, "y": 0.1
-                        },
-                        {
-                            "x": 30, "y": 0
-                        }
-                    ]
-                },
-                {                   
-                    "measurementDefinitionId": "40",
-                    "measure": 220,
-                    "value": 0.55,
-                    "valueFunctionData": [
-                        {
-                            "x": 100, "y": 0.3
-                        },
-                        {
-                            "x": 200, "y": 0.5
-                        },
-                        {
-                            "x": 300, "y": 0.66
-                        },
-                        {
-                            "x": 400, "y": 0.8
-                        },
-                        {
-                            "x": 500, "y": 0.9
-                        },
-                        {
-                            "x": 600, "y": 1.00
-                        }
-                    ]
-                }            
-            ]
-        }
-    ]
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Trg Personnel",
+                                "weight": 0.3,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Resolution Time",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Law Enforcement",
+                        "weight": 0.4,
+                        "icon": "people",
+                        "children": [
+                            {
+                                "name": "Infrastructure",
+                                "weight": 0.333,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Comprehensive Plan",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Boolean",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Interim Solution",
+                                "weight": 0.333,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Opinion Poll",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Percentage",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Indigenous Cap",
+                                "weight": 0.333,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Crime Rate",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Correction Systems",
+                        "weight": 0.2,
+                        "icon": "location_city",
+                        "children": [
+                            {
+                                "name": "Infrastructure",
+                                "weight": 0.5,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Prison Capacity",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Personnel",
+                                "weight": 0.5,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Manning Level",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Accountability",
+                        "weight": 0.15,
+                        "icon": "pan_tool",
+                        "children": [
+                            {
+                                "name": "Laws",
+                                "weight": 0.5,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Accountability Laws",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Courts",
+                                "weight": 0.5,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Accountabilty Courts",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Economic Opportunities",
+                "weight": 0.182,
+                "icon": null,
+                "children": [
+                    {
+                        "name": "Economic Development",
+                        "weight": 0.3,
+                        "icon": "attach_money",
+                        "children": [
+                            {
+                                "name": "Policy Drafting",
+                                "weight": 0.333,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Official Policy",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Market Economy",
+                                "weight": 0.333,
+                                "icon": "work",
+                                "children": [
+                                    {
+                                        "name": "International Trade",
+                                        "weight": 0.5,
+                                        "icon": null,
+                                        "children": [
+                                            {
+                                                "name": "Fertilizer Imports",
+                                                "weight": 1,
+                                                "icon": null,
+                                                "measurementDefinition": {
+                                                    "measurementType": "Number",
+                                                    "valueFunction": null
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "Private Sector",
+                                        "weight": 0.5,
+                                        "icon": null,
+                                        "children": [
+                                            {
+                                                "name": "Agriculture Exports",
+                                                "weight": 1,
+                                                "icon": null,
+                                                "measurementDefinition": {
+                                                    "measurementType": "Number",
+                                                    "valueFunction": null
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Macro Economic",
+                                "weight": 0.333,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "GDP Growth",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Percentage",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Economic Crime",
+                        "weight": 0.2,
+                        "icon": "money_off",
+                        "children": [
+                            {
+                                "name": "Grey Economy",
+                                "weight": 0.5,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Opium production by area (hectares)",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Black Economy",
+                                "weight": 0.5,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Child labor 12-14 yrs",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Economic Aid",
+                        "weight": 0.5,
+                        "icon": "local_hospital",
+                        "children": [
+                            {
+                                "name": "International Loans",
+                                "weight": 0.5,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Foreign Debt (Percentage of GDP)",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Percentage",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Grants",
+                                "weight": 0.5,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Foreign Aid in USD (Billions)",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Education",
+                "weight": 0.182,
+                "icon": null,
+                "children": [
+                    {
+                        "name": "Policy",
+                        "weight": 0.35,
+                        "icon": "description",
+                        "children": [
+                            {
+                                "name": "Modified Syllabus",
+                                "weight": 0.7,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Curriculum",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Incentives",
+                                "weight": 0.3,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Percentage of Child labor",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Education Infrastructure",
+                        "weight": 0.65,
+                        "icon": "school",
+                        "children": [
+                            {
+                                "name": "Schools",
+                                "weight": 0.4,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Percentage Enrollment Boys Rural Areas",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Percentage",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "name": "Percentage Enrollment (Girls in Rural Areas)",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Percentage",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Professional Institutions",
+                                "weight": 0.3,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Vocational Training per Thousand",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    },
+                                    {
+                                        "name": "Number of Universities",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Trainers",
+                                "weight": 0.3,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Student Teacher Ratio",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Socio Economic",
+                "weight": 0.091,
+                "icon": null,
+                "children": [
+                    {
+                        "name": "Relieve Suffering",
+                        "weight": 0.6,
+                        "icon": "healing",
+                        "children": [
+                            {
+                                "name": "Water",
+                                "weight": 0.35,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Availibity of Clean Water (Percentage)",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Percentage",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Food",
+                                "weight": 0.35,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Percentage of People Below Poverty Line",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Percentage",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Shelter",
+                                "weight": 0.3,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Number of IDPs (Millions)",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Sustaining Life",
+                        "weight": 0.4,
+                        "icon": "nature_people",
+                        "children": [
+                            {
+                                "name": "Medical",
+                                "weight": 0.7,
+                                "icon": null,
+                                "children": [
+                                    {
+                                        "name": "Doctors/1000",
+                                        "weight": 1,
+                                        "icon": null,
+                                        "measurementDefinition": {
+                                            "measurementType": "Number",
+                                            "valueFunction": null
+                                        },
+                                        "children": []
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "Utilities",
+                                "weight": 0.3,
+                                "icon": "flash_on",
+                                "children": [
+                                    {
+                                        "name": "Power",
+                                        "weight": 0.5,
+                                        "icon": null,
+                                        "children": [
+                                            {
+                                                "name": "Percentage with access to electricity",
+                                                "weight": 1,
+                                                "icon": null,
+                                                "measurementDefinition": {
+                                                    "measurementType": "Percentage",
+                                                    "valueFunction": null
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "Communications",
+                                        "weight": 0.5,
+                                        "icon": null,
+                                        "children": [
+                                            {
+                                                "name": "Percentage of Access to Mobiles",
+                                                "weight": 1,
+                                                "icon": null,
+                                                "measurementDefinition": {
+                                                    "measurementType": "Percentage",
+                                                    "valueFunction": null
+                                                },
+                                                "children": []
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
 }

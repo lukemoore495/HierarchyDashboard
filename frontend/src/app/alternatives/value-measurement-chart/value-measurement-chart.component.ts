@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ChartConfiguration, ChartType } from 'chart.js';
-import { getSelectedMeasurement, getSelectedMeasurementDefinition } from '../../state';
+import { getSelectedMeasurement, getSelectedMeasurementNode } from '../../state';
 import { HierarchyState } from '../../state/hierarchy.reducer';
 import { BaseChartDirective } from 'ng2-charts';
 import { AfterViewInit } from '@angular/core';
@@ -27,10 +27,10 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         const selectedMeasurement$ = this.store.select(getSelectedMeasurement);
-        const selectedMeasurementDefinition$ = this.store.select(getSelectedMeasurementDefinition);
+        const selectedMeasurementNode$ = this.store.select(getSelectedMeasurementNode);
         combineLatest([
             selectedMeasurement$,
-            selectedMeasurementDefinition$
+            selectedMeasurementNode$
         ])
             .subscribe(measurement => {
                 if(!this.chart) {
@@ -64,7 +64,7 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
             return pointIndex;
         };
 
-        if(!this.chart || !measurement.valueFunctionData || !measurement.measure || !measurement.value){
+        if(!this.chart || !measurement.valueFunctionData || !measurement.measure || !measurement.localValue){
             return;
         }
 
@@ -76,7 +76,7 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
             yAxis.push(point.y);
         }
 
-        const pointIndex = insertValuePoint(measurement.measure, measurement.value);
+        const pointIndex = insertValuePoint(measurement.measure, measurement.localValue);
 
         this.setPointColors(xAxis.length, pointIndex);
 

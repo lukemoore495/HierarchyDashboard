@@ -57,22 +57,13 @@ export class HierarchyTreeComponent implements OnInit{
     nodeToTreeNode(node: Node): TreeNode {
         const children: TreeNode[] = [];
         children.push(...node.children.map(node => this.nodeToTreeNode(node)));
-        children.push(...node.measurements.map(measurement => this.measurementDefinitionToTreeNode(measurement)));
+        const measurementDefinition = node.measurementDefinition ?? null;
         return {
             id: node.id,
             name: node.name,
             weight: node.weight,
-            measurementNode: false,
+            measurementNode: measurementDefinition !== null,
             children: children
-        };
-    }
-
-    measurementDefinitionToTreeNode(measurementDefinition: MeasurementDefinition): TreeNode {
-        return {
-            id: measurementDefinition.id,
-            name: measurementDefinition.name,
-            measurementNode: true,
-            children: []
         };
     }
 
@@ -90,10 +81,8 @@ export class HierarchyTreeComponent implements OnInit{
             const nextLevel = currentLevel + 1;
             node.children.forEach(child => addNodesToLevel(child, nextLevel));
         };
-        hierarchy.nodes.forEach(node => {
-            const treeNode = this.nodeToTreeNode(node);
-            addNodesToLevel(treeNode, 0);
-        });
+        const treeNode = this.nodeToTreeNode(hierarchy.root);
+        addNodesToLevel(treeNode, 0);
         return levels;
     }
 

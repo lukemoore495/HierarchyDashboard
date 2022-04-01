@@ -1,48 +1,70 @@
 {
     "name": "Best Car",
     "description": "demo example",
-    "nodes": [
-        {
-            "name": "Cost",
-            "weight": 0.400,
-            "children":[],
-            "measurements": [
-                {
-                    "measurementName": "Initial Cost",
-                    "measurementType": "Number"
-                },
-                {
-                    "measurementName": "Resale Value % (After 3 Years)",
-                    "measurementType": "Percentage"
-                }
-            ]
-        },
-        {
-            "name": "Performance",
-            "weight": 0.400,
-            "children":[],
-            "measurements": [
-                {
-                    "measurementName": "Fuel Economy (mpg)",
-                    "measurementType": "Number"
-                },
-                {
-                    "measurementName": "Horsepower",
-                    "measurementType": "Number"
-                }
-            ]
-        },
-        {
-            "name": "Styling",
-            "weight": 0.200,
-            "children":[],
-            "measurements": [
-                {
-                    "measurementName": "Star Rating",
-                    "measurementType": "Number"
-                }
-            ]
-        }
-    ],
+    "root": {
+        "name": "Best Car",
+        "icon": null,
+        "children": [
+            {
+                "name": "Cost",
+                "weight": 0.400,
+                "children": [],
+                "measurements": [
+                    {
+                        "name": "Initial Cost",
+                        "weight": 0.5,
+                        "icon": null,
+                        "measurementDefinition": {
+                            "measurementType": "Number"
+                        }
+                    },
+                    {
+                        "name": "Resale Value % (After 3 Years)",
+                        "weight": 0.5,
+                        "icon": null,
+                        "measurementDefinition": {
+                            "measurementType": "Percentage"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Performance",
+                "weight": 0.400,
+                "children": [
+                    {
+                        "name": "Fuel Economy (mpg)",
+                        "weight": 0.5,
+                        "icon": null,
+                        "measurementDefinition": {
+                            "measurementType": "Number"
+                        }
+                    },
+                    {
+                        "name": "Horsepower",
+                        "weight": 0.5,
+                        "icon": null,
+                        "measurementDefinition": {
+                            "measurementType": "Number"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "Styling",
+                "weight": 0.200,
+                "children": [
+                    {
+                        "name": "Star Rating",
+                        "weight": 0.5,
+                        "icon": null,
+                        "measurementDefinition": {
+                            "measurementType": "Number"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
     "alternatives": []
 }
