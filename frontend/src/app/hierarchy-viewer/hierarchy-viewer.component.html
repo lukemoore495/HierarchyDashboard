@@ -1,25 +1,28 @@
 <div class="header-container">
     <mat-form-field class="select" appearance="outline" *ngIf="hierarchies$ | async as hierarchies">
         <mat-select [value]="selectedHierarchy?.id ?? ' '" (selectionChange)="onSelect($event)">
-            <mat-option *ngFor="let hierarchy of hierarchies" [value]="hierarchy.id">{{hierarchy.name}}</mat-option>
+            <mat-option *ngFor="let hierarchy of hierarchies" [value]="hierarchy.id">{{ hierarchy.name }}</mat-option>
         </mat-select>
     </mat-form-field>
-    <button mat-raised-button color="accent" class="header-button">
+    <button mat-raised-button color="accent" (click)="createHierarchyDialog()" class="header-button">
         <mat-icon>add</mat-icon>
         Create Hierarchy
     </button>
-    <button mat-raised-button color="warn" class="header-button">
-        <mat-icon>delete</mat-icon>
-        Delete Hierarchy
+
+    <ng-container *ngIf="selectedHierarchy">
+        <button mat-raised-button color="warn" class="header-button" (click)="deleteHierarchyDialog()">
+            <mat-icon>delete</mat-icon>
+            Delete Hierarchy
+        </button>
+    </ng-container>
+
+    <button mat-raised-button color="accent" class="header-button" (click)="importExportHierarchyDialog()">
+        <mat-icon>import_export</mat-icon>
+        Import/Export Hierarchy
     </button>
 
-    <!-- This is a short term hack to save RRRHierarchy into the db -->
-    <button mat-raised-button color="accent" class="header-button" (click)="createHierarchy()">
-        <mat-icon>download</mat-icon>
-        Import RRRHierarchy
-    </button>
 </div>
-<app-hierarchy-tree *ngIf="selectedHierarchy" [hierarchy]="selectedHierarchy"></app-hierarchy-tree>
+<ng-template #treeContainer></ng-template>
 <ng-container *ngIf="hierarchies$ | async as hierarchies">
     <ng-container *ngIf="hierarchies.length === 0">
         <div class="welcome">

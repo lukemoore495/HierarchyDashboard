@@ -1,0 +1,29 @@
+.tab{
+    overflow: hidden;
+}
+
+.tab-container {
+    padding: 10%;
+}
+
+.input-hidden {
+    display: none;
+}
+
+.loading:after {
+    content: " .";
+    animation: dots 1s steps(5, end) infinite;
+}
+
+.file-upload{
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+
+    .upload-btn {
+        margin-right: 1rem;
+    }
+    .filename {
+        margin-right: 20%;
+    }
+}

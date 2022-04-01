@@ -1,0 +1,32 @@
+<mat-tab-group dynamicHeight (selectedIndexChange)="myTabSelectedIndexChange($event)">
+    [selectedIndex]="selectedTab.value">
+    <mat-tab label="Import">
+        <mat-dialog-content class="tab-container">
+            <input type="file" class="input-hidden" (change)="onFileSelected($event)" #fileUpload>
+            <div class="file-upload">
+                <button mat-raised-button color="accent" class="upload-btn" (click)="fileUpload.click()">
+                    <mat-icon>attach_file</mat-icon>
+                </button>
+                <div class="filename" *ngIf="fileName && fileName.length > 21">
+                    {{(fileName | slice:0:21) +'...'}}
+                </div>
+                <div class="filename" *ngIf="!fileName || fileName.length <= 21">
+                    {{fileName || "No file uploaded yet."}}
+                </div>
+            </div>
+        </mat-dialog-content>
+    </mat-tab>
+    <mat-tab [disabled]="!hierarchy" label="Export"></mat-tab>
+</mat-tab-group>
+<mat-dialog-actions>
+    <button mat-button (click)="closeDialog()" cdkFocusInitial>Cancel</button>
+    <button mat-button *ngIf="selectedTabIndex == 0" (click)="doAction()" color="primary" [disabled]="!fileName">
+        {{tabs[selectedTabIndex]}}
+    </button>
+    <a title="Export" [href]="downloadJsonHref" *ngIf="downloadJsonHref && selectedTabIndex == 1"
+        [download]="downloadJsonName">
+        <button mat-button (click)="doAction()" color="primary">
+            {{tabs[selectedTabIndex]}}
+        </button>
+    </a>
+</mat-dialog-actions>

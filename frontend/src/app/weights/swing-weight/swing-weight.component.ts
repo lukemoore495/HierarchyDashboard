@@ -9,7 +9,7 @@ import { SwingWeight } from './SwingWeight';
     templateUrl: './swing-weight.component.html',
     styleUrls: ['./swing-weight.component.scss']
 })
-export class SwingWeightComponent implements OnInit{
+export class SwingWeightComponent implements OnInit {
     @Input() node$?: Observable<Node | null>;
     node: Node | null = null;
     children: Node[] = [];
@@ -68,4 +68,20 @@ export class SwingWeightComponent implements OnInit{
         //replace with an api call in the future
         console.log(swingWeights);
     }
+
+    getPosition(element: DOMRect, parent: DOMRect): { left: string, top: string } | null {
+        // return null if element is not in the grid
+        if (element.top + element.height < parent.top
+            || element.bottom - element.height > parent.bottom
+            || element.left + element.width < parent.left
+            || element.right - element.width > parent.right) {
+            return null;
+        }
+
+        // return the center position relative to the parent
+        let x = ((element.left + (element.width / 2) - parent.left) * 100 / parent.width).toFixed(2);
+        let y = ((element.top + (element.height / 2) - parent.top) * 100 / parent.height).toFixed(2);
+        return { top: y, left: x };
+    }
+
 }
