@@ -48,7 +48,7 @@ export class HierarchyViewerComponent implements AfterViewInit, OnDestroy {
 
         this.hierarchies$ = this.store.select(getHierarchies);
     }
-    
+
     ngAfterViewInit(): void {
         if(!this.tree && this.selectedHierarchy){
             this.createTree();

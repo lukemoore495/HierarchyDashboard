@@ -27,6 +27,11 @@
 </div>
 <ng-template #treeContainer></ng-template>
 <ng-container *ngIf="hierarchies$ | async as hierarchies">
+    <div *ngIf="!tree && hierarchies.length > 0" class="spinner-container">
+        <mat-spinner class="tree-loading" color="primary"></mat-spinner>
+    </div>
+</ng-container>
+<ng-container *ngIf="hierarchies$ | async as hierarchies">
     <ng-container *ngIf="hierarchies.length === 0">
         <div class="welcome">
             <h1 class="title">Welcome to Hierarchy Dashboard</h1>
