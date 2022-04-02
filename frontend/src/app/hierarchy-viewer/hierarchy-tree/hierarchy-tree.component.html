@@ -11,15 +11,17 @@
                         {{node.name}}
                     </mat-card-title>
                 </mat-card-header>
-                <mat-card-content class="dashboard-card-content">
+                <mat-card-content class="card-content">
                     <div *ngIf="node?.weight" class="text">
                         Weight: {{node.weight}}
                     </div>
+                    <button class="measurement-node-delete" *ngIf="node.measurementNode" mat-button (click)="openDeleteNodeDialog(node.id)">Delete</button>
                 </mat-card-content>
-                <mat-card-actions *ngIf="!node.measurementNode">
-                    <button mat-button (click)="openAddNodeDialog(node.id)">Add</button>
-                    <button mat-button (click)="openDeleteNodeDialog(node.id)">Delete</button>
-                    <button mat-button *ngIf="canBeWeighted(node)" 
+                <mat-card-actions>
+                    <button *ngIf="!node.measurementNode" mat-button (click)="openAddNodeDialog(node.id)">Add</button>
+                    <button *ngIf="!node.measurementNode" mat-button (click)="openDeleteNodeDialog(node.id)">Delete</button>
+                    <button *ngIf="canBeWeighted(node)"  
+                        mat-button
                         matTooltip="Weights"
                         [routerLink]="['/weights', node.id]"
                         class="button">

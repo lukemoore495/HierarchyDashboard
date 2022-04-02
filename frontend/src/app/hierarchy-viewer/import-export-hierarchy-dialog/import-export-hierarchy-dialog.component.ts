@@ -15,7 +15,6 @@ import { HierarchyState } from 'src/app/state/hierarchy.reducer';
     styleUrls: ['./import-export-hierarchy-dialog.component.scss']
 })
 export class ImportExportHierarchyDialogComponent implements OnDestroy {
-
     tabs: string[] = ['Import', 'Export'];
     selectedTabIndex = 0;
     downloadJsonHref: SafeUrl | null = null;
@@ -24,6 +23,7 @@ export class ImportExportHierarchyDialogComponent implements OnDestroy {
     fileName = '';
     exportableHierarchy?: HierarchyRequest;
     subscriptions: Subscription[] = [];
+    loading = false;
 
     constructor(private sanitizer: DomSanitizer,
         public dialogRef: MatDialogRef<ImportExportHierarchyDialogComponent>,
@@ -74,6 +74,7 @@ export class ImportExportHierarchyDialogComponent implements OnDestroy {
 
     doAction() {
         if (this.selectedTabIndex == 0 && this.file) {
+            this.loading = true;
             this.importFile(this.file);
         } else {
             this.closeDialog();

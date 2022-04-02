@@ -20,7 +20,10 @@
 </mat-tab-group>
 <mat-dialog-actions>
     <button mat-button (click)="closeDialog()" cdkFocusInitial>Cancel</button>
-    <button mat-button *ngIf="selectedTabIndex == 0" (click)="doAction()" color="primary" [disabled]="!fileName">
+    <div *ngIf="loading" class="spinner-container">
+        <mat-spinner class="tree-loading" color="primary" diameter="30"></mat-spinner>
+    </div>
+    <button mat-button *ngIf="selectedTabIndex == 0 && !loading" (click)="doAction()" color="primary" [disabled]="!fileName">
         {{tabs[selectedTabIndex]}}
     </button>
     <a title="Export" [href]="downloadJsonHref" *ngIf="downloadJsonHref && selectedTabIndex == 1"

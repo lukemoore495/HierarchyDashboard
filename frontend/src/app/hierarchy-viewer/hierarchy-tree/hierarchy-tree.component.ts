@@ -208,15 +208,16 @@ export class HierarchyTreeComponent implements OnInit{
         return null;
     };
 
-    shiftElements(elementId: string, relationships: string[]): void {
+    shiftElements(elementId: string, relationships: string[], shiftLength?: number): void {
         const elements = this.findAllElementsToShift(elementId, relationships);
         for(const elementId of elements) { 
             const element = this.getNodeById(elementId);
             const pos = element?.getBoundingClientRect();
-            if(!element || !pos)
+            shiftLength = shiftLength ?? pos?.height;
+            if(!element || !shiftLength)
                 continue;
 
-            this.moveRelativeElement(element, pos.height);
+            this.moveRelativeElement(element, shiftLength);
         }
     };
 
@@ -301,7 +302,7 @@ export class HierarchyTreeComponent implements OnInit{
 
             const offset = getOffset(node);
             if(offset < 0) {
-                this.shiftElements(nodeId, this.relationships);
+                this.shiftElements(nodeId, this.relationships, offset * -1);
             }
         }
     }
