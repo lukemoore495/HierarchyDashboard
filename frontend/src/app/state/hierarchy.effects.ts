@@ -74,7 +74,7 @@ export class HierarchyEffects {
         return this.actions$
             .pipe(
                 ofType(HierarchyActions.deleteNode),
-                mergeMap(action => this.hierarchyService.deleteNode(action.nodeId)
+                mergeMap(action => this.hierarchyService.deleteNode(action.hierarchyId, action.nodeId)
                     .pipe(
                         map(_ => HierarchyActions.deleteNodeSuccess({nodeId: action.nodeId})),
                         catchError(error => of(HierarchyActions.deleteNodeFailure({error})))

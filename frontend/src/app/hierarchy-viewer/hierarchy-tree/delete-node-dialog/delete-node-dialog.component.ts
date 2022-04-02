@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { deleteNode, deleteNodeSuccess } from 'src/app/state/hierarchy.actions';
 import { HierarchyState } from 'src/app/state/hierarchy.reducer';
+import { DeleteNodeData } from './DeleteNodeData';
 
 @Component({
     selector: 'app-delete-node-dialog',
@@ -13,14 +14,16 @@ import { HierarchyState } from 'src/app/state/hierarchy.reducer';
 })
 export class DeleteNodeDialogComponent {
     subscriptions: Subscription[] = [];
-  
+    loading = false;
+
     constructor(public dialogRef: MatDialogRef<DeleteNodeDialogComponent>, 
-        @Inject(MAT_DIALOG_DATA) private nodeId: string, 
+        @Inject(MAT_DIALOG_DATA) private data: DeleteNodeData, 
         private store: Store<HierarchyState>, 
         private actions$: Actions) { }
 
     doAction() {
-        this.store.dispatch(deleteNode({nodeId: this.nodeId}));
+        this.loading = true;
+        this.store.dispatch(deleteNode({hierarchyId: this.data.hierarchyId, nodeId: this.data.nodeId}));
 
         const sub = this.actions$
             .pipe(ofType(deleteNodeSuccess))

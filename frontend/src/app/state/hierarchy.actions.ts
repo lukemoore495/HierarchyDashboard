@@ -88,7 +88,7 @@ export const createNodeFailure = createAction(
 
 export const deleteNode = createAction(
     '[Hierarchies] Delete Node',
-    props<{nodeId: string}>()
+    props<{hierarchyId: string, nodeId: string}>()
 );
 
 export const deleteNodeSuccess = createAction(

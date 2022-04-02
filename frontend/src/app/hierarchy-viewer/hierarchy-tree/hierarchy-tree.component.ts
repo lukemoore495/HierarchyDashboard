@@ -6,6 +6,7 @@ import { AddNodeDialogComponent } from './add-node-dialog/add-node-dialog.compon
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteNodeDialogComponent } from './delete-node-dialog/delete-node-dialog.component';
 import { CreateNodeData } from './add-node-dialog/CreateNode';
+import { DeleteNodeData } from './delete-node-dialog/DeleteNodeData';
 
 @Component({
     selector: 'app-hierarchy-tree',
@@ -402,7 +403,7 @@ export class HierarchyTreeComponent implements OnInit{
     }
 
     openDeleteNodeDialog(nodeId: string) {
-        this.dialog.open(DeleteNodeDialogComponent, {data: nodeId });
+        this.dialog.open(DeleteNodeDialogComponent, {data: {hierarchyId: this.hierarchy?.id, nodeId: nodeId} as DeleteNodeData });
     }
 
 }

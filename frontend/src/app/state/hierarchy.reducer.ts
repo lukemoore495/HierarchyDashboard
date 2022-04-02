@@ -126,7 +126,7 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         const copyHierarchy: Hierarchy = {...state.selectedHierarchy};
         return {
             ...state,
-            selectedHierarchy: addNodeToHierarchy(copyHierarchy, action.parentId, action.node)
+            selectedHierarchy: replaceNodeInHierarchy(copyHierarchy, action.node)
         };
     }),
     on(HierarchyActions.createNodeFailure, (state, action): HierarchyState => {
@@ -153,15 +153,13 @@ export const HierarchyReducer = createReducer<HierarchyState>(
     }),
 );
 
-function addNode(node: Node, parentId: string, newNode: Node) : Node {
-    if(node.id === parentId){
-        const children = [...node.children];
-        children.push(newNode);
-        return {...node, children: children};
+function replaceNode(node: Node, newNode: Node) : Node {
+    if(node.id === newNode.id){
+        return newNode;
     }
 
     const children: Node[] = [];
-    node.children.forEach(child => children.push(addNode(child, parentId, newNode)));
+    node.children.forEach(child => children.push(replaceNode(child, newNode)));
     return {...node, children: children};
 }
 
@@ -181,25 +179,12 @@ function deleteNode(node: Node, nodeId: string) : Node {
     return {...node, children: children};
 }
 
-function addNodeToHierarchy(hierarchy: Hierarchy, parentId: string, newNode: Node) : Hierarchy {
-    const nodes: Node[] = [];
-    for(const node of hierarchy.nodes){
-        nodes.push(addNode(node, parentId, newNode));
-    }
-    return {...hierarchy, nodes: nodes};
+function replaceNodeInHierarchy(hierarchy: Hierarchy, newNode: Node) : Hierarchy {
+    const node = replaceNode(hierarchy.root, newNode);
+    return {...hierarchy, root: node};
 }
 
 function removeNodeFromHierarchy(hierarchy: Hierarchy, nodeId: string) : Hierarchy {
-    const nodeIndex = hierarchy.nodes.findIndex(node => node.id === nodeId);
-    if(nodeIndex !== -1){
-        const nodes = [...hierarchy.nodes];
-        nodes.splice(nodeIndex, 1);
-        return {...hierarchy, nodes: nodes};
-    }
-
-    const nodes: Node[] = [];
-    for(const node of hierarchy.nodes){
-        nodes.push(deleteNode(node, nodeId));
-    }
-    return {...hierarchy, nodes: nodes};
+    const node = deleteNode(hierarchy.root, nodeId);
+    return {...hierarchy, root: node};
 }

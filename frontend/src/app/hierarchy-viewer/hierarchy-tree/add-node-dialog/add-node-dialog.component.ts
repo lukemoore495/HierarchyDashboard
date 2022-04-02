@@ -4,7 +4,7 @@ import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { MeasurementType } from 'src/app/Hierarchy';
-import { NodeRequest } from 'src/app/hierarchy.service';
+import { MeasurementDefinitionRequest, NodeRequest } from 'src/app/hierarchy.service';
 import { createNode, createNodeSuccess } from 'src/app/state/hierarchy.actions';
 import { HierarchyState } from 'src/app/state/hierarchy.reducer';
 import { CreateNodeData, CreateNodeForm } from './CreateNode';
@@ -20,6 +20,7 @@ export class AddNodeDialogComponent implements OnDestroy{
     subscriptions: Subscription[] = [];
     parentId: string;
     hierarchyId: string;
+    loading = false;
 
     constructor(public dialogRef: MatDialogRef<CreateNodeForm>, 
         @Inject(MAT_DIALOG_DATA) public data: CreateNodeData, 
@@ -40,12 +41,18 @@ export class AddNodeDialogComponent implements OnDestroy{
     }
 
     onSubmit() {
-        //needs to include measurements when they get refactored.
+        this.loading = true;
+        const measurementDefinition: MeasurementDefinitionRequest | undefined = 
+        this.form.isMeasurement && this.form.measurementType ? {
+            measurementType: this.form.measurementType,
+            valueFunction: null
+        } : undefined;
         const newNode: NodeRequest = {
             name: this.form.name,
             weight: 0,
-            measurements: [],
-            children: []
+            children: [],
+            icon: null,
+            measurementDefinition: measurementDefinition
         }; 
         this.store.dispatch(createNode({hierarchyId: this.hierarchyId, parentId: this.parentId, node: newNode}));
 

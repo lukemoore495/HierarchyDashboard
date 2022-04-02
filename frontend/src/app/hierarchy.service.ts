@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Alternative, Hierarchy, HierarchyListItem, ValueFunction } from './Hierarchy';
+import { Alternative, Hierarchy, HierarchyListItem, ValueFunction, Node, MeasurementType } from './Hierarchy';
 import { Observable, of } from 'rxjs';
 import { SensitivityAnalysisReport } from './sensitivity-analysis/SensitivityAnalysis';
 import { HttpClient } from '@angular/common/http';
@@ -20,7 +20,7 @@ export interface NodeRequest {
 }
 
 export interface MeasurementDefinitionRequest {
-    measurementType: string;
+    measurementType: MeasurementType;
     valueFunction?: ValueFunction | null;
 }
 
@@ -57,9 +57,14 @@ export class HierarchyService {
         return this.http.post<Node>(url, node);
     }
 
-    deleteNode(nodeId: string): Observable<string> {
-        const url = this.root + `/node/${nodeId}`;
+    deleteNode(hierarchyId: string, nodeId: string): Observable<string> {
+        const url = this.root + `/hierarchy/${hierarchyId}/node/${nodeId}`;
         return this.http.delete<string>(url);
+    }
+
+    exportHierarchy(hierarchyId: string): Observable<HierarchyRequest> {
+        const url = this.root + `/hierarchy/${hierarchyId}/export` ;
+        return this.http.get<HierarchyRequest>(url);
     }
 
     getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport>{
