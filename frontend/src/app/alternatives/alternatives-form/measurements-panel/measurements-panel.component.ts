@@ -29,7 +29,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     selectedMeasurementId: string | null = null;
     $parentNodeOpened: BehaviorSubject<boolean>;
     alternativeMeasurements: Measurement[] = [];
-    measurementDefinitions: MeasurementDefinition[] = [];
+    measurementNodes: Node[] = [];
     alternativeChanged = false;
 
     constructor(private fb: FormBuilder, private store: Store<HierarchyState>) { 
@@ -38,9 +38,11 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                 map(alternative => alternative?.measurements)
             )
             .subscribe(measurements => {
+                if(this.alternativeMeasurements.length !== 0){
+                    this.alternativeChanged = true;
+                }
                 this.alternativeMeasurements = measurements ?? []; 
                 this.setFormValues(this.alternativeMeasurements);
-                this.alternativeChanged = true;
             });
         this.subscriptions.push(sub);
     
@@ -54,16 +56,20 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     ngOnInit(): void {        
         const nodes : Node[] = Object.assign([], this.measurementNode?.children);
         for(const node of nodes) {
-            const measurementFields = node.measurements ?? [];
-            this.measurementDefinitions.push(...measurementFields);
+            const measurementFields = node.children.filter(child => child.measurementDefinition) ?? [];
+            this.measurementNodes.push(...measurementFields);
             for(const measurementField of measurementFields) {
+                if(!measurementField.measurementDefinition){
+                    continue;
+                }
+
                 let measurementValue : number | boolean | null
-                    = this.alternativeMeasurements.find(m => m.measurementDefinitionId === measurementField.id)?.measure ?? null;
-                if(this.isNumberMeasurement(measurementField)){
+                    = this.alternativeMeasurements.find(m => m.nodeId === measurementField.id)?.measure ?? null;
+                if(this.isNumberMeasurement(measurementField.measurementDefinition)){
                     this.form.addControl(measurementField.id, this.fb.control(null, [Validators.pattern('^[0-9]*$')]));
-                } else if (this.isPercentageMeasurement(measurementField)) {
+                } else if (this.isPercentageMeasurement(measurementField.measurementDefinition)) {
                     this.form.addControl(measurementField.id, this.fb.control(null, []));
-                } else if (this.isBooleanMeasurement(measurementField)) {
+                } else if (this.isBooleanMeasurement(measurementField.measurementDefinition)) {
                     this.form.addControl(measurementField.id, this.fb.control(null, []));
                     measurementValue = this.convertNumberToBoolean(measurementValue);
                 }
@@ -83,7 +89,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                             measure = this.convertBooleanToNumber(measure);
                         }
                         measurements.push({
-                            measurementDefinitionId: id,
+                            nodeId: id,
                             measure: measure
                         });
                     }
@@ -131,10 +137,10 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     setFormValues(measurements: Measurement[]){
         for(const measurement of measurements) {
             let measurementValue : number | boolean | null = measurement.measure ?? null;
-            if (this.isBooleanMeasurementUsingId(measurement.measurementDefinitionId)) {
+            if (this.isBooleanMeasurementUsingId(measurement.nodeId)) {
                 measurementValue = this.convertNumberToBoolean(measurementValue);
             }
-            const formControl = this.getFormControl(measurement.measurementDefinitionId);
+            const formControl = this.getFormControl(measurement.nodeId);
             formControl?.setValue(measurementValue);
         }
     }
@@ -153,13 +159,6 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
         return value === null;
     }
 
-    hasChildren(node: Node): boolean{
-        if(node?.children != undefined && node?.children.length) {
-            return true;
-        }
-        return false;
-    }
-
     convertNumberToBoolean(number: number | null): boolean | null {
         if(number !== null && (number === 0 || number === 1)) {
             return number === 1;
@@ -175,13 +174,13 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
         const modifiedMeasurements = [];
         const currentMeasurements = [];
         for(const measure of this.alternativeMeasurements) {
-            if(!newMeasurements.some(newMeasure => newMeasure.measurementDefinitionId === measure.measurementDefinitionId)){
+            if(!newMeasurements.some(newMeasure => newMeasure.nodeId === measure.nodeId)){
                 currentMeasurements.push(measure);
             }
         }
         
         for(const newMeasure of newMeasurements) {
-            const currentMeasure = this.alternativeMeasurements.find(measure => measure.measurementDefinitionId === newMeasure.measurementDefinitionId) ?? newMeasure;
+            const currentMeasure = this.alternativeMeasurements.find(measure => measure.nodeId === newMeasure.nodeId) ?? newMeasure;
             if(currentMeasure.measure !== newMeasure.measure) {
                 modifiedMeasurements.push(newMeasure);
                 currentMeasurements.push(newMeasure);
@@ -193,24 +192,45 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
         this.measurementResultEvent.emit(modifiedMeasurements);
     }
 
-    isNumberMeasurement(measurement : MeasurementDefinition): boolean {
-        return measurement.type === MeasurementType.Number;
-    }
-
-    isPercentageMeasurement(measurement : MeasurementDefinition): boolean {
-        return measurement.type === MeasurementType.Percentage;
-    }
-
-    isBooleanMeasurement(measurement : MeasurementDefinition): boolean {
-        return measurement.type === MeasurementType.Boolean;
-    }
-
-    isBooleanMeasurementUsingId(measurementDefinitionId : string): boolean {
-        const measurement = this.measurementDefinitions.find(m => m.id == measurementDefinitionId);
+    isNumberMeasurement(measurement? : MeasurementDefinition): boolean {
         if(!measurement){
             return false;
         }
-        return this.isBooleanMeasurement(measurement);
+        return measurement.measurementType === MeasurementType.Number;
+    }
+
+    isPercentageMeasurement(measurement? : MeasurementDefinition): boolean {
+        if(!measurement){
+            return false;
+        }
+        return measurement.measurementType === MeasurementType.Percentage;
+    }
+
+    isBooleanMeasurement(measurement? : MeasurementDefinition): boolean {
+        if(!measurement){
+            return false;
+        }
+        return measurement.measurementType === MeasurementType.Boolean;
+    }
+
+    isBooleanMeasurementUsingId(nodeId : string): boolean {
+        const measurement = this.measurementNodes.find(m => m.id == nodeId);
+        if(!measurement || !measurement.measurementDefinition){
+            return false;
+        }
+        return this.isBooleanMeasurement(measurement.measurementDefinition);
+    }
+
+    hasMeasurementNodes(node: Node): boolean {
+        return node.children.some(child => child.measurementDefinition);
+    }
+    
+    hasChildMeasurementNodes(node: Node): boolean {
+        return node.children.some(child => child.children.some(node => node.measurementDefinition));
+    }
+
+    getMeasurements(node: Node): Node[] {
+        return node.children.filter(child => child.measurementDefinition);
     }
 
     onPanelOpen(){
@@ -236,11 +256,11 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
 
     selectFirstMeasurement(){
         if(!this.measurementNode || 
-            !this.measurementNode.children[0] || 
-            !this.measurementNode.children[0].measurements[0])
+            !this.measurementNode.children[0])
             return;
 
-        const firstMeasurementId = this.measurementNode.children[0].measurements[0].id;
+        const firstMeasurementId = this.measurementNode.children[0]
+            .children.filter(node => node.measurementDefinition)[0].id;
         this.store.dispatch(HierarchyActions.setSelectedMeasurement({selectedMeasurementId: firstMeasurementId}));
         this.selectedMeasurementId = firstMeasurementId;
         if(this.measurementSelectList){

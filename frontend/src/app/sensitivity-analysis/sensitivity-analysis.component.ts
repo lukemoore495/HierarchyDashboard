@@ -27,7 +27,7 @@ export class SensitivityAnalysisComponent implements OnInit {
     constructor(private hierarchyService: HierarchyService, private store: Store<HierarchyState>) {
         store.select(getSelectedHierarchy)
             .pipe(
-                map(hierarchy => hierarchy?.nodes.map(node => node.name)),
+                map(hierarchy => hierarchy?.root.children.map(node => node.name)),
             )
             .subscribe(names => this.nodeNames = names ?? []);
     }

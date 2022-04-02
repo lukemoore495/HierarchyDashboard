@@ -1,9 +1,9 @@
-import { Injectable } from "@angular/core";
-import { createEffect, Actions, ofType } from "@ngrx/effects";
-import { of } from "rxjs";
-import { catchError, concatMap, map, mergeMap } from "rxjs/operators";
-import { HierarchyService } from "../hierarchy.service";
-import * as HierarchyActions from "./hierarchy.actions";
+import { Injectable } from '@angular/core';
+import { createEffect, Actions, ofType } from '@ngrx/effects';
+import { of } from 'rxjs';
+import { catchError, concatMap, map, mergeMap } from 'rxjs/operators';
+import { HierarchyService } from '../hierarchy.service';
+import * as HierarchyActions from './hierarchy.actions';
 
 @Injectable()
 export class HierarchyEffects {
@@ -19,7 +19,7 @@ export class HierarchyEffects {
                         catchError(error => of(HierarchyActions.createHierarchyFailure({ error })))
                     )
                 )
-            )
+            );
     });
     retrieveHierarchies$ = createEffect(() => {
         return this.actions$
@@ -31,7 +31,7 @@ export class HierarchyEffects {
                         catchError(error => of(HierarchyActions.retrieveHierarchiesFailure({ error })))
                     )
                 )
-            )
+            );
     });
     setHierarchy$ = createEffect(() => {
         return this.actions$
@@ -43,7 +43,7 @@ export class HierarchyEffects {
                         catchError(error => of(HierarchyActions.setSelectedHierarchyFailure({ error })))
                     )
                 )
-            )
+            );
     });
 
     deleteHierarchy$ = createEffect(() => {
@@ -56,6 +56,6 @@ export class HierarchyEffects {
                         catchError(error => of(HierarchyActions.deleteHierarchyFailure({ error })))
                     )
                 )
-            )
+            );
     });
 }

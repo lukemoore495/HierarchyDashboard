@@ -61,17 +61,8 @@ export class WeightsComponent implements OnInit, OnDestroy{
         };
 
         const allNodes: Node[] = [];
-        hierarchy.nodes.forEach(node => allNodes.push(...getNodes(node)));
-        allNodes.push(...hierarchy.nodes);
-
-        const topLevel: Node = {
-            id: 'topLevel',
-            name: 'Top Level',
-            children: hierarchy.nodes,
-            measurements: [],
-            weight: 1
-        };
-        allNodes.push(topLevel);
+        hierarchy.root.children.forEach(node => allNodes.push(...getNodes(node)));
+        allNodes.push(hierarchy.root);
         return allNodes;
     }
 

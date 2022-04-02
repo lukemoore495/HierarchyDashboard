@@ -4,8 +4,9 @@ from pathlib import Path
 import os
 import sys
 
-from models.hierarchy import Hierarchy, Node, Measurement
-from models.shared import db
+from models.hierarchy import Hierarchy, Node
+from models.shared import db # Allows the models to be split out into separate files.
+
 
 def get_config_path():
     if hasattr(sys, "_MEIPASS"):
@@ -23,65 +24,82 @@ app = Flask(__name__)
 # app configurations
 home_path = os.path.join(get_config_path(), "app.db")
 database_path = 'sqlite:///' + Path(home_path).as_posix()
-print(database_path)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_path
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = 0
 app.config["JSON_SORT_KEYS"] = False
 
+# initialize the app using the same db that's in shared.py
 db.init_app(app)
 
 
 # routes
-# TODO Add checks that hierarchies/nodes exist before adding subordinate resources
 @app.route("/hierarchy", methods=['POST'])
 def create_hierarchy():
     # Get data from .json sent with request
     data = request.get_json()
 
-    # Create Hierarchy
-    new_hierarchy = Hierarchy.create(data)
+    # Create hierarchy
+    hierarchy = Hierarchy(
+        name=data["name"],
+        description=data["description"]
+    )
 
-    # Parse and create Nodes
-    nodes_lst = data["nodes"]
-    Node.create_nodes(nodes_lst, new_hierarchy.id)
+    # Create root of tree and associate it with hierarchy. 
+    if "root" in data:
+        root_name = data["root"]["name"]
+        root = Node(root_name)
+    else:
+        root = Node(hierarchy.name)
+    
+    hierarchy.nodes.append(root)
+   
+   # Parse nodes and create tree
+    nodes_lst = data["root"]["children"]
+    if nodes_lst:
+        root.create_tree(nodes_lst)
 
-    return jsonify(new_hierarchy.to_dict()), 201
+    # Commit changes to DB
+    db.session.add(hierarchy)
+    db.session.commit()
+
+    return hierarchy.to_dict(), 201
 
 
-# To add a node to the root of the hierarchy, send 0 for parent_id
+# Will never not have a root node. If you do, things are messed
 @app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
 def create_node(hierarchy_id, parent_id):
     data = request.get_json()
 
-    if parent_id == 0:
-        parent_id = None
+    parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id).first()
 
-    if "icon" in data:
-        icon = data["icon"]
-    else:
-        icon = None
+    if not parent:
+        abort(404, description="Resource not found")
+    
+    new_node = parent.create(data)
 
-    new_node = Node.create(
-        data,
-        hierarchy_id=hierarchy_id,
-        parent_id=parent_id,
-        icon=icon
-    )
+    # Commit changes to DB
+    db.session.add(new_node)
+    db.session.commit()
 
-    return jsonify(new_node.to_dict()), 201
+    return jsonify(parent.to_dict()), 201
 
 
-@app.route("/hierarchy/<hierarchy_id>/node/<node_id>/measurement", methods=['POST'])
-def create_measurement(hierarchy_id, node_id):
-    data = request.get_json()
+# TODO: Create Alternative
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
+def create_alternative(hierarchy_id, parent_id):
+    pass
 
-    new_measurement = Measurement.create(
-        data,
-        hierarchy_id=hierarchy_id,
-        node_id=node_id,
-    )
 
-    return jsonify(new_measurement.to_dict()), 201
+# TODO: Update Alternative Measure (the variable from the frontend)
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/alternative/<alternative_id>/measure", methods=['PATCH'])
+def update_measure(hierarchy_id, parent_id, alternative_id):
+    pass
+
+
+#TODO: Patch Node
+@app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
+def update_node(hierarchy_id, parent_id):
+    pass
 
 
 @app.route("/hierarchy/ascending_id", methods=['GET'])
@@ -107,7 +125,7 @@ def get_all_hierarchies_descending():
 
 @app.route("/hierarchy/<hierarchy_id>", methods=['GET'])
 def get_one_hierarchy(hierarchy_id):
-    hierarchy = Hierarchy.get(hierarchy_id)
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
     
     if not hierarchy:
         abort(404, description="Resource not found")
@@ -115,10 +133,20 @@ def get_one_hierarchy(hierarchy_id):
     return jsonify(hierarchy.to_dict()), 200
 
 
+@app.route("/hierarchy/<hierarchy_id>/export", methods=['GET'])
+def export_hierarchy(hierarchy_id):
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    
+    if not hierarchy:
+        abort(404, description="Resource not found")
+
+    return jsonify(hierarchy.to_dict(export=True)), 200
+
+
 # TODO Reduce the code duplication in the DELETE Routes
 @app.route("/hierarchy/<hierarchy_id>", methods=['DELETE'])
 def delete_hierarchy(hierarchy_id):
-    hierarchy = Hierarchy.get(hierarchy_id)
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
 
     # hierarchy does not exist, return 404
     if not hierarchy:
@@ -131,13 +159,18 @@ def delete_hierarchy(hierarchy_id):
     return jsonify({"message": message}), 200
 
 
-@app.route("/node/<node_id>", methods=['DELETE'])
-def delete_node(node_id):
-    node = Node.get(node_id)
+@app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['DELETE'])
+def delete_node(hierarchy_id, node_id):
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    node = Node.query.filter_by(id=node_id).first()
 
     # node does not exist, return 404
-    if not node:
+    if not hierarchy or not node:
         abort(404, description="Resource not found")
+
+    root_node = hierarchy.nodes[0]
+    if root_node == node:
+        abort(405, description="Protected Resource")
 
     db.session.delete(node)
     db.session.commit()
@@ -146,19 +179,129 @@ def delete_node(node_id):
     return jsonify({"message": message}), 200
 
 
-@app.route("/measurement/<measurement_id>", methods=['DELETE'])
-def delete_measurement(measurement_id):
-    measurement = Measurement.get(measurement_id)
+# ALTERNATIVES
 
-    # measurement does not exist, return 404
-    if not measurement:
-        abort(404, description="Resource not found")
+# TODO: Create Alternative
+@app.route("/hierarchy/<hierarchy_id>/alternative", methods=['POST'])
+def create_alterntaive(hierarchy_id):
+    # Check Hierarchy
+    # Abort if it doesn't exist
 
-    db.session.delete(measurement)
-    db.session.commit()
+    # https://stackoverflow.com/questions/16093475/flask-sqlalchemy-querying-a-column-with-not-equals
+    # https://docs.sqlalchemy.org/en/14/core/sqlelement.html#sqlalchemy.sql.operators.ColumnOperators.isnot
+    measurements = Node.query.filter(Node.measurement_type != None).all()
+    # Read data
+    # {
+    #     "name": "Ford Fiesta",
+    #     "values": [
+    #         {
+    #             "nodeId": 12,
+    #             "measure": 12345,
+    #             "local_value": 43,
+    #             "global_value": 32,
+    #         },
+    #         {
+    #             "nodeId": 14,
+    #             "measure": 24,
+    #             "local_value": 64,
+    #             "global_value": 128,
+    #         }
+    #     ]
+    # }
+    
+    # Create alternative
+    # Generate values with alternative_id
+        # Values must match up with measurement nodes
+        # Generate null values if a value is not provided for a measurement
 
-    message = f"Measurement {measurement_id} Deleted"
-    return jsonify({"message": message}), 200
+    pass
+
+
+# TODO: Get Alternative
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
+def get_alternative(hierarchy_id, alternative_id):
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    alternative = Node.query.filter_by(id=alternative_id).first()
+
+    # Return alternative.to_dict()
+
+
+# TODO: Delete Alternative
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
+def delete_alternative(hierarchy_id, alternative_id):
+    pass
+
+
+# TODO: Patch Value
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<value_id>")
+def patch_value(hierarchy_id, alternative_id, value_id):
+    # Check the hierarchy, alternative, and value exist
+        # Abort if they don't
+
+    # Change individual measure in the value table
+    # Local and global values are regenerated according to weighting functions
+    # that don't exist yet
+    pass
+
+
+# WEIGHTING
+
+# Weight changes are done using the weighting models. You aren't able to directly
+# change the weight of a node.
+@app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
+def change_weight(hierarchy_id, node_id):
+    pass
+
+
+# TODO: Direct Assessment
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/weights/directAssessment", methods=['PATCH'])
+def direct_assessment(hierarchy_id, parent_id):
+    # Get data (new weights)
+    # [{"nodeId":1},"weight":.2},...]
+    # Get nodes on the same level (children of parent)
+
+    # If there aren't enough weights for each child
+        # Return error
+
+    # Check each weight
+    # Rebalance??
+    pass
+
+
+# TODO: Pair Wise
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/weights/pairWise", methods=['PATCH'])
+def pairwise(hierarchy_id, parent_id):
+    # TODO: Ask Sharjeel if the matrix uses negative values?
+    # Get data (new weight)
+    # [
+    #     {
+    #         "nodeId":1,
+    #         "pairComparison":{
+    #                             nodeId:3,
+    #                             nodeId:6, nodeId is the id of the node that 1 is being compared to.
+    #                             nodeId:1,
+    #                         }
+    #     },
+    #     ...
+    # ]
+
+    # Get the number of nodes
+    # Get the children of parent
+    # Compare, if they aren't equal, abort
+    # Create node_number x node_number matrix
+    # Populate the diagonal with 1
+    # Populate the other cells with sent data and it's inverse
+    # 0,0 = 1 0,1 = data 1,0 = 1/data
+
+    pass
+
+
+# TODO: Swing Weights
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/weights/directAssessment", methods=['PATCH'])
+def swing_weight(hierarchy_id, parent_id):
+    # MVP: Direct Assessment using swing weight values
+    # [{"nodeId":1},"swingWeight":.2},...]
+    pass
 
 if __name__ == "__main__":
     # Create the database if it doesn't exist

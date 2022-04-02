@@ -67,7 +67,7 @@ export class HierarchyViewerComponent implements OnDestroy {
 
     importExportHierarchyDialog() {
         this.dialog.open(ImportExportHierarchyDialogComponent, {
-            data: this.selectedHierarchy
+            data: this.selectedHierarchy ?? null
         });
     }
 

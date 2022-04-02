@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { map, tap } from 'rxjs/operators';
-import { Alternative, Hierarchy, MeasurementDefinition, Node } from '../Hierarchy';
+import { Alternative, Hierarchy, Node } from '../Hierarchy';
 import { getSelectedHierarchy } from '../state';
 import { HierarchyState } from '../state/hierarchy.reducer';
 import { Rank, RankChartData, RankValue } from './Rank';
@@ -28,7 +28,7 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
     accentColorString = 'rgb(255, 160, 0)';
     mutedColorString = 'rgb(255, 236, 179)';
     hoverColorString = 'rgb(189, 189, 189)';
-    measurements: MeasurementDefinition[] = [];
+    measurementNodes: Node[] = [];
     subscriptions: Subscription[] = [];
 
     constructor(private store: Store<HierarchyState>) {
@@ -38,7 +38,7 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
             .pipe(
                 tap(hierarchy => {
                     if(hierarchy) {
-                        this.measurements = this.getAllMeasurements(hierarchy);
+                        this.measurementNodes = this.getAllMeasurementNodes(hierarchy);
                     }
                 }),
                 map(hierarchy => hierarchy?.alternatives),
@@ -60,21 +60,23 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
         // const mutedColorString = getComputedStyle(this.accent?.nativeElement).color;
     }
 
-    getAllMeasurements(hierarchy: Hierarchy): MeasurementDefinition[] {
-        const getMeasurements = (node: Node): MeasurementDefinition[] => {
-            const currentMeasurements: MeasurementDefinition[] = [];
-            node.children.forEach(child => currentMeasurements.push(...getMeasurements(child)));
-            currentMeasurements.push(...node.measurements);
-            return currentMeasurements;
+    getAllMeasurementNodes(hierarchy: Hierarchy): Node[] {
+        const getMeasurementNodes = (node: Node): Node[] => {
+            const currentMeasurementNodes: Node[] = [];
+            const measurementNodes = node.children.filter(node => node.measurementDefinition);
+            const nodes = node.children.filter(node => !node.measurementDefinition);
+            currentMeasurementNodes.push(...measurementNodes);
+            nodes.forEach(node => currentMeasurementNodes.push(...getMeasurementNodes(node)));
+            return currentMeasurementNodes;
         };
 
-        const allMeasurements: MeasurementDefinition[] = [];
-        hierarchy.nodes.forEach(node => allMeasurements.push(...getMeasurements(node)));
-        return allMeasurements;
+        const AllMeasurementNodes: Node[] = [];
+        hierarchy.root.children.forEach(node => AllMeasurementNodes.push(...getMeasurementNodes(node)));
+        return AllMeasurementNodes;
     }
 
     findMeasurementName(measurementId: string): string | null {
-        const measurement = this.measurements.find(measurement => measurement.id === measurementId);
+        const measurement = this.measurementNodes.find(measurement => measurement.id === measurementId);
         return measurement?.name ?? null;
     }
 
@@ -83,8 +85,8 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
             const values: RankValue[] = [];
             alternative.measurements.forEach(measurement => {
                 values.push({
-                    value: measurement.value ?? 0,
-                    name: this.findMeasurementName(measurement.measurementDefinitionId)
+                    value: measurement.globalValue ?? 0,
+                    name: this.findMeasurementName(measurement.nodeId)
                 });
             });
             return values;

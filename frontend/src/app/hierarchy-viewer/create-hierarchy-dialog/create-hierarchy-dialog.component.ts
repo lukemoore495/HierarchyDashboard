@@ -27,7 +27,15 @@ export class CreateHierarchyDialogComponent {
 
     doAction() {
         const hierarchyRequest: HierarchyRequest = {
-            name: this.form.name, description: this.form.description, nodes: [], alternatives: []
+            name: this.form.name, 
+            description: this.form.description, 
+            root: {
+                name: this.form.name,
+                weight: 1,
+                children: [],
+                icon: null
+            }, 
+            alternatives: []
         };
         this.store.dispatch(createHierarchy({ hierarchy: hierarchyRequest }));
         this.actions$

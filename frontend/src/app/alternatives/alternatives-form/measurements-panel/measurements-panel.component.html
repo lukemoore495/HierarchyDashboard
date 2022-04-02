@@ -1,5 +1,5 @@
 <div [formGroup]="form" *ngIf="measurementNode as node">
-    <mat-expansion-panel *ngIf="hasChildren(node)" (opened)="onPanelOpen()" (closed)="onPanelClose()" [expanded]="isTopLevel">
+    <mat-expansion-panel *ngIf="hasChildMeasurementNodes(node)" (opened)="onPanelOpen()" (closed)="onPanelClose()" [expanded]="isTopLevel">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 {{node.name}}
@@ -10,8 +10,8 @@
             (selectionChange)="selectMeasurement(measurementSelectList.selectedOptions.selected[0]?.value)"
             [multiple]="false">
             <div *ngFor="let child of node?.children; index as i">
-                <div *ngIf="child?.measurements">
-                    <div *ngFor="let measurement of child.measurements" class="measurementSelect">
+                <div *ngIf="hasMeasurementNodes(child)">
+                    <div *ngFor="let measurement of getMeasurements(child)" class="measurementSelect">
                         <div class="selectOption">
                             <div class="option-container">
                                 <mat-list-option [value]="measurement.id"></mat-list-option>
@@ -19,7 +19,7 @@
                             <div class="measurementField">
                                 <h5 class="field-title">{{child.name}}</h5>
 
-                                <mat-form-field *ngIf="isNumberMeasurement(measurement)" class="full-width"
+                                <mat-form-field *ngIf="isNumberMeasurement(measurement.measurementDefinition)" class="full-width"
                                     appearance="fill">
                                     <mat-label>{{measurement.name}}</mat-label>
                                     <input matInput [formControlName]="measurement.id" class="form-control">
@@ -31,14 +31,14 @@
                                     </mat-error>
                                 </mat-form-field>
 
-                                <div *ngIf="isPercentageMeasurement(measurement)" class="slider">
-                                    <mat-slider *ngIf="isPercentageMeasurement(measurement)" class="full-width"
+                                <div *ngIf="isPercentageMeasurement(measurement.measurementDefinition)" class="slider">
+                                    <mat-slider class="full-width"
                                         [max]="100" [min]="0" [thumbLabel]="true" [formControlName]="measurement.id">
                                     </mat-slider>
                                     <mat-label>{{measurement.name}}</mat-label>
                                 </div>
 
-                                <div *ngIf="isBooleanMeasurement(measurement)" class="checkbox">
+                                <div *ngIf="isBooleanMeasurement(measurement.measurementDefinition)" class="checkbox">
                                     <mat-checkbox [formControlName]="measurement.id" [indeterminate]="checkboxIsIndeterminate(measurement.id)">
                                         <mat-label>{{measurement.name}}</mat-label>
                                     </mat-checkbox>
@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                <div *ngIf="hasChildren(child)">
+                <div *ngIf="hasChildMeasurementNodes(child)">
                     <app-measurements-panel 
                         [measurementNode]="child" 
                         (childNodeOpened)="deselectAndEmitToParent()" 

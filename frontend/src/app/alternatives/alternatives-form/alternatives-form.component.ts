@@ -14,30 +14,29 @@ export class AlternativesFormComponent implements OnInit {
     selectedHierarchy$?: Observable<Hierarchy | null | undefined>;
     measurementNodes: Node[] | null = null;
     currentMeasurements: Measurement[] = [];
-    topLevelName = 'Top Level';
 
     constructor(private store: Store<HierarchyState>) { }
 
     ngOnInit(): void {
         this.selectedHierarchy$ = this.store.select(getSelectedHierarchy);
         this.selectedHierarchy$.pipe(
-            map(hierarchy => hierarchy?.nodes === undefined ? null : hierarchy?.nodes),
-        ).subscribe(nodes => {
-            nodes ? this.measurementNodes = this.selectMeasurements(nodes) : this.measurementNodes = null;
+            map(hierarchy => hierarchy?.root),
+        ).subscribe(root => {
+            root ? this.measurementNodes = this.selectMeasurements(root) : this.measurementNodes = null;
         });
     }
 
-    selectMeasurements(nodes: Node[]): Node[] {
+    selectMeasurements(node: Node): Node[] {
         const findChildMeasurements = (node: Node): Node[] => {
             const childMeasurementNodes : Node[] = [];
             if(node.children.length === 0){
                 return childMeasurementNodes;
-            } else if(node.children?.every(x => x.measurements.length > 0)){
+            } else if(node.children?.every(x => this.hasMeasurementNode(x))){
                 childMeasurementNodes.push(node);
-            } else if(node.children?.some(x => x.measurements.length > 0)){
-                const innerNodes = node.children.filter(x => !(x.measurements.length > 0));
-                const allMeasurementNodes = node.children.filter(x => x.measurements.length > 0);
-                allMeasurementNodes.push(...this.selectMeasurements(innerNodes));
+            } else if(node.children?.some(x => this.hasMeasurementNode(x))){
+                const innerNodes = node.children.filter(x => !this.hasMeasurementNode(x));
+                const allMeasurementNodes = node.children.filter(x => this.hasMeasurementNode(x));
+                innerNodes.forEach(node => allMeasurementNodes.push(...this.selectMeasurements(node)));
                 const nodeWithChildren = {...node, children: allMeasurementNodes};
                 childMeasurementNodes.push(nodeWithChildren);
             } else if (node.children){
@@ -45,25 +44,14 @@ export class AlternativesFormComponent implements OnInit {
             }
             return childMeasurementNodes;
         };
-        const findDirectMeasurements = (nodes: Node[]): Node => {
-            const topLevelChildren: Node[] = [];
-            nodes
-                .filter(node => node.children.length === 0)
-                .forEach(node => topLevelChildren.push(node));
-            const topLevelMeasurementNode: Node = {
-                id: '',
-                name: this.topLevelName,
-                children: topLevelChildren,
-                measurements: [],
-                weight: 1
-            };
-            return topLevelMeasurementNode;
-        };
 
         const measurementNodes : Node[] = [];
-        measurementNodes.push(findDirectMeasurements(nodes));
-        nodes.forEach(node => measurementNodes.push(...findChildMeasurements(node)));
+        measurementNodes.push(...findChildMeasurements(node));
         return measurementNodes;
+    }
+
+    hasMeasurementNode(node: Node): boolean {
+        return node.children.some(node => node.measurementDefinition);
     }
 
     saveMeasurements(newMeasurements : Measurement[]){
