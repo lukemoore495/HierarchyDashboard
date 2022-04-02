@@ -27,14 +27,15 @@ export class ImportExportHierarchyDialogComponent implements OnDestroy {
 
     constructor(private sanitizer: DomSanitizer,
         public dialogRef: MatDialogRef<ImportExportHierarchyDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public hierarchy: Hierarchy,
+        @Inject(MAT_DIALOG_DATA) public hierarchy: Hierarchy | null,
         private store: Store<HierarchyState>,
         private actions$: Actions,
         private hierarchyService: HierarchyService) {
-
-        const sub = this.hierarchyService.exportHierarchy(hierarchy.id)
-            .subscribe(hierarchy => this.exportableHierarchy = hierarchy);
-        this.subscriptions.push(sub);
+        if(hierarchy){
+            const sub = this.hierarchyService.exportHierarchy(hierarchy.id)
+                .subscribe(hierarchy => this.exportableHierarchy = hierarchy);
+            this.subscriptions.push(sub);
+        }
     }
 
     ngOnDestroy(): void {
@@ -64,7 +65,7 @@ export class ImportExportHierarchyDialogComponent implements OnDestroy {
         }
         const theJSON = JSON.stringify(this.exportableHierarchy);
         this.downloadJsonHref = this.sanitizer.bypassSecurityTrustUrl('data:text/json;charset=UTF-8,' + encodeURIComponent(theJSON));
-        this.downloadJsonName = this.hierarchy.name + this.getDateTime() + '.json';
+        this.downloadJsonName = this.exportableHierarchy.name + this.getDateTime() + '.json';
     }
 
     closeDialog() {

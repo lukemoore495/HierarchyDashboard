@@ -98,7 +98,7 @@ def update_measure(hierarchy_id, parent_id, alternative_id):
 
 #TODO: Patch Node
 @app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
-def create_node(hierarchy_id, parent_id):
+def update_node(hierarchy_id, parent_id):
     pass
 
 

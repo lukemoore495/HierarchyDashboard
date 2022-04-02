@@ -38,9 +38,11 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                 map(alternative => alternative?.measurements)
             )
             .subscribe(measurements => {
+                if(this.alternativeMeasurements.length !== 0){
+                    this.alternativeChanged = true;
+                }
                 this.alternativeMeasurements = measurements ?? []; 
                 this.setFormValues(this.alternativeMeasurements);
-                this.alternativeChanged = true;
             });
         this.subscriptions.push(sub);
     
