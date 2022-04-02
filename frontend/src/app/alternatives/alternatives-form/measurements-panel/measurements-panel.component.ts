@@ -180,9 +180,12 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
         }
         
         for(const newMeasure of newMeasurements) {
-            const currentMeasure = this.alternativeMeasurements.find(measure => measure.nodeId === newMeasure.nodeId) ?? newMeasure;
-            if(currentMeasure.measure !== newMeasure.measure) {
+            const currentMeasure = this.alternativeMeasurements.find(measure => measure.nodeId === newMeasure.nodeId) ?? null;
+            const hasUpdate = currentMeasure?.measure !== newMeasure?.measure;
+            if(hasUpdate && newMeasure.measure !== null){
                 modifiedMeasurements.push(newMeasure);
+            }
+            if(hasUpdate) {
                 currentMeasurements.push(newMeasure);
                 continue;
             }
