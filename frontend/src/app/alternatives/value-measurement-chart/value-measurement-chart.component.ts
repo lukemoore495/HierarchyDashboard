@@ -5,7 +5,7 @@ import { getSelectedMeasurement, getSelectedMeasurementNode } from '../../state'
 import { HierarchyState } from '../../state/hierarchy.reducer';
 import { BaseChartDirective } from 'ng2-charts';
 import { AfterViewInit } from '@angular/core';
-import { Measurement } from '../../Hierarchy';
+import { Value } from '../../Hierarchy';
 import { combineLatest } from 'rxjs';
 
 @Component({
@@ -32,27 +32,27 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
             selectedMeasurement$,
             selectedMeasurementNode$
         ])
-            .subscribe(measurement => {
+            .subscribe(value => {
                 if(!this.chart) {
                     return;
                 }
 
-                if(!measurement[0]){
+                if(!value[0]){
                     this.clearChartData();
                     this.updateLabel('');
                     this.chart.update();
                     return;
                 }
 
-                this.chartNewMeasurement(measurement[0]);
-                if(measurement[1]?.name){
-                    this.updateLabel(measurement[1].name);
+                this.chartNewValue(value[0]);
+                if(value[1]?.name){
+                    this.updateLabel(value[1].name);
                 }
                 this.chart.update();
             });
     }
 
-    chartNewMeasurement(measurement : Measurement) {
+    chartNewValue(value : Value) {
 
         const insertValuePoint = (measure: number, value: number) : number => {
             if(!xAxis.some(x => x === measure.toString())) {
@@ -64,19 +64,19 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
             return pointIndex;
         };
 
-        if(!this.chart || !measurement.valueFunctionData || !measurement.measure || !measurement.localValue){
+        if(!this.chart || !value.valueFunctionData || !value.measure || !value.localValue){
             return;
         }
 
         let xAxis : string[] = [];
         let yAxis : number[] = [];
 
-        for(const point of measurement.valueFunctionData){
+        for(const point of value.valueFunctionData){
             xAxis.push(point.x.toString());
             yAxis.push(point.y);
         }
 
-        const pointIndex = insertValuePoint(measurement.measure, measurement.localValue);
+        const pointIndex = insertValuePoint(value.measure, value.localValue);
 
         this.setPointColors(xAxis.length, pointIndex);
 

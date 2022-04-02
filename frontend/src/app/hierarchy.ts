@@ -56,14 +56,14 @@ export enum ValueFunctionTypes {
 export interface Alternative {
     id: string;
     name: string;
-    measurements: Measurement[];
+    measurements: Value[];
 }
 
-export interface Measurement {
+export interface Value {
     nodeId: string;
-    measure?: number;
-    localValue?: number;
-    globalValue?: number;
+    measure: number | null;
+    localValue?: number | null;
+    globalValue?: number | null;
 
     //This will be removed later and is only here to
     //preserve demoing the value function chart. 
