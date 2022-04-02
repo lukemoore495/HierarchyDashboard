@@ -6,5 +6,8 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button (click)="closeDialog()" cdkFocusInitial>Cancel</button>
-    <button mat-button (click)="doAction()" color="warn">Delete</button>
+    <div *ngIf="loading" class="spinner-container">
+        <mat-spinner class="tree-loading" color="primary" diameter="30"></mat-spinner>
+    </div>
+    <button *ngIf="!loading" mat-button (click)="doAction()" color="warn">Delete</button>
 </mat-dialog-actions>

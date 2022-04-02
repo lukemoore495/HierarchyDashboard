@@ -14,6 +14,7 @@ import { CreateHierarchyForm } from './CreateHierarchyForm';
 })
 export class CreateHierarchyDialogComponent {
     form: CreateHierarchyForm;
+    loading = false;
 
     constructor(
         public dialogRef: MatDialogRef<CreateHierarchyDialogComponent>,
@@ -26,6 +27,7 @@ export class CreateHierarchyDialogComponent {
     }
 
     doAction() {
+        this.loading = true;
         const hierarchyRequest: HierarchyRequest = {
             name: this.form.name, 
             description: this.form.description, 
