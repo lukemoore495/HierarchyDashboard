@@ -84,6 +84,24 @@ def create_node(hierarchy_id, parent_id):
     return jsonify(parent.to_dict()), 201
 
 
+# TODO: Create Alternative
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
+def create_alternative(hierarchy_id, parent_id):
+    pass
+
+
+# TODO: Update Alternative Measure (the variable from the frontend)
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/alternative/<alternative_id>/measure", methods=['PATCH'])
+def update_measure(hierarchy_id, parent_id, alternative_id):
+    pass
+
+
+#TODO: Patch Node
+@app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
+def create_node(hierarchy_id, parent_id):
+    pass
+
+
 @app.route("/hierarchy/ascending_id", methods=['GET'])
 def get_all_hierarchies_ascending():
     all_hierarchies = Hierarchy.get_list(get_nodes=False)
@@ -160,6 +178,130 @@ def delete_node(hierarchy_id, node_id):
     message = f"Node {node_id} Deleted"
     return jsonify({"message": message}), 200
 
+
+# ALTERNATIVES
+
+# TODO: Create Alternative
+@app.route("/hierarchy/<hierarchy_id>/alternative", methods=['POST'])
+def create_alterntaive(hierarchy_id):
+    # Check Hierarchy
+    # Abort if it doesn't exist
+
+    # https://stackoverflow.com/questions/16093475/flask-sqlalchemy-querying-a-column-with-not-equals
+    # https://docs.sqlalchemy.org/en/14/core/sqlelement.html#sqlalchemy.sql.operators.ColumnOperators.isnot
+    measurements = Node.query.filter(Node.measurement_type != None).all()
+    # Read data
+    # {
+    #     "name": "Ford Fiesta",
+    #     "values": [
+    #         {
+    #             "nodeId": 12,
+    #             "measure": 12345,
+    #             "local_value": 43,
+    #             "global_value": 32,
+    #         },
+    #         {
+    #             "nodeId": 14,
+    #             "measure": 24,
+    #             "local_value": 64,
+    #             "global_value": 128,
+    #         }
+    #     ]
+    # }
+    
+    # Create alternative
+    # Generate values with alternative_id
+        # Values must match up with measurement nodes
+        # Generate null values if a value is not provided for a measurement
+
+    pass
+
+
+# TODO: Get Alternative
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
+def get_alternative(hierarchy_id, alternative_id):
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    alternative = Node.query.filter_by(id=alternative_id).first()
+
+    # Return alternative.to_dict()
+
+
+# TODO: Delete Alternative
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
+def delete_alternative(hierarchy_id, alternative_id):
+    pass
+
+
+# TODO: Patch Value
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<value_id>")
+def patch_value(hierarchy_id, alternative_id, value_id):
+    # Check the hierarchy, alternative, and value exist
+        # Abort if they don't
+
+    # Change individual measure in the value table
+    # Local and global values are regenerated according to weighting functions
+    # that don't exist yet
+    pass
+
+
+# WEIGHTING
+
+# Weight changes are done using the weighting models. You aren't able to directly
+# change the weight of a node.
+@app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
+def change_weight(hierarchy_id, node_id):
+    pass
+
+
+# TODO: Direct Assessment
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/weights/directAssessment", methods=['PATCH'])
+def direct_assessment(hierarchy_id, parent_id):
+    # Get data (new weights)
+    # [{"nodeId":1},"weight":.2},...]
+    # Get nodes on the same level (children of parent)
+
+    # If there aren't enough weights for each child
+        # Return error
+
+    # Check each weight
+    # Rebalance??
+    pass
+
+
+# TODO: Pair Wise
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/weights/pairWise", methods=['PATCH'])
+def pairwise(hierarchy_id, parent_id):
+    # TODO: Ask Sharjeel if the matrix uses negative values?
+    # Get data (new weight)
+    # [
+    #     {
+    #         "nodeId":1,
+    #         "pairComparison":{
+    #                             nodeId:3,
+    #                             nodeId:6, nodeId is the id of the node that 1 is being compared to.
+    #                             nodeId:1,
+    #                         }
+    #     },
+    #     ...
+    # ]
+
+    # Get the number of nodes
+    # Get the children of parent
+    # Compare, if they aren't equal, abort
+    # Create node_number x node_number matrix
+    # Populate the diagonal with 1
+    # Populate the other cells with sent data and it's inverse
+    # 0,0 = 1 0,1 = data 1,0 = 1/data
+
+    pass
+
+
+# TODO: Swing Weights
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/weights/directAssessment", methods=['PATCH'])
+def swing_weight(hierarchy_id, parent_id):
+    # MVP: Direct Assessment using swing weight values
+    # [{"nodeId":1},"swingWeight":.2},...]
+    pass
 
 if __name__ == "__main__":
     # Create the database if it doesn't exist
