@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>
+    Delete Hierarchy
+</h1>
+<mat-dialog-content>
+    <p>Are you sure you want to delete {{data.name}}{{!data.name.includes('Hierarchy') ? ' Hierarchy' : null}}?</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="closeDialog()" cdkFocusInitial>Cancel</button>
+    <button mat-button (click)="doAction()" color="warn">Delete</button>
+</mat-dialog-actions>

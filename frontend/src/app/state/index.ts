@@ -39,39 +39,33 @@ export const getSelectedMeasurement = createSelector(
     getSelectedAlternative,
     getSelectedMeasurementId,
     (alternative, measurementId) => {
-        return measurementId ? alternative?.measurements?.find(x => x.measurementDefinitionId === measurementId) ?? null : null;
+        return measurementId ? alternative?.measurements?.find(x => x.nodeId === measurementId) ?? null : null;
     }
 );
 
-export const getSelectedMeasurementDefinition = createSelector(
+export const getSelectedMeasurementNode = createSelector(
     getSelectedHierarchy,
     getSelectedMeasurementId,
     (hierarchy, measurementId) => {
-        return measurementId && hierarchy ? findMeasurementDefinition(hierarchy, measurementId) : null;
+        return measurementId && hierarchy ? findMeasurementNode(hierarchy, measurementId) : null;
     }
 );
 
-function findMeasurementDefinition(hierarchy: Hierarchy, measurementDefinitionId: string) : MeasurementDefinition | null {
-    const findMeasurementFromNode = (node: Node, measurementDefinitionId: string) : MeasurementDefinition | null => {
-        const measurementDefinition = node.measurements?.find(m => m.id == measurementDefinitionId);
-        if(measurementDefinition)
-            return measurementDefinition;
+function findMeasurementNode(hierarchy: Hierarchy, nodeId: string) : Node | null {
+    const findMeasurementFromNode = (node: Node, nodeId: string) : Node | null => {
+        const measurementNode = node.children?.find(m => m.id == nodeId);
+        if(measurementNode)
+            return measurementNode ?? null;
 
         if(!node.children || node.children.length === 0)
             return null;
 
         for(const child of node.children){
-            const measurement = findMeasurementFromNode(child, measurementDefinitionId);
+            const measurement = findMeasurementFromNode(child, nodeId);
             if(measurement)
                 return measurement;
         }
         return null;
     };
-
-    for(const node of hierarchy.nodes){
-        const measurement = findMeasurementFromNode(node, measurementDefinitionId);
-        if(measurement)
-            return measurement;
-    }
-    return null;
+    return findMeasurementFromNode(hierarchy.root, nodeId);
 }

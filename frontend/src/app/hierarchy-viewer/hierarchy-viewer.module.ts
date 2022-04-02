@@ -9,11 +9,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { HierarchyTreeComponent } from './hierarchy-tree/hierarchy-tree.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CreateHierarchyDialogComponent } from './create-hierarchy-dialog/create-hierarchy-dialog.component';
+import { DeleteHierarchyDialogComponent } from './delete-hierarchy-dialog/delete-hierarchy-dialog.component';
+import { ImportExportHierarchyDialogComponent } from './import-export-hierarchy-dialog/import-export-hierarchy-dialog.component';
 
 @NgModule({
     declarations: [
         HierarchyViewerComponent,
-        HierarchyTreeComponent
+        HierarchyTreeComponent,
+        CreateHierarchyDialogComponent,
+        DeleteHierarchyDialogComponent,
+        ImportExportHierarchyDialogComponent
     ],
     imports: [
         CommonModule,
@@ -23,10 +33,13 @@ import { HierarchyTreeComponent } from './hierarchy-tree/hierarchy-tree.componen
         MatSelectModule,
         MatFormFieldModule,
         MatTooltipModule,
-        RouterModule
+        RouterModule,
+        MatDialogModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        MatTabsModule
     ],
-    exports: [
-        HierarchyViewerComponent
-    ]
+    exports: [HierarchyViewerComponent]
 })
 export class HierarchyViewerModule { }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Alternative, Hierarchy, HierarchyListItem } from './Hierarchy';
+import { Alternative, Hierarchy, HierarchyListItem, ValueFunction } from './Hierarchy';
 import { Observable, of } from 'rxjs';
 import { SensitivityAnalysisReport } from './sensitivity-analysis/SensitivityAnalysis';
 import { HttpClient } from '@angular/common/http';
@@ -7,21 +7,21 @@ import { HttpClient } from '@angular/common/http';
 export interface HierarchyRequest {
     name: string;
     description: string;
-    nodes: NodeRequest[];
-    alternatives: Alternative[];
+    root: NodeRequest;
+    alternatives?: Alternative[];
 }
 
 export interface NodeRequest {
     name: string;
     weight: number;
     children: NodeRequest[];
-    icon?: string;
-    measurements: MeasurementDefinitionRequest[];
+    icon: string | null;
+    measurementDefinition?: MeasurementDefinitionRequest;
 }
 
 export interface MeasurementDefinitionRequest {
-    measurementName: string;
     measurementType: string;
+    valueFunction?: ValueFunction | null;
 }
 
 @Injectable({
@@ -30,7 +30,7 @@ export interface MeasurementDefinitionRequest {
 export class HierarchyService {
     root = 'http://localhost:4200/api';
 
-    constructor(private http: HttpClient){ }
+    constructor(private http: HttpClient) { }
 
     getHierarchies(): Observable<HierarchyListItem[]> {
         const url = this.root + '/hierarchy/ascending_id';
@@ -47,16 +47,26 @@ export class HierarchyService {
         return this.http.post<Hierarchy>(url, hierarchy);
     }
 
-    getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport>{
+    deleteHierarchy(hierarchyId: string): Observable<string> {
+        const url = this.root + '/hierarchy/' + hierarchyId;
+        return this.http.delete<string>(url);
+    }
+
+    exportHierarchy(hierarchyId: string): Observable<HierarchyRequest> {
+        const url = this.root + `/hierarchy/${hierarchyId}/export` ;
+        return this.http.get<HierarchyRequest>(url);
+    }
+
+    getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport> {
         return of(this.getFakeSensitivityAnalysisData(nodeNames));
     }
 
-    getSensitivityAnalysis(parentNodeId: string): Observable<SensitivityAnalysisReport>{
+    getSensitivityAnalysis(parentNodeId: string): Observable<SensitivityAnalysisReport> {
         return of(this.getFakeSensitivityAnalysisData([
             'Security', 'Justice', 'Economic Opportunities', 'Education', 'Socio Economic']));
     }
 
-    getFakeSensitivityAnalysisData(nodeNames: string[]): SensitivityAnalysisReport{
+    getFakeSensitivityAnalysisData(nodeNames: string[]): SensitivityAnalysisReport {
         return {
             report: [
                 {

@@ -166,7 +166,7 @@ class Node(db.Model):
 
         # Is a measurement node
         if self.measurement_type:
-            node_dict['measurement'] = {
+            node_dict['measurementDefinition'] = {
                 'measurementType': self.measurement_type,
                 'valueFunction': self.value_function
             }
@@ -207,11 +207,11 @@ class Node(db.Model):
         if 'weight' in data:
             weight = data['weight']
 
-        if 'measurement' in data:
-            if 'measurementType' in data['measurement']:
-                measurement_type = data['measurement']['measurementType']
-            if 'valueFunction' in data['measurement']:
-                value_function = data['measurement']['valueFunction']
+        if 'measurementDefinition' in data:
+            if 'measurementType' in data['measurementDefinition']:
+                measurement_type = data['measurementDefinition']['measurementType']
+            if 'valueFunction' in data['measurementDefinition']:
+                value_function = data['measurementDefinition']['valueFunction']
                 
         # Create child node
         new_node = Node(

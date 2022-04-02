@@ -27,7 +27,7 @@
     }
   }
   .active-link {
-    background-color: map-get($background, 300); /* Note: You could also use a custom theme */
+    background-color: map-get($background, 300);
     .icon{
       color: white;
     }
