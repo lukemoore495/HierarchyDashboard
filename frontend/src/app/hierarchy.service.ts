@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Alternative, Hierarchy, HierarchyListItem, ValueFunction } from './Hierarchy';
+import { Alternative, Hierarchy, HierarchyListItem, ValueFunction, Node, MeasurementType } from './Hierarchy';
 import { Observable, of } from 'rxjs';
 import { SensitivityAnalysisReport } from './sensitivity-analysis/SensitivityAnalysis';
 import { HttpClient } from '@angular/common/http';
+import { SwingWeight } from './weights/swing-weight/SwingWeight';
 
 export interface HierarchyRequest {
     name: string;
@@ -19,9 +20,33 @@ export interface NodeRequest {
     measurementDefinition?: MeasurementDefinitionRequest;
 }
 
+export interface AlternativeRequest {
+    name: string;
+    measurements: MeasurementRequest[];
+}
+
+export interface MeasurementRequest {
+    nodeId: string;
+    measure?: number;
+}
+
 export interface MeasurementDefinitionRequest {
-    measurementType: string;
+    measurementType: MeasurementType;
     valueFunction?: ValueFunction | null;
+}
+
+export interface DirectAssessment {
+    nodeId: string;
+    weight: number;
+}
+
+export interface PairwiseComparisonRequest {
+    nodeId: string;
+    pairComparison: PairComparison[];
+}
+export interface PairComparison {
+    nodeId: string;
+    comparison: number;
 }
 
 @Injectable({
@@ -52,12 +77,43 @@ export class HierarchyService {
         return this.http.delete<string>(url);
     }
 
+    createNode(hierarchyId: string, parentId: string, node: NodeRequest): Observable<Node> {
+        const url = this.root + `/hierarchy/${hierarchyId}/node/${parentId}`;
+        return this.http.post<Node>(url, node);
+    }
+
+    deleteNode(hierarchyId: string, nodeId: string): Observable<string> {
+        const url = this.root + `/hierarchy/${hierarchyId}/node/${nodeId}`;
+        return this.http.delete<string>(url);
+    }
+
+    // patchNode(hierarchyId: string, nodeId: string, node: NodeRequest): Observable<Node> {
+    //     const url = this.root + `/hierarchy/${hierarchyId}/node/${nodeId}`;
+    //     return this.http.patch<Node>(url, node);
+    // }
+
     exportHierarchy(hierarchyId: string): Observable<HierarchyRequest> {
         const url = this.root + `/hierarchy/${hierarchyId}/export` ;
         return this.http.get<HierarchyRequest>(url);
     }
 
-    getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport> {
+    // createAlternative(hierarchyId: string, alternative: AlternativeRequest): Alternative {}
+
+    // deleteAlternative(hierarchyId: string, alternativeId: string: string {}
+
+    // updateAlternativeMeasure(hierarchyId: string, alternativeId: string, nodeId: string, measurement: number): Alternative {}
+
+    // getValueFunctionPoint(hierarchyId: string, nodeId: string, xValue: number): Point{}
+
+    // directAssessment(hierarchyId: string, nodeId: string, directAssessments: DirectAssessment[]): Node {}
+
+    // pairwiseComparison(hierarchyId: string, nodeId: string, pairwiseComparisons: PairwiseComparisons[]): Node {}
+
+    // swingWeight(hierarchyId: string, nodeId: string, swingWeight: SwingWeight[]): Node {}
+
+    // editSwingWeightMatrix(hierarchyId: string, nodeId: string, swingValues: number[]): Node {}
+
+    getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport>{
         return of(this.getFakeSensitivityAnalysisData(nodeNames));
     }
 

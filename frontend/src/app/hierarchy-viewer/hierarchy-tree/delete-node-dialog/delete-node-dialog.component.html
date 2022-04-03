@@ -1,13 +1,14 @@
 <h1 mat-dialog-title>
-    Delete Hierarchy
+    Delete Node
 </h1>
 <mat-dialog-content>
-    <p>Are you sure you want to delete {{data.name}}{{!data.name.includes('Hierarchy') ? ' Hierarchy' : null}}?</p>
+    <p>Are you sure you want to delete this Node?</p>
+    <p>All child nodes will also be deleted.</p>
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button (click)="closeDialog()" cdkFocusInitial>Cancel</button>
     <div *ngIf="loading" class="spinner-container">
         <mat-spinner class="tree-loading" color="primary" diameter="30"></mat-spinner>
     </div>
-    <button *ngIf="!loading" mat-button (click)="doAction()" color="warn">Delete</button>
-</mat-dialog-actions>
+    <button mat-button *ngIf="!loading" (click)="doAction()" color="warn">Delete</button>
+</mat-dialog-actions> 

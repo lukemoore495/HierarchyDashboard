@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
-import { BehaviorSubject, debounceTime, map, Observable, Subscription, take } from 'rxjs';
-import { Measurement, MeasurementDefinition, MeasurementType, Node } from 'src/app/Hierarchy';
+import { BehaviorSubject, debounceTime, map, Observable, Subscription, take, tap } from 'rxjs';
+import { Value, MeasurementDefinition, MeasurementType, Node } from 'src/app/Hierarchy';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Output } from '@angular/core';
 import { OnDestroy } from '@angular/core';
@@ -20,7 +20,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     @Input() measurementNode: Node | null = null;
     @Input() parentIsSelected?: Observable<boolean>;
     @Input() isTopLevel = false;
-    @Output() measurementResultEvent: EventEmitter<Measurement[]>;
+    @Output() measurementResultEvent: EventEmitter<Value[]>;
     @Output() childNodeOpened: EventEmitter<void>;
     @Output() closed: EventEmitter<void>;
     @ViewChild('measurementSelectList') measurementSelectList?: MatSelectionList;
@@ -28,7 +28,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     subscriptions: Subscription[] = [];
     selectedMeasurementId: string | null = null;
     $parentNodeOpened: BehaviorSubject<boolean>;
-    alternativeMeasurements: Measurement[] = [];
+    alternativeMeasurements: Value[] = [];
     measurementNodes: Node[] = [];
     alternativeChanged = false;
 
@@ -47,7 +47,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
         this.subscriptions.push(sub);
     
         this.form = fb.group({});
-        this.measurementResultEvent = new EventEmitter<Measurement[]>();
+        this.measurementResultEvent = new EventEmitter<Value[]>();
         this.childNodeOpened = new EventEmitter<void>();
         this.closed = new EventEmitter<void>();
         this.$parentNodeOpened = new BehaviorSubject<boolean>(true);
@@ -82,7 +82,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
             .pipe(
                 debounceTime(1000),
                 map(form => {
-                    const measurements : Measurement[] = [];
+                    const measurements : Value[] = [];
                     for(const id in form){
                         let measure = form[id];
                         if(this.isBooleanMeasurementUsingId(id)){
@@ -134,7 +134,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
         }
     }
 
-    setFormValues(measurements: Measurement[]){
+    setFormValues(measurements: Value[]){
         for(const measurement of measurements) {
             let measurementValue : number | boolean | null = measurement.measure ?? null;
             if (this.isBooleanMeasurementUsingId(measurement.nodeId)) {
@@ -170,7 +170,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
         return bool ? 1 : 0;
     }
 
-    updateMeasurements (newMeasurements: Measurement[]){
+    updateMeasurements (newMeasurements: Value[]){
         const modifiedMeasurements = [];
         const currentMeasurements = [];
         for(const measure of this.alternativeMeasurements) {
@@ -180,9 +180,12 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
         }
         
         for(const newMeasure of newMeasurements) {
-            const currentMeasure = this.alternativeMeasurements.find(measure => measure.nodeId === newMeasure.nodeId) ?? newMeasure;
-            if(currentMeasure.measure !== newMeasure.measure) {
+            const currentMeasure = this.alternativeMeasurements.find(measure => measure.nodeId === newMeasure.nodeId) ?? null;
+            const hasUpdate = currentMeasure?.measure !== newMeasure?.measure;
+            if(hasUpdate && newMeasure.measure !== null){
                 modifiedMeasurements.push(newMeasure);
+            }
+            if(hasUpdate) {
                 currentMeasurements.push(newMeasure);
                 continue;
             }

@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
-import { Hierarchy, HierarchyListItem } from '../Hierarchy';
-import { HierarchyRequest } from '../hierarchy.service';
+import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
+import { HierarchyRequest, NodeRequest } from '../hierarchy.service';
 
 export const createHierarchy = createAction(
     '[Hierarchies] Create Hierarchy',
@@ -69,4 +69,34 @@ export const deleteHierarchySuccess = createAction(
 export const deleteHierarchyFailure = createAction(
     '[Hierarchies API] Delete Hierarchy Failure',
     props<{ error: string }>()
+);
+
+export const createNode = createAction(
+    '[Hierarchies] Create Node',
+    props<{hierarchyId: string, parentId: string, node: NodeRequest}>()
+);
+
+export const createNodeSuccess = createAction(
+    '[Hierarchies API] Create Node Success',
+    props<{parentId: string, node: Node}>()
+);
+
+export const createNodeFailure = createAction(
+    '[Hierarchies API] Create Node Failure',
+    props<{error: string}>()
+);
+
+export const deleteNode = createAction(
+    '[Hierarchies] Delete Node',
+    props<{hierarchyId: string, nodeId: string}>()
+);
+
+export const deleteNodeSuccess = createAction(
+    '[Hierarchies API] Delete Node Success',
+    props<{nodeId: string}>()
+);
+
+export const deleteNodeFailure = createAction(
+    '[Hierarchies API] Delete Node Failure',
+    props<{error: string}>()
 );

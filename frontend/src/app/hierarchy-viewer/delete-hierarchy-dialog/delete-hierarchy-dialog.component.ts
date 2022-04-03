@@ -12,6 +12,8 @@ import { DeleteHierarchyData } from './DeleteHierarchyData';
     styleUrls: ['./delete-hierarchy-dialog.component.scss']
 })
 export class DeleteHierarchyDialogComponent {
+    loading = false;
+
     constructor(
         public dialogRef: MatDialogRef<DeleteHierarchyDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: DeleteHierarchyData,
@@ -19,6 +21,7 @@ export class DeleteHierarchyDialogComponent {
         private actions$: Actions) {}
 
     doAction() {
+        this.loading = true;
         this.store.dispatch(deleteHierarchy({ hierarchyId: this.data.id }));
         this.actions$
             .pipe(

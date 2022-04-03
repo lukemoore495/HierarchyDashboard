@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
-import { Hierarchy, Measurement, Node } from '../../Hierarchy';
+import { Hierarchy, Value, Node } from '../../Hierarchy';
 import { getSelectedHierarchy } from '../../state';
 import { HierarchyState } from '../../state/hierarchy.reducer';
 
@@ -13,7 +13,7 @@ import { HierarchyState } from '../../state/hierarchy.reducer';
 export class AlternativesFormComponent implements OnInit {
     selectedHierarchy$?: Observable<Hierarchy | null | undefined>;
     measurementNodes: Node[] | null = null;
-    currentMeasurements: Measurement[] = [];
+    currentMeasurements: Value[] = [];
 
     constructor(private store: Store<HierarchyState>) { }
 
@@ -54,7 +54,7 @@ export class AlternativesFormComponent implements OnInit {
         return node.children.some(node => node.measurementDefinition);
     }
 
-    saveMeasurements(newMeasurements : Measurement[]){
+    saveMeasurements(newMeasurements : Value[]){
         //replace this with an api call in the future
         console.log(newMeasurements);
     }

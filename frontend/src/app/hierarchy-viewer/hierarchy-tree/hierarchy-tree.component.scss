@@ -12,8 +12,20 @@
         width: 16rem;
 
         .measurement-node{
-            background-color: map-get($primary, 300);;
+            background-color: map-get($primary, 300);
             border-radius: 50px;
+        }
+    }
+
+    .card-content{
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+
+        .measurement-node-delete{
+            margin-left: 1.5rem;
+            border-radius: 50px;
+            background-color: white;
         }
     }
 }

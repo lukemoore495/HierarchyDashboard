@@ -4,6 +4,9 @@
             <mat-option *ngFor="let hierarchy of hierarchies" [value]="hierarchy.id">{{ hierarchy.name }}</mat-option>
         </mat-select>
     </mat-form-field>
+
+    <mat-icon *ngIf="hierarchyDescription" [matTooltip]="hierarchyDescription">info</mat-icon> 
+
     <button mat-raised-button color="accent" (click)="createHierarchyDialog()" class="header-button">
         <mat-icon>add</mat-icon>
         Create Hierarchy
@@ -23,6 +26,11 @@
 
 </div>
 <ng-template #treeContainer></ng-template>
+<ng-container *ngIf="hierarchies$ | async as hierarchies">
+    <div *ngIf="!tree && hierarchies.length > 0" class="spinner-container">
+        <mat-spinner color="primary"></mat-spinner>
+    </div>
+</ng-container>
 <ng-container *ngIf="hierarchies$ | async as hierarchies">
     <ng-container *ngIf="hierarchies.length === 0">
         <div class="welcome">

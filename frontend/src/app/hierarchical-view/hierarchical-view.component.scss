@@ -30,11 +30,32 @@
   }
 }
 
-.spinner-container{
+.dialog-full-width {
+  width: 100%;
+}
+
+.tab-container {
+  padding: 5%;
+}
+
+.file-input {
+  display: none;
+}
+
+.file-upload {
   display: flex;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 10%;
+}
+
+.upload-button {
+  float: right;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  width: 30%;
+}
+
+.loading:after {
+  content: " .";
+  animation: dots 1s steps(5, end) infinite;
 }
 
 @keyframes dots {
