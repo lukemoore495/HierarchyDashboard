@@ -1,4 +1,4 @@
-import { Alternative, Value } from "../Hierarchy";
+import { Alternative, Value } from '../Hierarchy';
 
 export interface CreateHierarchyAlternative {
     hierarchyId: string;
