@@ -183,53 +183,91 @@ def delete_node(hierarchy_id, node_id):
 
 # TODO: Create Alternative
 @app.route("/hierarchy/<hierarchy_id>/alternative", methods=['POST'])
-def create_alterntaive(hierarchy_id):
-    # Check Hierarchy
-    # Abort if it doesn't exist
+def create_alternative(hierarchy_id):
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    
+    if not hierarchy:
+        abort(404, description="Resource not found")
 
     # https://stackoverflow.com/questions/16093475/flask-sqlalchemy-querying-a-column-with-not-equals
     # https://docs.sqlalchemy.org/en/14/core/sqlelement.html#sqlalchemy.sql.operators.ColumnOperators.isnot
-    measurements = Node.query.filter(Node.measurement_type != None).all()
-    # Read data
-    # {
-    #     "name": "Ford Fiesta",
-    #     "values": [
-    #         {
-    #             "nodeId": 12,
-    #             "measure": 12345,
-    #             "local_value": 43,
-    #             "global_value": 32,
-    #         },
-    #         {
-    #             "nodeId": 14,
-    #             "measure": 24,
-    #             "local_value": 64,
-    #             "global_value": 128,
-    #         }
-    #     ]
-    # }
-    
-    # Create alternative
-    # Generate values with alternative_id
-        # Values must match up with measurement nodes
-        # Generate null values if a value is not provided for a measurement
+    # Get all measurement nodes of the given hierarchy
+    measurements = Node.query.filter(Node.measurement_type != None, Node.hierarchy_id == hierarchy_id)
+    validNodeIds = []
+    for measurement in measurements:
+        validNodeIds.append(measurement.id)
 
-    pass
+    data = request.get_json()
+
+    # Create alternative
+    alternative = Alternative(
+        hierarchy_id,
+        name=data["name"]
+    )
+
+    if "values" in data:
+        for value in data["values"]:
+
+            # Generate null values if a value is not provided for a measurement
+            if "measure" in value:
+                measure = value["measure"]
+            else:
+                measure = None
+
+            if "local_value" in value:
+                local_value = value["local_value"]
+            else:
+                local_value = None
+                
+            if "global_value" in value:
+                global_value = value["global_value"]
+            else:
+                global_value = None
+
+            # Generate values with alternative_id
+            # Values must match up with measurement nodes
+            if value["nodeId"] in validNodeIds:
+                value = Value(value["nodeId"], measure, local_value, global_value)
+                alternative.values.append(value)
+            else:
+                abort(404, description="Node ID not valid")
+
+    db.session.add(alternative)
+    db.session.commit()
+
+    return alternative.to_dict(), 201
 
 
 # TODO: Get Alternative
 @app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
-def get_alternative(hierarchy_id, alternative_id):
+def get_alternative(hierarchy_id, alternative_id, methods=['GET']):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
-    alternative = Node.query.filter_by(id=alternative_id).first()
+    if not hierarchy:
+        abort(404, description="Resource not found")
 
-    # Return alternative.to_dict()
+    alternative = Alternative.query.filter_by(id=alternative_id).first()
+    if not alternative:
+        abort(404, description="Resource not found")
+
+    return alternative.to_dict(), 200
 
 
 # TODO: Delete Alternative
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>", methods=['DELETE'])
 def delete_alternative(hierarchy_id, alternative_id):
-    pass
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    if not hierarchy:
+        abort(404, description="Resource not found")
+
+    alternative = Alternative.query.filter_by(id=alternative_id).first()
+    if not alternative:
+        abort(404, description="Resource not found")
+
+    db.session.delete(alternative)
+    db.session.commit()
+
+    message = f"Alternative {alternative_id} Deleted"
+    return jsonify({"message": message}), 200
 
 
 # TODO: Patch Value
