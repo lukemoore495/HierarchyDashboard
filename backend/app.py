@@ -5,6 +5,7 @@ import os
 import sys
 
 from models.hierarchy import Hierarchy, Node
+from models.alternative import Alternative, Value
 from models.shared import db # Allows the models to be split out into separate files.
 
 
