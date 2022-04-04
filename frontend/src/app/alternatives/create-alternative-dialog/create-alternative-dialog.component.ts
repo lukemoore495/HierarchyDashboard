@@ -14,6 +14,7 @@ import { CreateAlternativeForm } from '../AlternativeForm';
 })
 export class CreateAlternativeDialogComponent {
   form: CreateAlternativeForm;
+  loading = false;
 
   constructor(
     public dialogRef: MatDialogRef<CreateAlternativeDialogComponent>,
@@ -30,6 +31,7 @@ export class CreateAlternativeDialogComponent {
   }
 
   doAction() {
+    this.loading = true;
     this.store.dispatch(createAlternative({ createAlternativeForm: this.form }));
     this.actions$
       .pipe(

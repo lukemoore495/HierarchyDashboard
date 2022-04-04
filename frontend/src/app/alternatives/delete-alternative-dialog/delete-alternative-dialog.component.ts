@@ -14,6 +14,8 @@ import { DeleteAlternativeForm } from '../AlternativeForm';
 })
 export class DeleteAlternativeDialogComponent {
   form: DeleteAlternativeForm;
+  loading = false;
+
   constructor(
     public dialogRef: MatDialogRef<DeleteAlternativeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DeleteAlternativeForm,
@@ -21,6 +23,7 @@ export class DeleteAlternativeDialogComponent {
     private actions$: Actions) { this.form = data }
 
   doAction() {
+    this.loading = true;
     this.store.dispatch(deleteAlternative({ deleteAlternativeForm: this.form }));
     this.actions$
       .pipe(
