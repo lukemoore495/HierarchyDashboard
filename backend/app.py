@@ -83,19 +83,7 @@ def create_node(hierarchy_id, parent_id):
     db.session.commit()
 
     return jsonify(parent.to_dict()), 201
-
-
-# TODO: Create Alternative
-@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
-def create_alternative(hierarchy_id, parent_id):
-    pass
-
-
-# TODO: Update Alternative Measure (the variable from the frontend)
-@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/alternative/<alternative_id>/measure", methods=['PATCH'])
-def update_measure(hierarchy_id, parent_id, alternative_id):
-    pass
-
+    
 
 #TODO: Patch Node
 @app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
@@ -280,6 +268,12 @@ def patch_value(hierarchy_id, alternative_id, value_id):
     # Change individual measure in the value table
     # Local and global values are regenerated according to weighting functions
     # that don't exist yet
+    pass
+
+
+# TODO: Update Alternative Measure (the variable from the frontend)
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/alternative/<alternative_id>/measure", methods=['PATCH'])
+def update_measure(hierarchy_id, parent_id, alternative_id):
     pass
 
 
