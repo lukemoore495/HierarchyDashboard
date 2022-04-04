@@ -188,6 +188,24 @@ export const HierarchyReducer = createReducer<HierarchyState>(
             error: action.error
         };
     }),
+    on(HierarchyActions.createAlternativeSuccess, (state, action): HierarchyState => {
+        const selectedHierarchy = state.selectedHierarchy;
+        const alternative = action.createAlternativeRresponse.alternative;
+
+        selectedHierarchy?.alternatives.push(action.createAlternativeRresponse.alternative);
+
+        return {
+            ...state,
+            selectedHierarchy: selectedHierarchy,
+            selectedAlternativeId: alternative.id
+        };
+    }),
+    on(HierarchyActions.createAlternativeFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
 );
 
 function replaceNode(node: Node, newNode: Node) : Node {

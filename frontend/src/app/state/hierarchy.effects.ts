@@ -95,4 +95,30 @@ export class HierarchyEffects {
                 )
             );
     });
+
+    createAlternative$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.createAlternative),
+                concatMap(action => this.hierarchyService.createAlternative(action.createAlternativeForm)
+                    .pipe(
+                        map(alternativeResponse => HierarchyActions.createAlternativeSuccess({ createAlternativeRresponse: alternativeResponse })),
+                        catchError(error => of(HierarchyActions.createAlternativeFailure({ error })))
+                    )
+                )
+            );
+    });
+
+    deleteAlternative$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.deleteAlternative),
+                concatMap(action => this.hierarchyService.deleteAlternative(action.deleteAlternativeForm)
+                    .pipe(
+                        map(alternativeResponse => HierarchyActions.deleteAlternativeSuccess({ deleteAlternativeResponse: alternativeResponse })),
+                        catchError(error => of(HierarchyActions.deleteAlternativeFailure({ error })))
+                    )
+                )
+            );
+    });
 }

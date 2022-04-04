@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { SensitivityAnalysisReport } from './sensitivity-analysis/SensitivityAnalysis';
 import { HttpClient } from '@angular/common/http';
 import { SwingWeight } from './weights/swing-weight/SwingWeight';
+import { CreateAlternativeForm, CreateAlternativeResponse, DeleteAlternativeForm } from './alternatives/AlternativeForm';
 
 export interface HierarchyRequest {
     name: string;
@@ -99,9 +100,15 @@ export class HierarchyService {
         return this.http.get<HierarchyRequest>(url);
     }
 
-    // createAlternative(hierarchyId: string, alternative: AlternativeRequest): Alternative {}
+    createAlternative(createAlternative: CreateAlternativeForm): Observable<CreateAlternativeResponse> {
+        const url = this.root + '/hierarchy/' + createAlternative.hierarchyId + '/alternative';
+        return this.http.post<CreateAlternativeResponse>(url, createAlternative);
+    }
 
-    // deleteAlternative(hierarchyId: string, alternativeId: string: string {}
+    deleteAlternative(deleteAlternative: DeleteAlternativeForm): Observable<DeleteAlternativeForm> {
+        const url = this.root + '/hierarchy/' + deleteAlternative.hierarchyId + '/alternative/' + deleteAlternative.alternative.id;
+        return this.http.delete<DeleteAlternativeForm>(url);
+    }
 
     updateAlternativeMeasure(hierarchyId: string, alternativeId: string, nodeId: string, measure: number): Observable<string> {
         const url = this.root + `/hierarchy/${hierarchyId}/alternative/${alternativeId}/node/${nodeId}` ;
@@ -119,7 +126,7 @@ export class HierarchyService {
 
     // editSwingWeightMatrix(hierarchyId: string, nodeId: string, swingValues: number[]): Node {}
 
-    getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport>{
+    getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport> {
         return of(this.getFakeSensitivityAnalysisData(nodeNames));
     }
 

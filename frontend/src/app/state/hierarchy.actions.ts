@@ -1,6 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
 import { HierarchyRequest, NodeRequest } from '../hierarchy.service';
+import { CreateAlternativeForm, CreateAlternativeResponse, DeleteAlternativeForm } from '../alternatives/AlternativeForm';
 
 export const createHierarchy = createAction(
     '[Hierarchies] Create Hierarchy',
@@ -114,4 +115,34 @@ export const updateAlternativeMeasureSuccess = createAction(
 export const updateAlternativeMeasureFailure = createAction(
     '[Alternatives API] Update Alternative Measure Failure',
     props<{error: string}>()
+);
+
+export const createAlternative = createAction(
+    '[Alternatives] Create Hierarchy',
+    props<{ createAlternativeForm: CreateAlternativeForm }>()
+);
+
+export const createAlternativeSuccess = createAction(
+    '[Alternatives API] Create Alternative Success',
+    props<{ createAlternativeRresponse: CreateAlternativeResponse }>()
+);
+
+export const createAlternativeFailure = createAction(
+    '[Alternatives API] Create Alternative Failure',
+    props<{ error: string }>()
+);
+
+export const deleteAlternative = createAction(
+    '[Alternatives] Delete Alternative',
+    props<{ deleteAlternativeForm: DeleteAlternativeForm }>()
+);
+
+export const deleteAlternativeSuccess = createAction(
+    '[Alternatives API] Delete Alternative Success',
+    props<{ deleteAlternativeResponse: DeleteAlternativeForm }>()
+);
+
+export const deleteAlternativeFailure = createAction(
+    '[Alternatives API] Delete Alternative Failure',
+    props<{ error: string }>()
 );
