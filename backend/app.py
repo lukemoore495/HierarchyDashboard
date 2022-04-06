@@ -260,15 +260,28 @@ def delete_alternative(hierarchy_id, alternative_id):
 
 
 # TODO: Patch Value
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<value_id>")
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<value_id>", methods=['POST'])
 def patch_value(hierarchy_id, alternative_id, value_id):
-    # Check the hierarchy, alternative, and value exist
-        # Abort if they don't
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    if not hierarchy:
+        abort(404, description="Resource not found")
+
+    alternative = Alternative.query.filter_by(id=alternative_id, hierarchy_id=hierarchy_id).first()
+    if not alternative:
+        abort(404, description="Resource not found")
+
+    value = Value.query.filter_by(id=value_id, alternative_id=alternative_id).first()
+    if not value:
+        abort(404, description="Resource not found")
 
     # Change individual measure in the value table
-    # Local and global values are regenerated according to weighting functions
-    # that don't exist yet
-    pass
+    data = request.get_json()
+    if "value" in data:
+        value.measure=data["value"]
+
+    db.session.commit()
+
+    return value.to_dict(), 201
 
 
 # TODO: Update Alternative Measure (the variable from the frontend)
