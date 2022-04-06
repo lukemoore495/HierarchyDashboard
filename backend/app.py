@@ -260,7 +260,7 @@ def delete_alternative(hierarchy_id, alternative_id):
 
 
 # TODO: Patch Value
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<value_id>", methods=['POST'])
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<value_id>", methods=['PATCH'])
 def patch_value(hierarchy_id, alternative_id, value_id):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
     if not hierarchy:
