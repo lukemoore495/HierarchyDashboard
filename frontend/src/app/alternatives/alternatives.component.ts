@@ -11,7 +11,7 @@ import { Observable, Subscription } from 'rxjs';
 import { CreateAlternativeDialogComponent } from './create-alternative-dialog/create-alternative-dialog.component';
 import { DeleteAlternativeDialogComponent } from './delete-alternative-dialog/delete-alternative-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { CreateAlternativeForm, DeleteAlternativeForm } from './AlternativeForm';
+import { CreateHierarchyAlternative, HierarchyAlternative } from './AlternativeForm';
 
 @Component({
     selector: 'app-alternatives',
@@ -66,7 +66,7 @@ export class AlternativesComponent implements OnDestroy {
 
     createAlternativeDialog() {
         this.dialog.open(CreateAlternativeDialogComponent, {
-            data: { hierarchyId: this.selectedHierarchyId } as CreateAlternativeForm
+            data: { hierarchyId: this.selectedHierarchyId } as CreateHierarchyAlternative
         });
     }
 
@@ -75,7 +75,7 @@ export class AlternativesComponent implements OnDestroy {
             data: {
                 hierarchyId: this.selectedHierarchyId,
                 alternative: this.selectedAlternative
-            } as DeleteAlternativeForm
+            } as HierarchyAlternative
         });
     }
 }

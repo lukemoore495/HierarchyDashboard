@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
+import { CreateHierarchyAlternative, HierarchyAlternative } from '../alternatives/AlternativeForm';
 import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
 import { HierarchyRequest, NodeRequest } from '../hierarchy.service';
-import { CreateAlternativeForm, CreateAlternativeResponse, DeleteAlternativeForm } from '../alternatives/AlternativeForm';
 
 export const createHierarchy = createAction(
     '[Hierarchies] Create Hierarchy',
@@ -119,12 +119,12 @@ export const updateAlternativeMeasureFailure = createAction(
 
 export const createAlternative = createAction(
     '[Alternatives] Create Hierarchy',
-    props<{ createAlternativeForm: CreateAlternativeForm }>()
+    props<{ createHierarchyAlternative: CreateHierarchyAlternative }>()
 );
 
 export const createAlternativeSuccess = createAction(
     '[Alternatives API] Create Alternative Success',
-    props<{ createAlternativeRresponse: CreateAlternativeResponse }>()
+    props<{ hierarchyAlternative: HierarchyAlternative }>()
 );
 
 export const createAlternativeFailure = createAction(
@@ -134,12 +134,12 @@ export const createAlternativeFailure = createAction(
 
 export const deleteAlternative = createAction(
     '[Alternatives] Delete Alternative',
-    props<{ deleteAlternativeForm: DeleteAlternativeForm }>()
+    props<{ hierarchyAlternative: HierarchyAlternative }>()
 );
 
 export const deleteAlternativeSuccess = createAction(
     '[Alternatives API] Delete Alternative Success',
-    props<{ deleteAlternativeResponse: DeleteAlternativeForm }>()
+    props<{ hierarchyAlternative: HierarchyAlternative }>()
 );
 
 export const deleteAlternativeFailure = createAction(

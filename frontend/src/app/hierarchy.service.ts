@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Alternative, Hierarchy, HierarchyListItem, ValueFunction, Node, MeasurementType } from './Hierarchy';
-import { Observable, of } from 'rxjs';
-import { SensitivityAnalysisReport } from './sensitivity-analysis/SensitivityAnalysis';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { CreateHierarchyAlternative, HierarchyAlternative } from './alternatives/AlternativeForm';
+import { Alternative, Hierarchy, HierarchyListItem, MeasurementType, Node, ValueFunction } from './Hierarchy';
+import { SensitivityAnalysisReport } from './sensitivity-analysis/SensitivityAnalysis';
 import { SwingWeight } from './weights/swing-weight/SwingWeight';
-import { CreateAlternativeForm, CreateAlternativeResponse, DeleteAlternativeForm } from './alternatives/AlternativeForm';
 
 export interface HierarchyRequest {
     name: string;
@@ -80,6 +80,16 @@ export class HierarchyService {
         return this.http.delete<string>(url);
     }
 
+    createAlternative(createAlternative: CreateHierarchyAlternative): Observable<HierarchyAlternative> {
+        const url = this.root + '/hierarchy/' + createAlternative.hierarchyId + '/alternative';
+        return this.http.post<HierarchyAlternative>(url, createAlternative);
+    }
+
+    deleteAlternative(deleteAlternative: HierarchyAlternative): Observable<string> {
+        const url = this.root + '/hierarchy/' + deleteAlternative.hierarchyId + '/alternative/' + deleteAlternative.alternative.id;
+        return this.http.delete<string>(url);
+    }
+
     createNode(hierarchyId: string, parentId: string, node: NodeRequest): Observable<Node> {
         const url = this.root + `/hierarchy/${hierarchyId}/node/${parentId}`;
         return this.http.post<Node>(url, node);
@@ -98,16 +108,6 @@ export class HierarchyService {
     exportHierarchy(hierarchyId: string): Observable<HierarchyRequest> {
         const url = this.root + `/hierarchy/${hierarchyId}/export` ;
         return this.http.get<HierarchyRequest>(url);
-    }
-
-    createAlternative(createAlternative: CreateAlternativeForm): Observable<CreateAlternativeResponse> {
-        const url = this.root + '/hierarchy/' + createAlternative.hierarchyId + '/alternative';
-        return this.http.post<CreateAlternativeResponse>(url, createAlternative);
-    }
-
-    deleteAlternative(deleteAlternative: DeleteAlternativeForm): Observable<DeleteAlternativeForm> {
-        const url = this.root + '/hierarchy/' + deleteAlternative.hierarchyId + '/alternative/' + deleteAlternative.alternative.id;
-        return this.http.delete<DeleteAlternativeForm>(url);
     }
 
     updateAlternativeMeasure(hierarchyId: string, alternativeId: string, nodeId: string, measure: number): Observable<string> {

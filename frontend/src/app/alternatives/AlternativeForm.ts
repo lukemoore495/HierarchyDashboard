@@ -1,16 +1,11 @@
 import { Alternative } from "../Hierarchy";
 
-export interface CreateAlternativeForm {
+export interface CreateHierarchyAlternative {
     hierarchyId: string;
     name: string;
 }
 
-export interface CreateAlternativeResponse {
-    hierarchyId: string;
-    alternative: Alternative;
-}
-
-export interface DeleteAlternativeForm {
+export interface HierarchyAlternative {
     hierarchyId: string;
     alternative: Alternative;
 }

@@ -1,8 +1,8 @@
 import { createReducer, on } from '@ngrx/store';
-import { Alternative, Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
-import * as HierarchyActions from './hierarchy.actions';
-import RRRHierarchy from '../../assets/staticFiles/RRRHierarchy.json';
 import CarHierarchy from '../../assets/staticFiles/DemoExample.json';
+import RRRHierarchy from '../../assets/staticFiles/RRRHierarchy.json';
+import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
+import * as HierarchyActions from './hierarchy.actions';
 
 export interface HierarchyState {
     selectedHierarchy: Hierarchy | null;
@@ -125,7 +125,8 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         if(!state.selectedHierarchy){
             return {...state};
         }
-        const copyHierarchy: Hierarchy = {...state.selectedHierarchy};
+        
+        const copyHierarchy: Hierarchy = { ...state.selectedHierarchy };
         return {
             ...state,
             selectedHierarchy: replaceNodeInHierarchy(copyHierarchy, action.node)
@@ -190,9 +191,9 @@ export const HierarchyReducer = createReducer<HierarchyState>(
     }),
     on(HierarchyActions.createAlternativeSuccess, (state, action): HierarchyState => {
         const selectedHierarchy = state.selectedHierarchy;
-        const alternative = action.createAlternativeRresponse.alternative;
+        const alternative = action.hierarchyAlternative.alternative;
 
-        selectedHierarchy?.alternatives.push(action.createAlternativeRresponse.alternative);
+        selectedHierarchy?.alternatives.push(action.hierarchyAlternative.alternative);
 
         return {
             ...state,
