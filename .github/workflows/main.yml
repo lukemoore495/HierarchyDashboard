@@ -20,7 +20,7 @@ jobs:
     - name: install dependencies
       run: |
         npm install
-        pip install -r requirements.txt pyinstaller
+        pip install pyinstaller
       working-directory: ./frontend
     - name: build
       run: npm run make
@@ -39,7 +39,7 @@ jobs:
     - name: install dependencies
       run: |
         npm install
-        pip install -r requirements.txt pyinstaller
+        pip install pyinstaller
       working-directory: ./frontend
     - name: build
       run: npm run make
@@ -58,7 +58,7 @@ jobs:
     - name: install dependencies
       run: |
         npm install
-        pip install -r requirements.txt pyinstaller
+        pip install pyinstaller
       working-directory: ./frontend
     - name: build
       run: npm run make
