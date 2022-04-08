@@ -16,6 +16,7 @@ jobs:
         node-version: 16
     - name: install dependencies
       run: npm install
+      working-directory: ./frontend
     - name: build
       run: npm run make
       working-directory: ./frontend
@@ -29,6 +30,7 @@ jobs:
         node-version: 16
     - name: install dependencies
       run: npm install
+      working-directory: ./frontend
     - name: build
       run: npm run make
       working-directory: ./frontend
@@ -42,6 +44,7 @@ jobs:
         node-version: 16
     - name: install dependencies
       run: npm install
+      working-directory: ./frontend
     - name: build
       run: npm run make
       working-directory: ./frontend
