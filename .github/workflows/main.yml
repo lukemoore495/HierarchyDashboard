@@ -25,6 +25,11 @@ jobs:
     - name: build
       run: npm run make
       working-directory: ./frontend
+    - name: debug
+      run: |
+        ls app
+        ls
+      working-directory: ./frontend/dist
 
   build_on_mac:
     runs-on: macos-latest
@@ -44,6 +49,11 @@ jobs:
     - name: build
       run: npm run make
       working-directory: ./frontend
+    - name: debug
+      run: |
+        ls app
+        ls
+      working-directory: ./frontend/dist
 
   build_on_win:
     runs-on: windows-latest
