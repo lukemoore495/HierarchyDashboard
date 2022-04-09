@@ -19,8 +19,8 @@ jobs:
         python-version: 3.9
     - name: install dependencies
       run: |
-        npm install @electron-forge/cli
         npm ci
+        npm install @electron-forge/cli@latest
         pip install pyinstaller
       working-directory: ./frontend
     - name: build1
