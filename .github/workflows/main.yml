@@ -19,11 +19,8 @@ jobs:
         python-version: 3.9
     - name: install dependencies
       run: |
-        npm install
+        npm ci
         pip install pyinstaller
-        npm install -g electron-forge
-        npm install --production=false
-        npm install electron-prebuilt-compile
       working-directory: ./frontend
     - name: build1
       run: pyinstaller --onefile --name=app.exe ../backend/app.py
@@ -44,7 +41,7 @@ jobs:
         python-version: 3.9
     - name: install dependencies
       run: |
-        npm install
+        npm ci
         pip install pyinstaller
         npm install -g electron-forge
         npm install --production=false
@@ -69,7 +66,7 @@ jobs:
         python-version: 3.9
     - name: install dependencies
       run: |
-        npm install
+        npm ci
         pip install pyinstaller
       working-directory: ./frontend
     - name: build
