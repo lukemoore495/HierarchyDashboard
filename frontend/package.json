@@ -14,7 +14,7 @@
     "package": "electron-forge package",
     "make": "pyinstaller --onefile --name=app.exe ../backend/app.py && npx electron-forge make",
     "make-backend": "python -m PyInstaller -F ../backend/app.py",
-    "publish": "npx electron-forge publish"
+    "publish": "pyinstaller --onefile --name=app.exe ../backend/app.py && npx electron-forge publish"
   },
   "private": true,
   "dependencies": {
