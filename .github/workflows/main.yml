@@ -22,11 +22,8 @@ jobs:
         npm ci
         pip install pyinstaller
       working-directory: ./frontend
-    - name: build1
-      run: pyinstaller --onefile --name=app.exe ../backend/app.py
-      working-directory: ./frontend
-    - name: build2
-      run: npx electron-forge make
+    - name: build
+      run: npm run make
       working-directory: ./frontend
 
   build_on_mac:
@@ -44,11 +41,8 @@ jobs:
         npm ci
         pip install pyinstaller
       working-directory: ./frontend
-    - name: build1
-      run: pyinstaller --onefile --name=app.exe ../backend/app.py
-      working-directory: ./frontend
-    - name: build2
-      run: npx electron-forge make
+    - name: build
+      run: npm run make
       working-directory: ./frontend
 
   build_on_win:
