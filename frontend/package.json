@@ -91,7 +91,9 @@
         },
         {
           "name": "@electron-forge/maker-rpm",
-          "config": {}
+          "config": {
+            "license": "GPLv3+"
+          }
         }
       ]
     }
