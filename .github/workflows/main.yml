@@ -7,46 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_on_linux:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@master
-      with:
-        node-version: 16
-    - uses: actions/setup-python@v3
-      with:
-        python-version: 3.9
-    - name: install dependencies
-      run: |
-        npm ci
-        pip install pyinstaller
-      working-directory: ./frontend
-    - name: build
-      run: npm run make
-      working-directory: ./frontend
-
-  build_on_mac:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@master
-      with:
-        node-version: 16
-    - uses: actions/setup-python@v3
-      with:
-        python-version: 3.9
-    - name: install dependencies
-      run: |
-        npm ci
-        pip install pyinstaller
-      working-directory: ./frontend
-    - name: build
-      run: npm run make
-      working-directory: ./frontend
-
-  build_on_win:
-    runs-on: windows-latest
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@master
