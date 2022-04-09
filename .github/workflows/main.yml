@@ -21,6 +21,7 @@ jobs:
       run: |
         npm install
         pip install pyinstaller
+        npm install electron
       working-directory: ./frontend
     - name: build1
       run: pyinstaller --onefile --name=app.exe ../backend/app.py
@@ -43,6 +44,7 @@ jobs:
       run: |
         npm install
         pip install pyinstaller
+        npm install electron
       working-directory: ./frontend
     - name: build1
       run: pyinstaller --onefile --name=app.exe ../backend/app.py
