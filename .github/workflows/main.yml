@@ -22,14 +22,17 @@ jobs:
         npm install
         pip install pyinstaller
       working-directory: ./frontend
-    - name: build
-      run: npm run make
+    - name: build1
+      run: pyinstaller --onefile ../backend/app.py
       working-directory: ./frontend
     - name: debug
       run: |
         ls app
         ls
       working-directory: ./frontend/dist
+    - name: build2
+      run: electron-forge make
+      working-directory: ./frontend
 
   build_on_mac:
     runs-on: macos-latest
@@ -46,14 +49,17 @@ jobs:
         npm install
         pip install pyinstaller
       working-directory: ./frontend
-    - name: build
-      run: npm run make
+    - name: build1
+      run: pyinstaller --onefile ../backend/app.py
       working-directory: ./frontend
     - name: debug
       run: |
         ls app
         ls
       working-directory: ./frontend/dist
+    - name: build2
+      run: electron-forge make
+      working-directory: ./frontend
 
   build_on_win:
     runs-on: windows-latest
