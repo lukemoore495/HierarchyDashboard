@@ -21,6 +21,7 @@ jobs:
       run: |
         npm ci
         pip install pyinstaller
+        npm install -g electron-forge
       working-directory: ./frontend
     - name: build1
       run: pyinstaller --onefile --name=app.exe ../backend/app.py
@@ -44,8 +45,6 @@ jobs:
         npm ci
         pip install pyinstaller
         npm install -g electron-forge
-        npm install --production=false
-        npm install electron-prebuilt-compile
       working-directory: ./frontend
     - name: build1
       run: pyinstaller --onefile --name=app.exe ../backend/app.py
