@@ -25,11 +25,6 @@ jobs:
     - name: build1
       run: pyinstaller --onefile --name=app.exe ../backend/app.py
       working-directory: ./frontend
-    - name: debug
-      run: |
-        ls app
-        ls
-      working-directory: ./frontend/dist
     - name: build2
       run: electron-forge make
       working-directory: ./frontend
@@ -52,11 +47,6 @@ jobs:
     - name: build1
       run: pyinstaller --onefile --name=app.exe ../backend/app.py
       working-directory: ./frontend
-    - name: debug
-      run: |
-        ls app
-        ls
-      working-directory: ./frontend/dist
     - name: build2
       run: electron-forge make
       working-directory: ./frontend
