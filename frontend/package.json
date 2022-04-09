@@ -48,6 +48,7 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.63",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
     "@electron-forge/maker-zip": "^6.0.0-beta.63",
+    "@electron-forge/publisher-github": "^6.0.0-beta.63",
     "@types/chart.js": "^2.9.28",
     "@types/chartjs-plugin-annotation": "^0.5.2",
     "@types/jasmine": "~3.10.0",
@@ -55,7 +56,6 @@
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
     "electron": "^17.1.0",
-    "electron-prebuilt-compile": "8.2.0",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.4.0",
     "eslint-plugin-prettier": "4.0.0",
@@ -93,6 +93,19 @@
           "name": "@electron-forge/maker-rpm",
           "config": {
             "license": "GPLv3+"
+          }
+        }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "lukemoore495",
+              "name": "HierarchyDashboard"
+            },
+            "draft": true,
+            "prerelease": true
           }
         }
       ]
