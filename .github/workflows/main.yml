@@ -21,13 +21,13 @@ jobs:
       run: |
         npm ci
         pip install pyinstaller
-        npm install -g electron-forge
+        sudo apt install rpm
       working-directory: ./frontend
     - name: build1
       run: pyinstaller --onefile --name=app.exe ../backend/app.py
       working-directory: ./frontend
     - name: build2
-      run: electron-forge make
+      run: npx electron-forge make
       working-directory: ./frontend
 
   build_on_mac:
@@ -44,13 +44,12 @@ jobs:
       run: |
         npm ci
         pip install pyinstaller
-        npm install -g electron-forge
       working-directory: ./frontend
     - name: build1
       run: pyinstaller --onefile --name=app.exe ../backend/app.py
       working-directory: ./frontend
     - name: build2
-      run: electron-forge make
+      run: npx electron-forge make
       working-directory: ./frontend
 
   build_on_win:
