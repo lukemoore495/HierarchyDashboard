@@ -1,7 +1,7 @@
 {
   "name": "dashboard-app",
   "version": "0.0.0",
-  "main": "app.js",
+  "main": "./electron/app.js",
   "description": "Hierarchy Dashboard",
   "author": "Luke Moore",
   "scripts": {
