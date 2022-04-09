@@ -23,7 +23,7 @@ jobs:
         pip install pyinstaller
       working-directory: ./frontend
     - name: build1
-      run: pyinstaller --onefile ../backend/app.py
+      run: pyinstaller --onefile --name=app.exe ../backend/app.py
       working-directory: ./frontend
     - name: debug
       run: |
@@ -50,7 +50,7 @@ jobs:
         pip install pyinstaller
       working-directory: ./frontend
     - name: build1
-      run: pyinstaller --onefile ../backend/app.py
+      run: pyinstaller --onefile --name=app.exe ../backend/app.py
       working-directory: ./frontend
     - name: debug
       run: |
