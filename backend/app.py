@@ -259,9 +259,8 @@ def delete_alternative(hierarchy_id, alternative_id):
     return jsonify({"message": message}), 200
 
 
-# TODO: Patch Value
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<value_id>", methods=['PATCH'])
-def patch_value(hierarchy_id, alternative_id, value_id):
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<node_id>", methods=['PATCH'])
+def patch_value(hierarchy_id, alternative_id, node_id):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
     if not hierarchy:
         abort(404, description="Resource not found")
@@ -270,7 +269,7 @@ def patch_value(hierarchy_id, alternative_id, value_id):
     if not alternative:
         abort(404, description="Resource not found")
 
-    value = Value.query.filter_by(id=value_id, alternative_id=alternative_id).first()
+    value = Value.query.filter_by(node_id=node_id, alternative_id=alternative_id).first()
     if not value:
         abort(404, description="Resource not found")
 
