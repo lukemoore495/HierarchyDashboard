@@ -22,6 +22,7 @@ jobs:
         npm ci
         pip install pyinstaller
         npm install -g electron-forge
+        npm install node-sass
       working-directory: ./frontend
     - name: build1
       run: pyinstaller --onefile --name=app.exe ../backend/app.py
