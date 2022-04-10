@@ -51,10 +51,10 @@ function createWindow () {
         mainWindow.webContents.openDevTools();
     }
 
-    mainWindow.loadFile(rootPath + '/dist/DashboardApp/index.html');
+    mainWindow.loadFile(rootPath + '/dist/HierarchyDashboard/index.html');
 
     mainWindow.webContents.on('did-fail-load', () => {
-        mainWindow.loadFile(rootPath + '/dist/DashboardApp/index.html');
+        mainWindow.loadFile(rootPath + '/dist/HierarchyDashboard/index.html');
     });
 
     mainWindow.on('closed', function () {
