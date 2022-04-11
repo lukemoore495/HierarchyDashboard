@@ -231,11 +231,8 @@ def create_alternative(hierarchy_id):
 @app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
 def get_alternative(hierarchy_id, alternative_id, methods=['GET']):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
-    if not hierarchy:
-        abort(404, description="Resource not found")
-
     alternative = Alternative.query.filter_by(id=alternative_id).first()
-    if not alternative:
+    if not hierarchy or not alternative:
         abort(404, description="Resource not found")
 
     return alternative.to_dict(), 200
@@ -245,11 +242,8 @@ def get_alternative(hierarchy_id, alternative_id, methods=['GET']):
 @app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>", methods=['DELETE'])
 def delete_alternative(hierarchy_id, alternative_id):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
-    if not hierarchy:
-        abort(404, description="Resource not found")
-
     alternative = Alternative.query.filter_by(id=alternative_id).first()
-    if not alternative:
+    if not hierarchy or not alternative:
         abort(404, description="Resource not found")
 
     db.session.delete(alternative)
