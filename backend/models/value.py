@@ -20,10 +20,10 @@ class Value(db.Model):
 
     def to_dict(self, export=False):
         alt_dict = {
-            "node_id": self.node_id,
+            "nodeId": self.node_id,
             "measure": self.measure,
-            "local_value": self.local_value,
-            "global_value": self.global_value
+            "localValue": self.local_value,
+            "globalValue": self.global_value
         }
 
         if not export:
