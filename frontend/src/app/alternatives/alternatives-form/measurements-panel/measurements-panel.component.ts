@@ -1,15 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, debounceTime, map, Observable, Subscription, take, tap } from 'rxjs';
-import { Value, MeasurementDefinition, MeasurementType, Node } from 'src/app/Hierarchy';
+import { Value, MeasurementDefinition, MeasurementType, Node } from '../../../Hierarchy';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Output } from '@angular/core';
 import { OnDestroy } from '@angular/core';
-import { HierarchyState } from 'src/app/state/hierarchy.reducer';
 import { Store } from '@ngrx/store';
-import { getSelectedAlternative, getSelectedMeasurementId } from 'src/app/state';
 import * as HierarchyActions from '../../../state/hierarchy.actions';
 import { MatSelectionList } from '@angular/material/list';
 import { AfterViewInit } from '@angular/core';
+import { getSelectedAlternative, getSelectedMeasurementId } from '../../../state';
+import { HierarchyState } from '../../../state/hierarchy.reducer';
 
 @Component({
     selector: 'app-measurements-panel',

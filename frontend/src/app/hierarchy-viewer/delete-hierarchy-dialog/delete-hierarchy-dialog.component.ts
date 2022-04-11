@@ -2,8 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { deleteHierarchy, deleteHierarchySuccess } from 'src/app/state/hierarchy.actions';
-import { HierarchyState } from 'src/app/state/hierarchy.reducer';
+import { deleteHierarchy, deleteHierarchySuccess } from '../../state/hierarchy.actions';
+import { HierarchyState } from '../../state/hierarchy.reducer';
 import { DeleteHierarchyData } from './DeleteHierarchyData';
 
 @Component({
