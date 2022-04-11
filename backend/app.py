@@ -1,4 +1,5 @@
 from distutils.command.config import config
+from threading import local
 from flask import Flask, abort, jsonify, request
 from pathlib import Path
 import os
@@ -173,42 +174,45 @@ def delete_node(hierarchy_id, node_id):
 # TODO: Create Alternative
 @app.route("/hierarchy/<hierarchy_id>/alternative", methods=['POST'])
 def create_alternative(hierarchy_id):
+    data = request.get_json()
+    
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
     
     if not hierarchy:
         abort(404, description="Resource not found")
 
-    measurements = Node.query.filter(Node.measurement_type != None, Node.hierarchy_id == hierarchy.id)
-    validNodeIds = []
-    for measurement in measurements:
-        validNodeIds.append(measurement.id)
-
-    data = request.get_json()
-
     # Create alternative
     alternative = Alternative(
-        hierarchy_id = hierarchy.id,
         name=data["name"]
     )
 
     if "values" in data:
+        # Check each value's nodeId belongs to an existing node.
+        measurements = Node.query.filter(Node.measurement_type != None, Node.hierarchy_id == hierarchy.id)
+        measurement_ids = []
+        for measurement in measurements:
+            measurement_ids.append(measurement.id)
+        
+        value_node_ids = []
         for value in data["values"]:
+            value_node_ids.append(value['nodeId'])
 
-            # Generate null values if a value is not provided for a measurement
+        # Fancy way to check if value_node_ids is a subset of measurement_ids
+        if not all(value_node_id in measurement_ids for value_node_id in value_node_ids):
+            abort(404, description="Resource not found")
+
+        for value in data["values"]:
+            measure = None
+            local_value = None
+            global_value = None
+
+            # Substitute values
             if "measure" in value:
                 measure = value["measure"]
-            else:
-                measure = None
-
-            if "local_value" in value:
-                local_value = value["local_value"]
-            else:
-                local_value = None
-                
-            if "global_value" in value:
-                global_value = value["global_value"]
-            else:
-                global_value = None
+            if "localValue" in value:
+                local_value = value["localValue"]
+            if "globalValue" in value:
+                global_value = value["globalValue"]
 
             # Generate values with alternative_id
             # Values must match up with measurement nodes
@@ -223,6 +227,7 @@ def create_alternative(hierarchy_id):
         value = Value(unusedNode, None, None, None)
         alternative.values.append(value)
 
+    hierarchy.append(alternative) # alternative and values get hierarchy_id from this line
     db.session.add(alternative)
     db.session.commit()
 
