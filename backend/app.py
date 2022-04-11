@@ -216,10 +216,15 @@ def create_alternative(hierarchy_id):
             # Generate values with alternative_id
             # Values must match up with measurement nodes
             if value["nodeId"] in validNodeIds:
+                validNodeIds.remove(value["nodeId"])
                 value = Value(value["nodeId"], measure, local_value, global_value)
                 alternative.values.append(value)
             else:
                 abort(404, description="Node ID not valid")
+
+    for unusedNode in validNodeIds:
+        value = Value(unusedNode, None, None, None)
+        alternative.values.append(value)
 
     db.session.add(alternative)
     db.session.commit()
