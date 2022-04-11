@@ -41,6 +41,12 @@ class Hierarchy(db.Model):
         cascade="all, delete",
         backref=db.backref("hierarchy"), # Allows the population of the hiearchy_id field in nodes
         )
+    
+    alternatives = db.relationship(
+        "Alternative",
+        cascade="all, delete",
+        backref=db.backref("hierarchy)"),
+    )
 
     def __init__(self, name, description):
         """

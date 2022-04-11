@@ -178,10 +178,7 @@ def create_alternative(hierarchy_id):
     if not hierarchy:
         abort(404, description="Resource not found")
 
-    # https://stackoverflow.com/questions/16093475/flask-sqlalchemy-querying-a-column-with-not-equals
-    # https://docs.sqlalchemy.org/en/14/core/sqlelement.html#sqlalchemy.sql.operators.ColumnOperators.isnot
-    # Get all measurement nodes of the given hierarchy
-    measurements = Node.query.filter(Node.measurement_type != None, Node.hierarchy_id == hierarchy_id)
+    measurements = Node.query.filter(Node.measurement_type != None, Node.hierarchy_id == hierarchy.id)
     validNodeIds = []
     for measurement in measurements:
         validNodeIds.append(measurement.id)
@@ -190,7 +187,7 @@ def create_alternative(hierarchy_id):
 
     # Create alternative
     alternative = Alternative(
-        hierarchy_id,
+        hierarchy_id = hierarchy.id,
         name=data["name"]
     )
 
@@ -235,9 +232,8 @@ def create_alternative(hierarchy_id):
 # TODO: Get Alternative
 @app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>", methods=['GET'])
 def get_alternative(hierarchy_id, alternative_id):
-    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
-    alternative = Alternative.query.filter_by(id=alternative_id).first()
-    if not hierarchy or not alternative:
+    alternative = Alternative.query.filter_by(id=alternative_id, hierarchy_id=hierarchy_id).first()
+    if not alternative:
         abort(404, description="Resource not found")
 
     return alternative.to_dict(), 200
@@ -246,9 +242,8 @@ def get_alternative(hierarchy_id, alternative_id):
 # TODO: Delete Alternative
 @app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>", methods=['DELETE'])
 def delete_alternative(hierarchy_id, alternative_id):
-    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
-    alternative = Alternative.query.filter_by(id=alternative_id).first()
-    if not hierarchy or not alternative:
+    alternative = Alternative.query.filter_by(id=alternative_id, hierarchy_id=hierarchy_id).first()
+    if not alternative:
         abort(404, description="Resource not found")
 
     db.session.delete(alternative)

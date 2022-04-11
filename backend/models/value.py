@@ -11,7 +11,6 @@ class Value(db.Model):
     local_value = db.Column(db.Integer)
     global_value = db.Column(db.Integer)
 
-
     def __init__(self, node_id, measure, local_value, global_value):
         self.node_id = node_id
         self.measure=measure

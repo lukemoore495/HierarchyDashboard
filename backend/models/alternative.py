@@ -5,11 +5,9 @@ class Alternative(db.Model):
     __tablename__ = 'alternative'
     id = db.Column(db.Integer, primary_key=True)
 
-    hierarchy_id = db.Column(db.Integer, nullable=False)
+    hierarchy_id = db.Column(db.Integer, db.ForeignKey("hierarchy.id"), nullable=False)
     name = db.Column(db.String())
 
-    
-    # Currently contains all nodes in the tree
     values = db.relationship(
         "Value",
         cascade="all, delete",
@@ -30,7 +28,7 @@ class Alternative(db.Model):
     def to_dict(self, get_values=True, export=False):
         alt_dict = {
             "name": self.name,
-            "hierarchy_id": self.hierarchy_id
+            "hierarchyId": self.hierarchy_id
         }
 
         if not export:
