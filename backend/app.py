@@ -228,8 +228,8 @@ def create_alternative(hierarchy_id):
 
 
 # TODO: Get Alternative
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
-def get_alternative(hierarchy_id, alternative_id, methods=['GET']):
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>", methods=['GET'])
+def get_alternative(hierarchy_id, alternative_id):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
     alternative = Alternative.query.filter_by(id=alternative_id).first()
     if not hierarchy or not alternative:
