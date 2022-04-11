@@ -6,13 +6,17 @@ class Value(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     
     alternative_id = db.Column(db.Integer, db.ForeignKey("alternative.id"), nullable=False)
-    node_id = db.Column(db.Integer)
+    node_id = db.Column(db.Integer, db.ForeignKey("node.id"), nullable=False) # Measurement id
     measure = db.Column(db.Integer)
     local_value = db.Column(db.Integer)
     global_value = db.Column(db.Integer)
 
-    def __init__(self, node_id, measure, local_value, global_value):
-        self.node_id = node_id
+    def __init__(self, alternative, measurement=None, measure=None, local_value=None, global_value=None):
+        # Values belong to both alternatives and measurement nodes
+        self.alternative=alternative
+        self.measurement=measurement
+
+        # Data fields
         self.measure=measure
         self.local_value = local_value
         self.global_value = global_value

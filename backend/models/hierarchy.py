@@ -45,7 +45,7 @@ class Hierarchy(db.Model):
     alternatives = db.relationship(
         "Alternative",
         cascade="all, delete",
-        backref=db.backref("hierarchy)"),
+        backref=db.backref("hierarchy"),
     )
 
     def __init__(self, name, description):

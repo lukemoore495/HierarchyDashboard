@@ -186,6 +186,9 @@ def create_alternative(hierarchy_id):
         name=data["name"]
     )
 
+    # TODO:
+    # An alternative should still be created, but with all fields None
+    # Even if there are no values in data
     if "values" in data:
         # Check each value's nodeId belongs to an existing node.
         measurements = Node.query.filter(Node.measurement_type != None, Node.hierarchy_id == hierarchy.id)
@@ -201,31 +204,22 @@ def create_alternative(hierarchy_id):
         if not all(value_node_id in measurement_ids for value_node_id in value_node_ids):
             abort(404, description="Resource not found")
 
-        for value in data["values"]:
-            measure = None
-            local_value = None
-            global_value = None
-
-            # Substitute values
-            if "measure" in value:
-                measure = value["measure"]
-            if "localValue" in value:
-                local_value = value["localValue"]
-            if "globalValue" in value:
-                global_value = value["globalValue"]
-
-            # Generate values with alternative_id
-            # Values must match up with measurement nodes
-            if value["nodeId"] in validNodeIds:
-                validNodeIds.remove(value["nodeId"])
-                value = Value(value["nodeId"], measure, local_value, global_value)
-                alternative.values.append(value)
-            else:
-                abort(404, description="Node ID not valid")
-
-    for unusedNode in validNodeIds:
-        value = Value(unusedNode, None, None, None)
-        alternative.values.append(value)
+        for measurement in measurements:
+            new_value = Value(
+                alternative=alternative,
+                measurement=measurement,
+            )
+            
+            if measurement.id in value_node_ids:
+                for value in data['values']:
+                    if value['nodeId'] == measurement.id:
+                        # Substitute values
+                        if "measure" in value:
+                            new_value.measure = value["measure"]
+                        if "localValue" in value:
+                            new_value.local_value = value["localValue"]
+                        if "globalValue" in value:
+                            new_value.global_value = value["globalValue"]
 
     hierarchy.append(alternative) # alternative and values get hierarchy_id from this line
     db.session.add(alternative)

@@ -70,6 +70,12 @@ class Node(db.Model):
         cascade="all, delete-orphan",
         backref=db.backref("parent",remote_side=[id]),
         )
+    
+    values = db.relationship(
+        "Value",
+        cascade="all, delete",
+        backref=db.backref("measurement")
+    )
 
     def __init__(self, name, parent=None, icon=None, weight=None, measurement_type=None, value_function=None):
         """
