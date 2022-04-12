@@ -101,14 +101,14 @@ class Hierarchy(db.Model):
         # Get tree as dict
         if get_nodes:
             root = Node.query.filter_by(parent_id=None, hierarchy_id=self.id).first()
-            hier_dict["root"] = root.to_dict(export) # naming it root simplifies frontend
+            hier_dict["root"] = root.to_dict(export=export) # naming it root simplifies frontend
 
         if get_alts:
             alternatives = Alternative.query.filter_by(hierarchy_id=self.id)
 
             alts_lst = []
             for alt in alternatives:
-                alts_lst.append(alt.to_dict(export))
+                alts_lst.append(alt.to_dict(export=export))
 
             hier_dict["alternatives"] = alts_lst
 

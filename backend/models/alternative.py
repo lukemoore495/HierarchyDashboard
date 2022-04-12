@@ -25,7 +25,7 @@ class Alternative(db.Model):
         self.name=name
         self.hierarchy=hierarchy
 
-    def to_dict(self, get_values=True, export=False):
+    def to_dict(self, export=False):
         alt_dict = {
             "name": self.name,
             "hierarchyId": self.hierarchy_id
@@ -34,16 +34,17 @@ class Alternative(db.Model):
         if not export:
             alt_dict['id'] = str(self.id)
 
-        if get_values:
-            alt_dict['values'] = []
-            values = Value.query.filter_by(alternative_id=self.id)
-            for value in values:
-                alt_dict['values'].append(value.to_dict(export))
+        val_dicts = []
+        values = Value.query.filter_by(alternative_id=self.id)
+        for value in values:
+            val_dicts.append(value.to_dict(export))
+        alt_dict['values'] = val_dicts
 
         return alt_dict
 
     @classmethod
-    def create(cls, hierarchy, measurements, data):
+    def create(cls, hierarchy, data):
+        measurements = hierarchy.get_measurements()
         # Create alternative
         alternative = Alternative(
             name=data["name"],
@@ -58,11 +59,13 @@ class Alternative(db.Model):
         value_node_ids = []
         for value in data["values"]:
             value_node_ids.append(value['nodeId'])
-
+        
+        print("HERE2")
         # Fancy way to check if value_node_ids is a subset of measurement_ids
         if not all(value_node_id in measurement_ids for value_node_id in value_node_ids):
             return None
 
+        print("HERE3")
         for measurement in measurements:
             new_value = Value(
                 alternative=alternative,

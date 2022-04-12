@@ -60,15 +60,19 @@ def create_hierarchy():
     if nodes_lst:
         root.create_tree(nodes_lst)
 
+    # Commit changes to DB
+    db.session.add(hierarchy)
+    db.session.commit()
+
     # Parse and create alternatives
     alternatives = data["alternatives"]
+    new_alts = []
     for alternative in alternatives:
-        hierarchy.alternatives.append(Alternative.create(alternative))
+        new_alts.append(Alternative.create(hierarchy, alternative))
 
     if None in alternatives:
         abort(204, description="Problem with Alternatives")
-    
-    # Commit changes to DB
+
     db.session.add(hierarchy)
     db.session.commit()
 
