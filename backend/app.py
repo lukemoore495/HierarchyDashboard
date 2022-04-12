@@ -190,58 +190,15 @@ def create_alternative(hierarchy_id):
         abort(404, description="Resource not found")
 
     measurements = hierarchy.get_measurements()
-    alternative = Alternative.create(measurements, data)
+    alternative = Alternative.create(hierarchy, measurements, data)
 
     if not alternative:
         abort(404, description="Resource not found")
 
-    hierarchy.alternatives.append(alternative) # alternative and values get hierarchy_id from this line
-    db.session.add(hierarchy)
+    db.session.add(alternative)
     db.session.commit()
 
     return alternative.to_dict(), 201
-
-    # # Create alternative
-    # alternative = Alternative(
-    #     name=data["name"]
-    # )
-
-    # # Check each value's nodeId belongs to an existing node.
-    # measurements = Node.query.filter(Node.measurement_type != None, Node.hierarchy_id == hierarchy.id)
-    # measurement_ids = []
-    # for measurement in measurements:
-    #     measurement_ids.append(measurement.id)
-    
-    # value_node_ids = []
-    # for value in data["values"]:
-    #     value_node_ids.append(value['nodeId'])
-
-    # # Fancy way to check if value_node_ids is a subset of measurement_ids
-    # if not all(value_node_id in measurement_ids for value_node_id in value_node_ids):
-    #     abort(404, description="Resource not found")
-
-    # for measurement in measurements:
-    #     new_value = Value(
-    #         alternative=alternative,
-    #         measurement=measurement,
-    #     )
-        
-    #     if measurement.id in value_node_ids:
-    #         for value in data['values']:
-    #             if value['nodeId'] == measurement.id:
-    #                 # Substitute values
-    #                 if "measure" in value:
-    #                     new_value.measure = value["measure"]
-    #                 if "localValue" in value:
-    #                     new_value.local_value = value["localValue"]
-    #                 if "globalValue" in value:
-    #                     new_value.global_value = value["globalValue"]
-
-    # hierarchy.alternatives.append(alternative) # alternative and values get hierarchy_id from this line
-    # db.session.add(hierarchy)
-    # db.session.commit()
-
-    # return alternative.to_dict(), 201
 
 
 # TODO: Get Alternative

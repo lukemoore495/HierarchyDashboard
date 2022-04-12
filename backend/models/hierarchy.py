@@ -140,4 +140,4 @@ class Hierarchy(db.Model):
 
     # Some helper functions
     def get_measurements(self):
-        return Node.get_measurements(self.id)
+        return Node.get_measurements(hierarchy_id=self.id)

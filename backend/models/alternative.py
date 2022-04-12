@@ -14,7 +14,7 @@ class Alternative(db.Model):
         backref=db.backref("alternative")
         )
 
-    def __init__(self, hierarchy_id, name):
+    def __init__(self, name, hierarchy):
         """
         Parameters
         ----------
@@ -22,8 +22,8 @@ class Alternative(db.Model):
             Name of the alternative to be created.
 
         """
-        self.name = name
-        self.hierarchy_id=hierarchy_id
+        self.name=name
+        self.hierarchy=hierarchy
 
     def to_dict(self, get_values=True, export=False):
         alt_dict = {
@@ -43,10 +43,11 @@ class Alternative(db.Model):
         return alt_dict
 
     @classmethod
-    def create(cls, measurements, data):
+    def create(cls, hierarchy, measurements, data):
         # Create alternative
         alternative = Alternative(
             name=data["name"],
+            hierarchy=hierarchy,
         )
 
         # Check each value's nodeId belongs to an existing node.
