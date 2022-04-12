@@ -193,8 +193,7 @@ def create_alternative(hierarchy_id):
     if not hierarchy:
         abort(404, description="Resource not found")
 
-    measurements = hierarchy.get_measurements()
-    alternative = Alternative.create(hierarchy, measurements, data)
+    alternative = Alternative.create(hierarchy, data)
 
     if not alternative:
         abort(404, description="Resource not found")
@@ -214,8 +213,6 @@ def get_alternative(hierarchy_id, alternative_id):
 
     return alternative.to_dict(), 200
 
-
-# TODO: Delete Alternative
 @app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>", methods=['DELETE'])
 def delete_alternative(hierarchy_id, alternative_id):
     alternative = Alternative.query.filter_by(id=alternative_id, hierarchy_id=hierarchy_id).first()
@@ -229,6 +226,7 @@ def delete_alternative(hierarchy_id, alternative_id):
     return jsonify({"message": message}), 200
 
 
+# TODO: Double check that patch_value works. Talk to the frontend about integration.
 @app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<node_id>", methods=['PATCH'])
 def patch_value(hierarchy_id, alternative_id, node_id):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
