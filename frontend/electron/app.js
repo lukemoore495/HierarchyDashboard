@@ -6,8 +6,9 @@ let mainWindow;
 let backend;
 let development = !app.isPackaged;
 
+const rootPath = path.normalize(__dirname + '/..');
 if(development){
-    backend = path.join(process.cwd(),'./dist/app.exe');
+    backend = path.join(rootPath,'/dist/app.exe');
 } else {
     backend = path.join(process.resourcesPath,'app.exe');
 }
@@ -47,13 +48,13 @@ function createWindow () {
     });
 
     if(development){
-        mainWindow.webContents.openDevTools()
+        mainWindow.webContents.openDevTools();
     }
 
-    mainWindow.loadFile(__dirname + '/dist/DashboardApp/index.html');
+    mainWindow.loadFile(rootPath + '/dist/HierarchyDashboard/index.html');
 
     mainWindow.webContents.on('did-fail-load', () => {
-        mainWindow.loadFile(__dirname + '/dist/DashboardApp/index.html');
+        mainWindow.loadFile(rootPath + '/dist/HierarchyDashboard/index.html');
     });
 
     mainWindow.on('closed', function () {

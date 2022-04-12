@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
-import { Hierarchy, MeasurementDefinition, MeasurementType, Node } from 'src/app/Hierarchy';
+import { Hierarchy, Node } from '../../Hierarchy';
 import { OnInit } from '@angular/core';
 import { TreeNode } from './TreeNode';
 import { AddNodeDialogComponent } from './add-node-dialog/add-node-dialog.component';

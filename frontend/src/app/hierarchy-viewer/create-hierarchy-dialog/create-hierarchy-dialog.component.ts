@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { HierarchyRequest } from 'src/app/hierarchy.service';
-import { createHierarchy, createHierarchySuccess } from 'src/app/state/hierarchy.actions';
-import { HierarchyState } from 'src/app/state/hierarchy.reducer';
+import { HierarchyRequest } from '../../hierarchy.service';
+import { createHierarchy, createHierarchySuccess } from '../../state/hierarchy.actions';
+import { HierarchyState } from '../../state/hierarchy.reducer';
 import { CreateHierarchyForm } from './CreateHierarchyForm';
 
 @Component({

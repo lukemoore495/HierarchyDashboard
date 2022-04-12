@@ -53,7 +53,9 @@ export interface PairComparison {
     providedIn: 'root'
 })
 export class HierarchyService {
-    root = 'http://localhost:4200/api';
+    //Use localhost:5000 for desktop and /api for browser mode
+      root = 'http://localhost:5000';
+    //root = 'http://localhost:4200/api';
 
     constructor(private http: HttpClient) { }
 
