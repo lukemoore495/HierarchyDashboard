@@ -255,3 +255,6 @@ class Node(db.Model):
         """
         for node in nodes_lst:
             self.create(node)
+
+    def get_measurements(self, hierarchy_id):
+        return Node.query.filter(Node.measurement_type != None, Node.hierarchy_id == hierarchy_id)

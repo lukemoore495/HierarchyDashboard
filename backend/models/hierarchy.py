@@ -1,3 +1,4 @@
+from models.alternative import Alternative
 from .shared import db # Allows the models to be split out into separate files.
 from .node import Node
 
@@ -70,7 +71,7 @@ class Hierarchy(db.Model):
         """Returns a formatted string representation of a hierarchy, including nodes."""
         return repr(self) + "\n\nTree:\n" + self.nodes[0].dump()
 
-    def to_dict(self, get_nodes=True, export=False):
+    def to_dict(self, get_nodes=True, get_alts=True, export=False):
         """
         Returns a dictionary representation of the hierarchy and its tree.
         Formats the fields according to the Frontend's requirements.
@@ -102,10 +103,19 @@ class Hierarchy(db.Model):
             root = Node.query.filter_by(parent_id=None, hierarchy_id=self.id).first()
             hier_dict["root"] = root.to_dict(export) # naming it root simplifies frontend
 
+        if get_alts:
+            alternatives = Alternative.query.filter_by(hierarchy_id=self.id)
+
+            alts_lst = []
+            for alt in alternatives:
+                alts_lst.append(alt.to_dict(export))
+
+            hier_dict["alternatives"] = alts_lst
+
         return hier_dict
     
     @classmethod
-    def get_list(cls, get_nodes):
+    def get_list(cls, get_nodes, get_alts):
         """
         Returns a list of hierarchy objects.
         Flag determine if nodes are returned.
@@ -124,6 +134,10 @@ class Hierarchy(db.Model):
         all_hierarchies = []
 
         for hierarchy in hierarchies:
-            all_hierarchies.append(hierarchy.to_dict(get_nodes))
+            all_hierarchies.append(hierarchy.to_dict(get_nodes, get_alts))
         
         return all_hierarchies
+
+    # Some helper functions
+    def get_measurements(self):
+        return Node.get_measurements(self.id)

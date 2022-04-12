@@ -55,11 +55,19 @@ def create_hierarchy():
     
     hierarchy.nodes.append(root)
    
-   # Parse nodes and create tree
+    # Parse nodes and create tree
     nodes_lst = data["root"]["children"]
     if nodes_lst:
         root.create_tree(nodes_lst)
 
+    # Parse and create alternatives
+    alternatives = data["alternatives"]
+    for alternative in alternatives:
+        hierarchy.alternatives.append(Alternative.create(alternative))
+
+    if None in alternatives:
+        abort(204, description="Problem with Alternatives")
+    
     # Commit changes to DB
     db.session.add(hierarchy)
     db.session.commit()
@@ -94,7 +102,7 @@ def update_node(hierarchy_id, parent_id):
 
 @app.route("/hierarchy/ascending_id", methods=['GET'])
 def get_all_hierarchies_ascending():
-    all_hierarchies = Hierarchy.get_list(get_nodes=False)
+    all_hierarchies = Hierarchy.get_list(get_nodes=False, get_alts=False)
 
     if not all_hierarchies:
         abort(404, description="Resource not found")
@@ -104,7 +112,7 @@ def get_all_hierarchies_ascending():
 
 @app.route("/hierarchy/descending_id", methods=['GET'])
 def get_all_hierarchies_descending():
-    all_hierarchies = Hierarchy.get_list(get_nodes=False)
+    all_hierarchies = Hierarchy.get_list(get_nodes=False, get_alts=False)
     all_hierarchies.reverse()
 
     if not all_hierarchies:
@@ -181,51 +189,59 @@ def create_alternative(hierarchy_id):
     if not hierarchy:
         abort(404, description="Resource not found")
 
-    # Create alternative
-    alternative = Alternative(
-        name=data["name"]
-    )
+    measurements = hierarchy.get_measurements()
+    alternative = Alternative.create(measurements, data)
 
-    # TODO:
-    # An alternative should still be created, but with all fields None
-    # Even if there are no values in data
-    if "values" in data:
-        # Check each value's nodeId belongs to an existing node.
-        measurements = Node.query.filter(Node.measurement_type != None, Node.hierarchy_id == hierarchy.id)
-        measurement_ids = []
-        for measurement in measurements:
-            measurement_ids.append(measurement.id)
-        
-        value_node_ids = []
-        for value in data["values"]:
-            value_node_ids.append(value['nodeId'])
+    if not alternative:
+        abort(404, description="Resource not found")
 
-        # Fancy way to check if value_node_ids is a subset of measurement_ids
-        if not all(value_node_id in measurement_ids for value_node_id in value_node_ids):
-            abort(404, description="Resource not found")
-
-        for measurement in measurements:
-            new_value = Value(
-                alternative=alternative,
-                measurement=measurement,
-            )
-            
-            if measurement.id in value_node_ids:
-                for value in data['values']:
-                    if value['nodeId'] == measurement.id:
-                        # Substitute values
-                        if "measure" in value:
-                            new_value.measure = value["measure"]
-                        if "localValue" in value:
-                            new_value.local_value = value["localValue"]
-                        if "globalValue" in value:
-                            new_value.global_value = value["globalValue"]
-
-    hierarchy.append(alternative) # alternative and values get hierarchy_id from this line
-    db.session.add(alternative)
+    hierarchy.alternatives.append(alternative) # alternative and values get hierarchy_id from this line
+    db.session.add(hierarchy)
     db.session.commit()
 
     return alternative.to_dict(), 201
+
+    # # Create alternative
+    # alternative = Alternative(
+    #     name=data["name"]
+    # )
+
+    # # Check each value's nodeId belongs to an existing node.
+    # measurements = Node.query.filter(Node.measurement_type != None, Node.hierarchy_id == hierarchy.id)
+    # measurement_ids = []
+    # for measurement in measurements:
+    #     measurement_ids.append(measurement.id)
+    
+    # value_node_ids = []
+    # for value in data["values"]:
+    #     value_node_ids.append(value['nodeId'])
+
+    # # Fancy way to check if value_node_ids is a subset of measurement_ids
+    # if not all(value_node_id in measurement_ids for value_node_id in value_node_ids):
+    #     abort(404, description="Resource not found")
+
+    # for measurement in measurements:
+    #     new_value = Value(
+    #         alternative=alternative,
+    #         measurement=measurement,
+    #     )
+        
+    #     if measurement.id in value_node_ids:
+    #         for value in data['values']:
+    #             if value['nodeId'] == measurement.id:
+    #                 # Substitute values
+    #                 if "measure" in value:
+    #                     new_value.measure = value["measure"]
+    #                 if "localValue" in value:
+    #                     new_value.local_value = value["localValue"]
+    #                 if "globalValue" in value:
+    #                     new_value.global_value = value["globalValue"]
+
+    # hierarchy.alternatives.append(alternative) # alternative and values get hierarchy_id from this line
+    # db.session.add(hierarchy)
+    # db.session.commit()
+
+    # return alternative.to_dict(), 201
 
 
 # TODO: Get Alternative
