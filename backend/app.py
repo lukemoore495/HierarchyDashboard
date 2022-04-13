@@ -1,10 +1,12 @@
 from distutils.command.config import config
+from threading import local
 from flask import Flask, abort, jsonify, request
 from pathlib import Path
 import os
 import sys
 
 from models.hierarchy import Hierarchy, Node
+from models.alternative import Alternative, Value
 from models.shared import db # Allows the models to be split out into separate files.
 
 
@@ -53,7 +55,7 @@ def create_hierarchy():
     
     hierarchy.nodes.append(root)
    
-   # Parse nodes and create tree
+    # Parse nodes and create tree
     nodes_lst = data["root"]["children"]
     if nodes_lst:
         root.create_tree(nodes_lst)
@@ -62,15 +64,31 @@ def create_hierarchy():
     db.session.add(hierarchy)
     db.session.commit()
 
+    # Parse and create alternatives
+    alternatives = data["alternatives"]
+    new_alts = []
+    for alternative in alternatives:
+        new_alts.append(Alternative.create(hierarchy, alternative))
+
+    if None in alternatives:
+        abort(204, description="Problem with Alternatives")
+
+    db.session.add(hierarchy)
+    db.session.commit()
+
     return hierarchy.to_dict(), 201
 
 
 # Will never not have a root node. If you do, things are messed
+# TODO: Clean up the check between old and new measures. It works but it's sloppy.
 @app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
 def create_node(hierarchy_id, parent_id):
     data = request.get_json()
 
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
     parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id).first()
+    old_measurements = hierarchy.get_measurements()
+    old_measurements = [r for r in old_measurements]
 
     if not parent:
         abort(404, description="Resource not found")
@@ -81,20 +99,22 @@ def create_node(hierarchy_id, parent_id):
     db.session.add(new_node)
     db.session.commit()
 
+    # Create new null values for new measurement nodes
+    updated_measurements = hierarchy.get_measurements()
+    updated_measurements = [r for r in updated_measurements]
+    alternatives = Alternative.query.filter_by(hierarchy_id=hierarchy_id)
+
+    for measure in updated_measurements:
+        if measure not in old_measurements:
+            for alt in alternatives:
+                new_value = Value(alt, measure)
+
+                db.session.add(new_value)
+
+    db.session.commit()
+
     return jsonify(parent.to_dict()), 201
-
-
-# TODO: Create Alternative
-@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
-def create_alternative(hierarchy_id, parent_id):
-    pass
-
-
-# TODO: Update Alternative Measure (the variable from the frontend)
-@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/alternative/<alternative_id>/measure", methods=['PATCH'])
-def update_measure(hierarchy_id, parent_id, alternative_id):
-    pass
-
+    
 
 #TODO: Patch Node
 @app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
@@ -104,7 +124,7 @@ def update_node(hierarchy_id, parent_id):
 
 @app.route("/hierarchy/ascending_id", methods=['GET'])
 def get_all_hierarchies_ascending():
-    all_hierarchies = Hierarchy.get_list(get_nodes=False)
+    all_hierarchies = Hierarchy.get_list(get_nodes=False, get_alts=False)
 
     if not all_hierarchies:
         abort(404, description="Resource not found")
@@ -114,7 +134,7 @@ def get_all_hierarchies_ascending():
 
 @app.route("/hierarchy/descending_id", methods=['GET'])
 def get_all_hierarchies_descending():
-    all_hierarchies = Hierarchy.get_list(get_nodes=False)
+    all_hierarchies = Hierarchy.get_list(get_nodes=False, get_alts=False)
     all_hierarchies.reverse()
 
     if not all_hierarchies:
@@ -183,64 +203,67 @@ def delete_node(hierarchy_id, node_id):
 
 # TODO: Create Alternative
 @app.route("/hierarchy/<hierarchy_id>/alternative", methods=['POST'])
-def create_alterntaive(hierarchy_id):
-    # Check Hierarchy
-    # Abort if it doesn't exist
-
-    # https://stackoverflow.com/questions/16093475/flask-sqlalchemy-querying-a-column-with-not-equals
-    # https://docs.sqlalchemy.org/en/14/core/sqlelement.html#sqlalchemy.sql.operators.ColumnOperators.isnot
-    measurements = Node.query.filter(Node.measurement_type != None).all()
-    # Read data
-    # {
-    #     "name": "Ford Fiesta",
-    #     "values": [
-    #         {
-    #             "nodeId": 12,
-    #             "measure": 12345,
-    #             "local_value": 43,
-    #             "global_value": 32,
-    #         },
-    #         {
-    #             "nodeId": 14,
-    #             "measure": 24,
-    #             "local_value": 64,
-    #             "global_value": 128,
-    #         }
-    #     ]
-    # }
+def create_alternative(hierarchy_id):
+    data = request.get_json()
     
-    # Create alternative
-    # Generate values with alternative_id
-        # Values must match up with measurement nodes
-        # Generate null values if a value is not provided for a measurement
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    
+    if not hierarchy:
+        abort(404, description="Resource not found")
 
-    pass
+    alternative = Alternative.create(hierarchy, data)
+
+    if not alternative:
+        abort(404, description="Resource not found")
+
+    db.session.add(alternative)
+    db.session.commit()
+
+    return alternative.to_dict(), 201
 
 
 # TODO: Get Alternative
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>", methods=['GET'])
 def get_alternative(hierarchy_id, alternative_id):
-    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
-    alternative = Node.query.filter_by(id=alternative_id).first()
+    alternative = Alternative.query.filter_by(id=alternative_id, hierarchy_id=hierarchy_id).first()
+    if not alternative:
+        abort(404, description="Resource not found")
 
-    # Return alternative.to_dict()
+    return alternative.to_dict(), 200
 
-
-# TODO: Delete Alternative
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>", methods=['DELETE'])
 def delete_alternative(hierarchy_id, alternative_id):
-    pass
+    alternative = Alternative.query.filter_by(id=alternative_id, hierarchy_id=hierarchy_id).first()
+    if not alternative:
+        abort(404, description="Resource not found")
+
+    db.session.delete(alternative)
+    db.session.commit()
+
+    message = f"Alternative {alternative_id} Deleted"
+    return jsonify({"message": message}), 200
 
 
-# TODO: Patch Value
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<value_id>")
-def patch_value(hierarchy_id, alternative_id, value_id):
-    # Check the hierarchy, alternative, and value exist
-        # Abort if they don't
+# TODO: Double check that patch_value works. Talk to the frontend about integration.
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/node/<node_id>", methods=['PATCH'])
+def patch_value(hierarchy_id, alternative_id, node_id):
+    data = request.get_json()
+    value = Value.query.filter_by(node_id=node_id, alternative_id=alternative_id).first()
+    if not value:
+        abort(404, description="Resource not found")
 
     # Change individual measure in the value table
-    # Local and global values are regenerated according to weighting functions
-    # that don't exist yet
+    if "measure" in data:
+        value.measure=data["measure"]
+
+    db.session.commit()
+
+    return value.to_dict(), 201
+
+
+# TODO: Update Alternative Measure (the variable from the frontend)
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/alternative/<alternative_id>/measure", methods=['PATCH'])
+def update_measure(hierarchy_id, parent_id, alternative_id):
     pass
 
 
