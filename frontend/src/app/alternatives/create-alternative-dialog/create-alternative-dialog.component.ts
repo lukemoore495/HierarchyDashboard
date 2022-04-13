@@ -2,8 +2,8 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { createAlternative, createAlternativeSuccess } from 'src/app/state/hierarchy.actions';
-import { HierarchyState } from 'src/app/state/hierarchy.reducer';
+import { createAlternative, createAlternativeSuccess } from '../../state/hierarchy.actions';
+import { HierarchyState } from '../../state/hierarchy.reducer';
 import { CreateHierarchyAlternative } from '../AlternativeForm';
 
 @Component({
