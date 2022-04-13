@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable, Subscription } from 'rxjs';
 import { Hierarchy, Value, Node } from '../../Hierarchy';
-import { getSelectedHierarchy } from '../../state';
+import { getSelectedAlternative, getSelectedHierarchy } from '../../state';
+import { updateAlternativeMeasure } from '../../state/hierarchy.actions';
 import { HierarchyState } from '../../state/hierarchy.reducer';
 
 @Component({
@@ -10,20 +11,36 @@ import { HierarchyState } from '../../state/hierarchy.reducer';
     templateUrl: './alternatives-form.component.html',
     styleUrls: ['./alternatives-form.component.scss']
 })
-export class AlternativesFormComponent implements OnInit {
+export class AlternativesFormComponent implements OnInit, OnDestroy {
     selectedHierarchy$?: Observable<Hierarchy | null | undefined>;
     measurementNodes: Node[] | null = null;
     currentMeasurements: Value[] = [];
+    hierarchyId: string | null = null;
+    alternativeId: string | null = null;
+    subscriptions: Subscription[] = [];
 
     constructor(private store: Store<HierarchyState>) { }
 
     ngOnInit(): void {
         this.selectedHierarchy$ = this.store.select(getSelectedHierarchy);
-        this.selectedHierarchy$.pipe(
-            map(hierarchy => hierarchy?.root),
-        ).subscribe(root => {
-            root ? this.measurementNodes = this.selectMeasurements(root) : this.measurementNodes = null;
+        const hierarchySub = this.selectedHierarchy$.subscribe(hierarchy => {
+            if(!hierarchy){
+                return;
+            }
+            this.hierarchyId = hierarchy.id;
+            hierarchy.root ? this.measurementNodes = this.selectMeasurements(hierarchy.root) : this.measurementNodes = null;
         });
+        const alternativeSub = this.store.select(getSelectedAlternative).subscribe(alternative => {
+            if(!alternative){
+                return;
+            }
+            this.alternativeId = alternative.id;
+        });
+        this.subscriptions.push(hierarchySub, alternativeSub);
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.forEach(sub => sub.unsubscribe());
     }
 
     selectMeasurements(node: Node): Node[] {
@@ -55,8 +72,25 @@ export class AlternativesFormComponent implements OnInit {
     }
 
     saveMeasurements(newMeasurements : Value[]){
-        //replace this with an api call in the future
-        console.log(newMeasurements);
+        const hierarchyId = this.hierarchyId ?? null;
+        const alternativeId = this.alternativeId ?? null;
+        if(!hierarchyId || !alternativeId){
+            return;
+        }
+        newMeasurements.forEach(measurement => {
+            if(!measurement.measure){
+                return;
+            }
+            this.store.dispatch(
+                updateAlternativeMeasure(
+                    {
+                        hierarchyId: hierarchyId, 
+                        alternativeId: alternativeId, 
+                        nodeId: measurement.nodeId, 
+                        measure: measurement.measure
+                    }
+                ));
+        });
     }
 
 }

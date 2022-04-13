@@ -31,16 +31,10 @@ export const HierarchyReducer = createReducer<HierarchyState>(
             name: action.hierarchy.name
         });
 
-        //Remove this once we have alternatives in the backend
-        const hierarchy = { ...action.hierarchy };
-        if (hierarchy.name === 'RRR Hierarchy') {
-            hierarchy.alternatives = (RRRHierarchy as Hierarchy).alternatives;
-        }
-
         return {
             ...state,
             Hierarchies: hierarchies,
-            selectedHierarchy: hierarchy
+            selectedHierarchy: action.hierarchy
         };
     }),
     on(HierarchyActions.createHierarchyFailure, (state, action): HierarchyState => {
@@ -64,13 +58,6 @@ export const HierarchyReducer = createReducer<HierarchyState>(
     }),
     on(HierarchyActions.setSelectedHierarchySuccess, (state, action): HierarchyState => {
         const hierarchy = { ...action.hierarchy };
-
-        //Remove this once we have alternatives in the backend
-        if (hierarchy.name === 'RRR Hierarchy') {
-            hierarchy.alternatives = (RRRHierarchy as Hierarchy).alternatives;
-        } else if (hierarchy.name === 'Best Car') {
-            hierarchy.alternatives = (CarHierarchy as Hierarchy).alternatives;
-        }
 
         const alternative = hierarchy.alternatives ? hierarchy.alternatives[0] : null;
         return {

@@ -22,12 +22,12 @@ export interface NodeRequest {
 
 export interface AlternativeRequest {
     name: string;
-    measurements: MeasurementRequest[];
+    value: ValueRequest[];
 }
 
-export interface MeasurementRequest {
+export interface ValueRequest {
     nodeId: string;
-    measure?: number;
+    measure: number;
 }
 
 export interface MeasurementDefinitionRequest {
@@ -105,7 +105,8 @@ export class HierarchyService {
 
     updateAlternativeMeasure(hierarchyId: string, alternativeId: string, nodeId: string, measure: number): Observable<string> {
         const url = this.root + `/hierarchy/${hierarchyId}/alternative/${alternativeId}/node/${nodeId}` ;
-        return this.http.patch<string>(url, measure);
+        const measureUpdate = {'measure': measure};
+        return this.http.patch<string>(url, measureUpdate);
     }
 
     // getValueFunctionPoint(hierarchyId: string, nodeId: string, xValue: number): Point{}
