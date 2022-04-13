@@ -4,10 +4,10 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { Hierarchy } from 'src/app/Hierarchy';
-import { HierarchyRequest, HierarchyService } from 'src/app/hierarchy.service';
-import { createHierarchy, createHierarchySuccess } from 'src/app/state/hierarchy.actions';
-import { HierarchyState } from 'src/app/state/hierarchy.reducer';
+import { Hierarchy } from '../../Hierarchy';
+import { HierarchyRequest, HierarchyService } from '../../hierarchy.service';
+import { createHierarchy, createHierarchySuccess } from '../../state/hierarchy.actions';
+import { HierarchyState } from '../../state/hierarchy.reducer';
 
 @Component({
     selector: 'app-import-export-hierarchy-dialog',

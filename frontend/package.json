@@ -1,5 +1,5 @@
 {
-  "name": "dashboard-app",
+  "name": "hierarchy-dashboard",
   "version": "0.0.0",
   "main": "./electron/app.js",
   "description": "Hierarchy Dashboard",
@@ -77,7 +77,7 @@
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
-            "name": "dashboard_app"
+            "name": "hierarchy_dashboard"
           }
         },
         {

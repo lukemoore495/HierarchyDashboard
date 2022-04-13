@@ -3,8 +3,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { deleteNode, deleteNodeSuccess } from 'src/app/state/hierarchy.actions';
-import { HierarchyState } from 'src/app/state/hierarchy.reducer';
+import { deleteNode, deleteNodeSuccess } from '../../../state/hierarchy.actions';
+import { HierarchyState } from '../../../state/hierarchy.reducer';
 import { DeleteNodeData } from './DeleteNodeData';
 
 @Component({

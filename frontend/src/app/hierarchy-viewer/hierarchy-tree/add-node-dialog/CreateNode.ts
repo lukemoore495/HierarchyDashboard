@@ -1,4 +1,4 @@
-import { MeasurementType } from 'src/app/Hierarchy';
+import { MeasurementType } from '../../../Hierarchy';
 
 export interface CreateNodeForm {
     isMeasurement: boolean;
