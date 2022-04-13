@@ -1,6 +1,4 @@
 import { createReducer, on } from '@ngrx/store';
-import CarHierarchy from '../../assets/staticFiles/DemoExample.json';
-import RRRHierarchy from '../../assets/staticFiles/RRRHierarchy.json';
 import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
 import * as HierarchyActions from './hierarchy.actions';
 
