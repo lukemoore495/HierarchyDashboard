@@ -30,13 +30,6 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         });
 
         const alternatives = [...action.hierarchy.alternatives];
-        //Remove this once we have value function data as part of a hierarchy
-        //Keep for demo purposes only
-        // if (action.hierarchy.name === 'RRR Hierarchy') {
-        //     alternatives.push(...(RRRHierarchy as Hierarchy).alternatives);
-        // } else if (action.hierarchy.name === 'Best Car') {
-        //     alternatives.push(...(CarHierarchy as Hierarchy).alternatives);
-        // }
 
         return {
             ...state,
@@ -66,14 +59,6 @@ export const HierarchyReducer = createReducer<HierarchyState>(
     on(HierarchyActions.setSelectedHierarchySuccess, (state, action): HierarchyState => {
         const alternative = action.hierarchy.alternatives ? action.hierarchy.alternatives[0] : null;
         const alternatives = [...action.hierarchy.alternatives];
-
-        //Remove this once we have value function data as part of a hierarchy
-        //Keep for demo purposes only
-        // if (action.hierarchy.name === 'RRR Hierarchy') {
-        //     alternatives.push(...(RRRHierarchy as Hierarchy).alternatives);
-        // } else if (action.hierarchy.name === 'Best Car') {
-        //     alternatives.push(...(CarHierarchy as Hierarchy).alternatives);
-        // }
 
         return {
             ...state,
