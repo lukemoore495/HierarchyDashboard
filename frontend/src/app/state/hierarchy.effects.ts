@@ -82,4 +82,17 @@ export class HierarchyEffects {
                 )
             );
     });
+    updateAlternativeMeasure$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.updateAlternativeMeasure),
+                mergeMap(action => this.hierarchyService.updateAlternativeMeasure(action.hierarchyId, action.alternativeId, action.nodeId, action.measure)
+                    .pipe(
+                        map(_ => HierarchyActions.updateAlternativeMeasureSuccess(
+                            {hierarchyId: action.hierarchyId, alternativeId: action.alternativeId, nodeId: action.nodeId, measure: action.measure})),
+                        catchError(error => of(HierarchyActions.updateAlternativeMeasureFailure({error})))
+                    )
+                )
+            );
+    });
 }

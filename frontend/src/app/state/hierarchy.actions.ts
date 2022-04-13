@@ -100,3 +100,18 @@ export const deleteNodeFailure = createAction(
     '[Hierarchies API] Delete Node Failure',
     props<{error: string}>()
 );
+
+export const updateAlternativeMeasure = createAction(
+    '[Alternatives] Update Alternative Measure',
+    props<{hierarchyId: string, alternativeId: string, nodeId: string, measure: number}>()
+);
+
+export const updateAlternativeMeasureSuccess = createAction(
+    '[Alternatives API] Update Alternative Measure Success',
+    props<{hierarchyId: string, alternativeId: string, nodeId: string, measure: number}>()
+);
+
+export const updateAlternativeMeasureFailure = createAction(
+    '[Alternatives API] Update Alternative Measure Failure',
+    props<{error: string}>()
+);

@@ -1926,7 +1926,7 @@
         {
             "id": "1",
             "name": "2006",
-            "measurements": [
+            "values": [
                 {
                     "nodeId": "57",
                     "measure": 13,

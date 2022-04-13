@@ -54,8 +54,8 @@ export interface PairComparison {
 })
 export class HierarchyService {
     //Use localhost:5000 for desktop and /api for browser mode
-      root = 'http://localhost:5000';
-    //root = 'http://localhost:4200/api';
+    //root = 'http://localhost:5000';
+    root = 'http://localhost:4200/api';
 
     constructor(private http: HttpClient) { }
 
@@ -103,7 +103,10 @@ export class HierarchyService {
 
     // deleteAlternative(hierarchyId: string, alternativeId: string: string {}
 
-    // updateAlternativeMeasure(hierarchyId: string, alternativeId: string, nodeId: string, measurement: number): Alternative {}
+    updateAlternativeMeasure(hierarchyId: string, alternativeId: string, nodeId: string, measure: number): Observable<string> {
+        const url = this.root + `/hierarchy/${hierarchyId}/alternative/${alternativeId}/node/${nodeId}` ;
+        return this.http.patch<string>(url, measure);
+    }
 
     // getValueFunctionPoint(hierarchyId: string, nodeId: string, xValue: number): Point{}
 

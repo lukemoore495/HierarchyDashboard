@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
+import { Alternative, Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
 import * as HierarchyActions from './hierarchy.actions';
 import RRRHierarchy from '../../assets/staticFiles/RRRHierarchy.json';
 import CarHierarchy from '../../assets/staticFiles/DemoExample.json';
@@ -146,6 +146,35 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         };
     }),
     on(HierarchyActions.deleteNodeFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
+    on(HierarchyActions.updateAlternativeMeasureSuccess, (state, action): HierarchyState => {
+        if(!state.selectedHierarchy || action.hierarchyId != state.selectedHierarchy.id){
+            return {...state};
+        }
+
+        const copyHierarchy: Hierarchy = {...state.selectedHierarchy};
+        const alternativeIndex = copyHierarchy.alternatives.findIndex(x => x.id === action.alternativeId);
+        if(alternativeIndex !== -1){
+            return {...state};
+        }
+
+        const valueIndex = copyHierarchy.alternatives[alternativeIndex].values.findIndex(x => x.nodeId === action.nodeId);
+        if(valueIndex !== -1){
+            return {...state};
+        }
+
+        copyHierarchy.alternatives[alternativeIndex].values[valueIndex].measure = action.measure;
+
+        return {
+            ...state,
+            selectedHierarchy: copyHierarchy
+        };
+    }),
+    on(HierarchyActions.updateAlternativeMeasureFailure, (state, action): HierarchyState => {
         return {
             ...state,
             error: action.error
