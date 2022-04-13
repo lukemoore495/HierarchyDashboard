@@ -80,11 +80,15 @@ def create_hierarchy():
 
 
 # Will never not have a root node. If you do, things are messed
+# TODO: Clean up the check between old and new measures. It works but it's sloppy.
 @app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
 def create_node(hierarchy_id, parent_id):
     data = request.get_json()
 
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
     parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id).first()
+    old_measurements = hierarchy.get_measurements()
+    old_measurements = [r for r in old_measurements]
 
     if not parent:
         abort(404, description="Resource not found")
@@ -93,6 +97,20 @@ def create_node(hierarchy_id, parent_id):
 
     # Commit changes to DB
     db.session.add(new_node)
+    db.session.commit()
+
+    # Create new null values for new measurement nodes
+    updated_measurements = hierarchy.get_measurements()
+    updated_measurements = [r for r in updated_measurements]
+    alternatives = Alternative.query.filter_by(hierarchy_id=hierarchy_id)
+
+    for measure in updated_measurements:
+        if measure not in old_measurements:
+            for alt in alternatives:
+                new_value = Value(alt, measure)
+
+                db.session.add(new_value)
+
     db.session.commit()
 
     return jsonify(parent.to_dict()), 201
@@ -227,7 +245,7 @@ def delete_alternative(hierarchy_id, alternative_id):
 
 
 # TODO: Double check that patch_value works. Talk to the frontend about integration.
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<node_id>", methods=['PATCH'])
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/node/<node_id>", methods=['PATCH'])
 def patch_value(hierarchy_id, alternative_id, node_id):
     data = request.get_json()
     value = Value.query.filter_by(node_id=node_id, alternative_id=alternative_id).first()

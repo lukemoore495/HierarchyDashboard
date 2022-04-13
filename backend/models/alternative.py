@@ -60,12 +60,10 @@ class Alternative(db.Model):
         for value in data["values"]:
             value_node_ids.append(value['nodeId'])
         
-        print("HERE2")
         # Fancy way to check if value_node_ids is a subset of measurement_ids
         if not all(value_node_id in measurement_ids for value_node_id in value_node_ids):
             return None
 
-        print("HERE3")
         for measurement in measurements:
             new_value = Value(
                 alternative=alternative,
@@ -92,3 +90,4 @@ class Alternative(db.Model):
             new_alternatives.append(Alternative.create(measurements, alternative))
         
         return new_alternatives
+    

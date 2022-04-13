@@ -18,8 +18,8 @@ class Value(db.Model):
 
         # Data fields
         self.measure=measure
-        self.local_value = local_value
-        self.global_value = global_value
+        self.local_value=local_value
+        self.global_value=global_value
 
     def to_dict(self, export=False):
         alt_dict = {
