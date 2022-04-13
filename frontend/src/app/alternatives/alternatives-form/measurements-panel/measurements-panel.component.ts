@@ -64,7 +64,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                 }
 
                 let measurementValue : number | boolean | null
-                    = this.alternativeMeasurements.find(m => m.nodeId === measurementField.id)?.measure ?? null;
+                    = this.alternativeMeasurements.find(m => m.nodeId == measurementField.id)?.measure ?? null;
                 if(this.isNumberMeasurement(measurementField.measurementDefinition)){
                     this.form.addControl(measurementField.id, this.fb.control(null, []));
                 } else if (this.isPercentageMeasurement(measurementField.measurementDefinition)) {
