@@ -229,22 +229,14 @@ def delete_alternative(hierarchy_id, alternative_id):
 # TODO: Double check that patch_value works. Talk to the frontend about integration.
 @app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<node_id>", methods=['PATCH'])
 def patch_value(hierarchy_id, alternative_id, node_id):
-    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
-    if not hierarchy:
-        abort(404, description="Resource not found")
-
-    alternative = Alternative.query.filter_by(id=alternative_id, hierarchy_id=hierarchy_id).first()
-    if not alternative:
-        abort(404, description="Resource not found")
-
+    data = request.get_json()
     value = Value.query.filter_by(node_id=node_id, alternative_id=alternative_id).first()
     if not value:
         abort(404, description="Resource not found")
 
     # Change individual measure in the value table
-    data = request.get_json()
-    if "value" in data:
-        value.measure=data["value"]
+    if "measure" in data:
+        value.measure=data["measure"]
 
     db.session.commit()
 
