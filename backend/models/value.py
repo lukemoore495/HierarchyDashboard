@@ -23,7 +23,7 @@ class Value(db.Model):
 
     def to_dict(self, export=False):
         alt_dict = {
-            "nodeId": self.node_id,
+            "nodeId": str(self.node_id),
             "measure": self.measure,
             "localValue": self.local_value,
             "globalValue": self.global_value

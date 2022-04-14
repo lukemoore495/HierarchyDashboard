@@ -78,7 +78,7 @@ export class AlternativesFormComponent implements OnInit, OnDestroy {
             return;
         }
         newMeasurements.forEach(measurement => {
-            if(!measurement.measure){
+            if(measurement.measure === null){
                 return;
             }
             this.store.dispatch(
