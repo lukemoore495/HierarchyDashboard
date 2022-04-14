@@ -31,7 +31,9 @@ export class AddNodeDialogComponent implements OnDestroy{
         this.form = {
             isMeasurement: false,
             measurementType: null,
-            name: ''
+            name: '',
+            point1: {x: null, y: null},
+            point2: {x: null, y: null}
         };
         this.measurementTypes = Object.keys(MeasurementType);
     }
