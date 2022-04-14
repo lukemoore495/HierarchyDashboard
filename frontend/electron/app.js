@@ -1,27 +1,30 @@
 const {app, BrowserWindow} = require('electron');
 const url = require('url');
 const path = require('path');
+const { exit } = require('process');
 
 let mainWindow;
 let backend;
 let development = !app.isPackaged;
 
 const rootPath = path.normalize(__dirname + '/..');
-if(development){
-    backend = path.join(rootPath,'/dist/app.exe');
-} else {
-    backend = path.join(process.resourcesPath,'app.exe');
-}
+// if(development){
+     //backend = path.join(rootPath,'/dist/app.exe');
+// } else {
+    backend = path.join(process.resourcesPath, 'app.exe');
+//}
 
-var execfile = require('child_process').execFile;
+var execfile = require('child_process').exec;
 execfile(
  backend,
  {
   windowsHide: true,
+
  },
  (err, stdout, stderr) => {
   if (err) {
-  console.log(err);
+  console.error(err);
+  app.exit(0);
   }
   if (stdout) {
   console.log(stdout);
