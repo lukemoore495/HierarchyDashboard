@@ -64,12 +64,6 @@ export interface Value {
     measure: number | null;
     localValue?: number | null;
     globalValue?: number | null;
-
-    //This will be removed later and is only here to
-    //preserve demoing the value function chart. 
-    //Value function data belongs to the MeasurementDefinition
-    //since all alternatives use it.
-    valueFunctionData?: Point[];
 }
 
 export interface Point{
