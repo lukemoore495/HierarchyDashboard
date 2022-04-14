@@ -5,7 +5,7 @@ import { getSelectedMeasurement, getSelectedMeasurementNode } from '../../state'
 import { HierarchyState } from '../../state/hierarchy.reducer';
 import { BaseChartDirective } from 'ng2-charts';
 import { AfterViewInit } from '@angular/core';
-import { Value } from '../../Hierarchy';
+import { Point, Value } from '../../Hierarchy';
 import { combineLatest } from 'rxjs';
 
 @Component({
@@ -44,7 +44,9 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
                     return;
                 }
 
-                this.chartNewValue(value[0]);
+                if(value[1]?.measurementDefinition?.valueFunctionData){
+                    this.chartNewValue(value[0], value[1]?.measurementDefinition?.valueFunctionData);
+                }
                 if(value[1]?.name){
                     this.updateLabel(value[1].name);
                 }
@@ -52,7 +54,7 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
             });
     }
 
-    chartNewValue(value : Value) {
+    chartNewValue(value : Value, points: Point[]) {
 
         const insertValuePoint = (measure: number, value: number) : number => {
             if(!xAxis.some(x => x === measure.toString())) {
@@ -64,19 +66,22 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
             return pointIndex;
         };
 
-        if(!this.chart || !value.valueFunctionData || !value.measure || !value.localValue){
+        if(!this.chart){
             return;
         }
 
         let xAxis : string[] = [];
         let yAxis : number[] = [];
 
-        for(const point of value.valueFunctionData){
+        for(const point of points){
             xAxis.push(point.x.toString());
             yAxis.push(point.y);
         }
 
-        const pointIndex = insertValuePoint(value.measure, value.localValue);
+        let pointIndex: number | null = null;
+        if(value.measure && value.localValue){
+            pointIndex = insertValuePoint(value.measure, value.localValue);
+        }
 
         this.setPointColors(xAxis.length, pointIndex);
 
@@ -103,7 +108,7 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
         this.lineChartData.datasets[0].data = [];
     }
 
-    setPointColors(chartLength: number, valuePointIndex: number){
+    setPointColors(chartLength: number, valuePointIndex: number | null){
         this.backgroundColors = [];
         this.hoverBorderColors = [];
         for(let i = 0; i < chartLength; i++){
