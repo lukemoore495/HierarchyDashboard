@@ -1,6 +1,6 @@
-from models.alternative import Alternative
 from .shared import db # Allows the models to be split out into separate files.
 from .node import Node
+from .alternative import Alternative
 
 class Hierarchy(db.Model):
     """

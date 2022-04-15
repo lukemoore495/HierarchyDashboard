@@ -58,7 +58,8 @@ class Node(db.Model):
     # Data Fields
     name = db.Column(db.String(), nullable=False)
     icon = db.Column(db.String())
-    weight = db.Column(db.Float)
+    local_weight = db.Column(db.Float)
+    global_weight = db.Column(db.Float)
 
     # For Measurements
     measurement_type = db.Column(db.String())

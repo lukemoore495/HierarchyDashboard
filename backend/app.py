@@ -326,6 +326,33 @@ def swing_weight(hierarchy_id, parent_id):
     # [{"nodeId":1},"swingWeight":.2},...]
     pass
 
+
+# RANKING
+@app.route("hierarchy/<hierarchy_id>/alternative/ranking")
+def rank_alternatives(hierarchy_id):
+    hierarchy = Hierarchy.query.filter_by(hierarchy_id=hierarchy_id).first()
+    measurements = hierarchy.get_measurements()
+
+    # Generate a dictionary whose keys are alternative_ids
+    rankings = {}
+    for alt in hierarchy.alternatives:
+        rankings[alt.id] = {
+            "name": alt.name,
+            "total": 0,
+        }
+
+    # For each measurement, normalize and weight all values
+    for measurement in measurements:
+        for value in measurement.values:
+            weighted_value = measurement.normalize(value) * measurement.global_weight
+
+            # Add the corrected value to the rankings dict under the correct alternative.
+            rankings[value.alternative_id][measurement.name] = weighted_value
+            rankings[value.alternative_id]["total"] += weighted_value
+    
+    return rankings
+
+
 if __name__ == "__main__":
     # Create the database if it doesn't exist
     config_path = os.path.join(get_config_path(), "app.db")
