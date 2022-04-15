@@ -70,9 +70,6 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {
-        "extraResource": "./dist/app.exe"
-      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
