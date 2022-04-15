@@ -113,7 +113,7 @@ class Node(db.Model):
             self.global_weight=parent.global_weight * local_weight
         else:
             self.global_weight=1
-            self.local_weight=1
+            local_weight=1
         # Identifiers
         self.parent=parent
 
@@ -272,12 +272,12 @@ class Node(db.Model):
     def normalize(self, measure):
         if measure is None:
             return 0
-        if self.measurement_type == "linear":
+        if self.measurement_type == "Linear":
             numbers = []
             
             for word in self.value_function.split():
                 if word.isdigit():
-                    numbers.append(int(word))
+                    numbers.append(float(word))
 
             # For sanity
             x1 = numbers[0]
