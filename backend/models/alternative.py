@@ -57,8 +57,9 @@ class Alternative(db.Model):
             measurement_ids.append(measurement.id)
         
         value_node_ids = []
-        for value in data["values"]:
-            value_node_ids.append(value['nodeId'])
+        if "values" in data:            
+            for value in data["values"]:
+                value_node_ids.append(value['nodeId'])
         
         # Fancy way to check if value_node_ids is a subset of measurement_ids
         if not all(value_node_id in measurement_ids for value_node_id in value_node_ids):
