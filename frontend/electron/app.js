@@ -7,11 +7,11 @@ let backend;
 let development = !app.isPackaged;
 
 const rootPath = path.normalize(__dirname + '/..');
-if(development){
+//if(development){
     backend = path.join(rootPath,'/dist/app.exe');
-} else {
-    backend = path.join(process.resourcesPath,'app.exe');
-}
+// } else {
+//     backend = path.join(process.resourcesPath,'app.exe');
+// }
 
 var execfile = require('child_process').execFile;
 execfile(
