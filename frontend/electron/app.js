@@ -21,7 +21,8 @@ execfile(
  },
  (err, stdout, stderr) => {
   if (err) {
-  console.log(err);
+  console.error(err);
+  app.exit(0);
   }
   if (stdout) {
   console.log(stdout);
