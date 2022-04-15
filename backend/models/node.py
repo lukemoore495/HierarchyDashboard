@@ -1,3 +1,4 @@
+import this
 from .shared import db # Allows the models to be split out into separate files.
 
 
@@ -270,8 +271,15 @@ class Node(db.Model):
         return cls.query.filter(cls.measurement_type != None, cls.hierarchy_id == hierarchy_id)
 
     def normalize(self, measure):
+        # TODO: Add a cap to reference points, y must be between 0 and 1
+        # If you enter in an x that after normalization > 1
+        # Return 1
+        # If < 1
+        # Return 0
+
         if measure is None:
             return 0
+        # TODO: Switch to vfType
         if self.measurement_type == "Linear":
             numbers = []
             
@@ -293,4 +301,3 @@ class Node(db.Model):
             return result
         
         return 0
-    

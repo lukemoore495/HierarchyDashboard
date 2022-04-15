@@ -18,6 +18,7 @@ class Value(db.Model):
 
         # Data fields
         self.measure=measure
+        # Refresh global_value (weighted_value from rank_alternatives) each time the data changes.
         self.local_value=local_value
         self.global_value=global_value
 

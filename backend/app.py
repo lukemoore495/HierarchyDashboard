@@ -353,6 +353,15 @@ def rank_alternatives(hierarchy_id):
     return jsonify(rankings), 200
 
 
+# TODO: Adjust weights
+# Whenever you adjust weight
+# Return global values of each affected measurement.
+# Return parent node, children's global weight will be affected
+
+# TODO: Adjust measurement
+# Update global_value
+
+
 if __name__ == "__main__":
     # Create the database if it doesn't exist
     config_path = os.path.join(get_config_path(), "app.db")
