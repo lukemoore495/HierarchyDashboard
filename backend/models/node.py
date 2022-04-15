@@ -24,8 +24,10 @@ class Node(db.Model):
         The name of the node.
     icon : str
         String to store the icon the frontend uses for the node.
-    weight : float
-        Floating point value representing weight
+    local_weight : float
+        Floating point value representing the local weight
+    global_weight : float
+        Floating point value representing the global weight
     measurement_type : str
         String representing the measurement's type.
     value_function : str
@@ -78,7 +80,7 @@ class Node(db.Model):
         backref=db.backref("measurement")
     )
 
-    def __init__(self, name, parent=None, icon=None, weight=None, measurement_type=None, value_function=None):
+    def __init__(self, name, parent=None, icon=None, local_weight=None, measurement_type=None, value_function=None):
         """
         Parameters
         ----------
@@ -90,8 +92,8 @@ class Node(db.Model):
         icon : str, optional
             String to store the icon the frontend uses for the node.
             (default is None)
-        weight : float, optional
-            Floating point value representing weight
+        local_weight : float, optional
+            Floating point value representing the local weight of the node
             (default is None)
         measurement_type : str, optional
             String representing the type of measurement.
@@ -112,7 +114,9 @@ class Node(db.Model):
 
         # Data Fields
         self.name=name
-        self.weight=weight
+        self.local_weight=local_weight
+        # TODO: Make this less weird??
+        self.global_weight=local_weight * parent.global_weight
         self.icon=icon
 
         # For Measurements
@@ -164,7 +168,7 @@ class Node(db.Model):
         # Fields renamed according to Frontend
         node_dict = {
             'name': self.name,
-            'weight': self.weight,
+            'weight': self.local_weight,
             'icon': self.icon,
         }
 
@@ -205,14 +209,14 @@ class Node(db.Model):
         # Check for optional parameters
         # TODO: Weight isn't optional. Work with Frontend.
         icon = None
-        weight = None
+        local_weight = 0
         measurement_type = None
         value_function = None
 
         if 'icon' in data:
             icon = data['icon']
         if 'weight' in data:
-            weight = data['weight']
+            local_weight = data['weight']
 
         if 'measurementDefinition' in data:
             if 'measurementType' in data['measurementDefinition']:
@@ -225,7 +229,7 @@ class Node(db.Model):
             name=data['name'],
             parent=self,
             icon=icon,
-            weight=weight,
+            local_weight=local_weight,
             measurement_type=measurement_type,
             value_function=value_function,
         )
