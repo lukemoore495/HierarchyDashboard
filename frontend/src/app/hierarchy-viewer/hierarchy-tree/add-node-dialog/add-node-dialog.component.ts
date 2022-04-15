@@ -46,8 +46,7 @@ export class AddNodeDialogComponent implements OnDestroy{
         this.loading = true;
         const measurementDefinition: MeasurementDefinitionRequest | undefined = 
         this.form.isMeasurement && this.form.measurementType ? {
-            measurementType: this.form.measurementType,
-            valueFunction: null
+            measurementType: this.form.measurementType
         } : undefined;
         const newNode: NodeRequest = {
             name: this.form.name,
