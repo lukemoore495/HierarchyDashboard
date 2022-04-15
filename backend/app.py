@@ -332,7 +332,7 @@ def swing_weight(hierarchy_id, parent_id):
 
 
 # RANKING
-@app.route("hierarchy/<hierarchy_id>/alternative/ranking")
+@app.route("/hierarchy/<hierarchy_id>/alternative/ranking", methods=['PATCH'])
 def rank_alternatives(hierarchy_id):
     hierarchy = Hierarchy.query.filter_by(hierarchy_id=hierarchy_id).first()
     measurements = hierarchy.get_measurements()
