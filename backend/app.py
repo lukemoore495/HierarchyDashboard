@@ -53,6 +53,10 @@ def create_hierarchy():
     else:
         root = Node(hierarchy.name)
     
+    # Needed for weight balancing later.
+    root.local_weight = 1
+    root.global_weight = 1
+    
     hierarchy.nodes.append(root)
    
     # Parse nodes and create tree
