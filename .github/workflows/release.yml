@@ -30,10 +30,8 @@ jobs:
         pip install pyinstaller
       working-directory: ./frontend
     - name: build
-      run: |
-        pyinstaller --onefile --name=app.exe ../backend/app.py
-        ng build --base-href ./
-      working-directory: ./frontend
+      run: pyinstaller --onefile --name=app.exe app.py
+      working-directory: ./backend
     - name: Save dist artifact
       uses: actions/upload-artifact@v2
       with: 
