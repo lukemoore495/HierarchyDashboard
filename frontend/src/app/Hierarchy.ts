@@ -23,34 +23,28 @@ export interface Node {
 
 export interface MeasurementDefinition {
     measurementType: string | null;
-    valueFunction?: ValueFunction;
+    valueFunctionType?: ValueFunctionType;
     valueFunctionData?: Point[];
+    linearReferencePoints?: Point[];
+    categories?: Category[];
 }
 
 export enum MeasurementType {
     Number = 'Number',
     Percentage = 'Percentage',
-    Boolean = 'Boolean'
-}
-
-export interface ValueFunction {
-    upperBound: number;
-    lowerBound: number;
-    rowCategories: Category[];
-    columnCategories: Category[];
-    type: ValueFunctionTypes;
+    Boolean = 'Boolean',
+    Discrete = 'Discrete'
 }
 
 export interface Category {
     name: string;
+    measure: string;
     value: number;
 }
 
-export enum ValueFunctionTypes {
-    Increasing,
-    Decreasing,
-    OneDimension,
-    TwoDimension
+export enum ValueFunctionType {
+    Linear,
+    Categorical
 }
 
 export interface Alternative {
