@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Alternative, Hierarchy, HierarchyListItem, Node, MeasurementType, ValueFunctionType, Point, Category } from './Hierarchy';
 import { Observable, of } from 'rxjs';
 import { CreateAlternativeResponse, CreateHierarchyAlternative, HierarchyAlternative } from './alternatives/AlternativeForm';
-import { Alternative, Hierarchy, HierarchyListItem, MeasurementType, Node, ValueFunction } from './Hierarchy';
 import { SensitivityAnalysisReport } from './sensitivity-analysis/SensitivityAnalysis';
 import { SwingWeight } from './weights/swing-weight/SwingWeight';
 
@@ -33,7 +33,9 @@ export interface ValueRequest {
 
 export interface MeasurementDefinitionRequest {
     measurementType: MeasurementType;
-    valueFunction?: ValueFunction | null;
+    valueFunctionType?: ValueFunctionType;
+    linearReferencePoints?: Point[];
+    categories?: Category[];
 }
 
 export interface DirectAssessment {
