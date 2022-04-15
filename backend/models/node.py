@@ -257,6 +257,30 @@ class Node(db.Model):
         for node in nodes_lst:
             self.create(node)
 
+    # Utility Functions
     @classmethod
     def get_measurements(cls, hierarchy_id):
         return cls.query.filter(cls.measurement_type != None, cls.hierarchy_id == hierarchy_id)
+
+    def normalize(self, value):
+        
+        if self.measurement_type == "linear":
+            numbers = []
+            
+            for word in self.value_function.split():
+                if word.isdigit():
+                    numbers.append(int(word))
+
+            # For sanity
+            x1 = numbers[0]
+            y1 = numbers[1]
+            x2 = numbers[2]
+            y2 = numbers[3]
+
+            # Linear function equation
+            result = (((y2 - y1) / (x2 - x1)) * value) + ((x2 * y1) - (x1 * y2)) / (x2 - x1)
+
+            return result
+        
+        return 0
+    
