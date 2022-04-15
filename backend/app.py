@@ -53,10 +53,6 @@ def create_hierarchy():
     else:
         root = Node(hierarchy.name)
     
-    # Needed for weight balancing later.
-    root.local_weight = 1
-    root.global_weight = 1
-    
     hierarchy.nodes.append(root)
    
     # Parse nodes and create tree
@@ -332,9 +328,9 @@ def swing_weight(hierarchy_id, parent_id):
 
 
 # RANKING
-@app.route("/hierarchy/<hierarchy_id>/alternative/ranking", methods=['PATCH'])
+@app.route("/hierarchy/<hierarchy_id>/alternative/ranking", methods=['GET'])
 def rank_alternatives(hierarchy_id):
-    hierarchy = Hierarchy.query.filter_by(hierarchy_id=hierarchy_id).first()
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
     measurements = hierarchy.get_measurements()
 
     # Generate a dictionary whose keys are alternative_ids
@@ -348,13 +344,13 @@ def rank_alternatives(hierarchy_id):
     # For each measurement, normalize and weight all values
     for measurement in measurements:
         for value in measurement.values:
-            weighted_value = measurement.normalize(value) * measurement.global_weight
+            weighted_value = measurement.normalize(value.measure) * measurement.global_weight
 
             # Add the corrected value to the rankings dict under the correct alternative.
             rankings[value.alternative_id][measurement.name] = weighted_value
             rankings[value.alternative_id]["total"] += weighted_value
     
-    return rankings
+    return jsonify(rankings), 200
 
 
 if __name__ == "__main__":

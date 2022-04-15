@@ -109,14 +109,17 @@ class Node(db.Model):
         # If it's accessed after self.parent=parent, it fails.
         if parent:
             self.hierarchy = parent.hierarchy
+            # TODO: Make this less weird??
+            self.global_weight=parent.global_weight * local_weight
+        else:
+            self.global_weight=1
+            self.local_weight=1
         # Identifiers
         self.parent=parent
 
         # Data Fields
         self.name=name
         self.local_weight=local_weight
-        # TODO: Make this less weird??
-        self.global_weight=local_weight * parent.global_weight
         self.icon=icon
 
         # For Measurements
@@ -266,8 +269,9 @@ class Node(db.Model):
     def get_measurements(cls, hierarchy_id):
         return cls.query.filter(cls.measurement_type != None, cls.hierarchy_id == hierarchy_id)
 
-    def normalize(self, value):
-        
+    def normalize(self, measure):
+        if measure is None:
+            return 0
         if self.measurement_type == "linear":
             numbers = []
             
@@ -282,7 +286,7 @@ class Node(db.Model):
             y2 = numbers[3]
 
             # Linear function equation
-            result = (((y2 - y1) / (x2 - x1)) * value) + ((x2 * y1) - (x1 * y2)) / (x2 - x1)
+            result = (((y2 - y1) / (x2 - x1)) * measure) + ((x2 * y1) - (x1 * y2)) / (x2 - x1)
 
             return result
         
