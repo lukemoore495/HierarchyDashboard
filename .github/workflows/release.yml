@@ -29,9 +29,14 @@ jobs:
         npm install
         pip install pyinstaller
       working-directory: ./frontend
-    - name: publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: npm run publish
+    - name: build
+      run: |
+        pyinstaller --onefile --name=app.exe ../backend/app.py
+        ng build --base-href ./
       working-directory: ./frontend
+    - name: Save dist artifact
+      uses: actions/upload-artifact@v2
+      with: 
+        name: dist
+        path: ./frontend/dist
 

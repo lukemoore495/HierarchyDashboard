@@ -12,8 +12,6 @@ const rootPath = path.normalize(__dirname + '/..');
 // } else {
 //     backend = path.join(process.resourcesPath,'app.exe');
 // }
-var nodeConsole = require('console');
-var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
 
 var execfile = require('child_process').execFile;
 execfile(
@@ -23,7 +21,7 @@ execfile(
  },
  (err, stdout, stderr) => {
   if (err) {
-  myConsole.log(err);
+  console.log(err);
   }
   if (stdout) {
   console.log(stdout);
