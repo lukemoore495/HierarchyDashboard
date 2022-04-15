@@ -285,8 +285,10 @@ class Node(db.Model):
             x2 = numbers[2]
             y2 = numbers[3]
 
+            m = ((y2 - y1) / (x2 - x1))
+            b = ((x2 * y1) - (x1 * y2)) / (x2 - x1)
             # Linear function equation
-            result = (((y2 - y1) / (x2 - x1)) * measure) + ((x2 * y1) - (x1 * y2)) / (x2 - x1)
+            result = (m * measure) + b
 
             return result
         
