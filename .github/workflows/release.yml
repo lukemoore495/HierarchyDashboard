@@ -36,5 +36,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with: 
         name: dist
-        path: ./frontend/dist
+        path: ./backend/dist
 
