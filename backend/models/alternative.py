@@ -28,7 +28,7 @@ class Alternative(db.Model):
     def to_dict(self, export=False):
         alt_dict = {
             "name": self.name,
-            "hierarchyId": self.hierarchy_id
+            "hierarchyId": str(self.hierarchy_id)
         }
 
         if not export:

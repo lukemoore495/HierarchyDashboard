@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { CreateHierarchyAlternative, HierarchyAlternative } from './alternatives/AlternativeForm';
+import { CreateAlternativeResponse, CreateHierarchyAlternative, HierarchyAlternative } from './alternatives/AlternativeForm';
 import { Alternative, Hierarchy, HierarchyListItem, MeasurementType, Node, ValueFunction } from './Hierarchy';
 import { SensitivityAnalysisReport } from './sensitivity-analysis/SensitivityAnalysis';
 import { SwingWeight } from './weights/swing-weight/SwingWeight';
@@ -80,9 +80,13 @@ export class HierarchyService {
         return this.http.delete<string>(url);
     }
 
-    createAlternative(createAlternative: CreateHierarchyAlternative): Observable<HierarchyAlternative> {
+    createAlternative(createAlternative: CreateHierarchyAlternative): Observable<CreateAlternativeResponse> {
         const url = this.root + '/hierarchy/' + createAlternative.hierarchyId + '/alternative';
-        return this.http.post<HierarchyAlternative>(url, createAlternative);
+        const request = {
+            name: createAlternative.name,
+            values: []
+        };
+        return this.http.post<CreateAlternativeResponse>(url, request);
     }
 
     deleteAlternative(deleteAlternative: HierarchyAlternative): Observable<string> {

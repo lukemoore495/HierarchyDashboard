@@ -101,7 +101,13 @@ export class HierarchyEffects {
                 ofType(HierarchyActions.createAlternative),
                 concatMap(action => this.hierarchyService.createAlternative(action.createHierarchyAlternative)
                     .pipe(
-                        map(alternativeResponse => HierarchyActions.createAlternativeSuccess({ hierarchyAlternative: alternativeResponse })),
+                        map(alternativeResponse => HierarchyActions.createAlternativeSuccess(
+                            { 
+                                hierarchyAlternative: {
+                                    hierarchyId: alternativeResponse.hierarchyId, 
+                                    alternative: alternativeResponse 
+                                }
+                            })),
                         catchError(error => of(HierarchyActions.createAlternativeFailure({ error })))
                     )
                 )
