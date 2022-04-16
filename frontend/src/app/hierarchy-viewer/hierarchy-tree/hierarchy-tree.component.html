@@ -16,9 +16,11 @@
                         Weight: {{node.weight}}
                     </div>
                     <button class="measurement-node-delete" *ngIf="node.measurementNode" mat-button (click)="openDeleteNodeDialog(node.id)">Delete</button>
+                    <button class="measurement-node-delete" *ngIf="node.measurementNode" mat-button (click)="openEditNodeDialog(node.id)">Edit</button>
                 </mat-card-content>
                 <mat-card-actions>
                     <button *ngIf="!node.measurementNode" mat-button (click)="openAddNodeDialog(node.id)">Add</button>
+                    <button *ngIf="!node.measurementNode" mat-button (click)="openEditNodeDialog(node.id)">Edit</button>
                     <button *ngIf="!node.measurementNode && i !== 0" mat-button (click)="openDeleteNodeDialog(node.id)">Delete</button>
                     <button *ngIf="canBeWeighted(node)"  
                         mat-button

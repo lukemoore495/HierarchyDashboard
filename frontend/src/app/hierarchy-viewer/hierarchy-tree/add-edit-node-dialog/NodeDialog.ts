@@ -1,6 +1,6 @@
-import { MeasurementType } from '../../../Hierarchy';
+import { MeasurementType, Node } from '../../../Hierarchy';
 
-export interface CreateNodeForm {
+export interface NodeForm {
     isMeasurement: boolean;
     measurementType: MeasurementType | null;
     name: string;
@@ -13,7 +13,8 @@ export interface PointForm{
     y: number | null;
 }
 
-export interface CreateNodeData {
-    parentId: string;
+export interface NodeDialogData {
+    parentId?: string;
+    existingNode?: Node;
     hierarchyId: string;
 }
