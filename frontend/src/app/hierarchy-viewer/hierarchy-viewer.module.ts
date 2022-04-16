@@ -13,7 +13,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { CreateHierarchyDialogComponent } from './create-hierarchy-dialog/create-hierarchy-dialog.component';
 import { DeleteHierarchyDialogComponent } from './delete-hierarchy-dialog/delete-hierarchy-dialog.component';
 import { ImportExportHierarchyDialogComponent } from './import-export-hierarchy-dialog/import-export-hierarchy-dialog.component';
-import { AddNodeDialogComponent } from './hierarchy-tree/add-node-dialog/add-node-dialog.component';
+import { AddEditNodeDialogComponent } from './hierarchy-tree/add-edit-node-dialog/add-edit-node-dialog.component';
 import { DeleteNodeDialogComponent } from './hierarchy-tree/delete-node-dialog/delete-node-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -28,7 +28,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
         CreateHierarchyDialogComponent,
         DeleteHierarchyDialogComponent,
         ImportExportHierarchyDialogComponent,
-        AddNodeDialogComponent,
+        AddEditNodeDialogComponent,
         DeleteNodeDialogComponent
     ],
     imports: [
