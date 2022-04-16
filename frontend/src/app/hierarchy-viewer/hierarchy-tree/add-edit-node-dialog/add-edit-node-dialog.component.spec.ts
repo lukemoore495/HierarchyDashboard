@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddNodeDialogComponent } from './add-node-dialog.component';
+import { AddNodeDialogComponent } from './add-edit-node-dialog.component';
 
 describe('AddNodeDialogComponent', () => {
   let component: AddNodeDialogComponent;

@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Add Node</h1>
+<h1 mat-dialog-title>{{existingNode ? "Edit" : "Add"}} Node</h1>
 <mat-dialog-content>
     <form #addNodeForm="ngForm">
         <div class="column">
@@ -36,7 +36,7 @@
                     Y1 is required.
                     </mat-error>
                     <mat-error appearance="fill"
-                        *ngIf="(y1.invalid && (y1.dirty || y1.touched) && (y1.errors?.['min'] || y1.errors?.['max'])) && !y2.errors?.['required']">
+                        *ngIf="(y1.invalid && (y1.dirty || y1.touched) && (y1.errors?.['min'] || y1.errors?.['max'])) && !y1.errors?.['required']">
                         Values must be between 1-0.
                     </mat-error>
                 </mat-form-field>
@@ -71,5 +71,5 @@
     <div *ngIf="loading" class="spinner-container">
         <mat-spinner class="tree-loading" color="primary" diameter="30"></mat-spinner>
     </div>
-    <button *ngIf="!loading" mat-button (click)="onSubmit()" [disabled]="!addNodeForm.form.valid && !loading">Add</button>
+    <button *ngIf="!loading" mat-button (click)="onSubmit()" [disabled]="!addNodeForm.form.valid && !loading">{{existingNode ? "Edit" : "Add"}}</button>
 </mat-dialog-actions> 

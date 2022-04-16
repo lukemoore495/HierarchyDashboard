@@ -57,8 +57,8 @@ export interface PairComparison {
 })
 export class HierarchyService {
     //Use localhost:5000 for desktop and /api for browser mode
-    root = 'http://localhost:5000';
-    //root = 'http://localhost:4200/api';
+    //root = 'http://localhost:5000';
+    root = 'http://localhost:4200/api';
 
     constructor(private http: HttpClient) { }
 
@@ -106,10 +106,10 @@ export class HierarchyService {
         return this.http.delete<string>(url);
     }
 
-    // patchNode(hierarchyId: string, nodeId: string, node: NodeRequest): Observable<Node> {
-    //     const url = this.root + `/hierarchy/${hierarchyId}/node/${nodeId}`;
-    //     return this.http.patch<Node>(url, node);
-    // }
+    patchNode(hierarchyId: string, nodeId: string, node: NodeRequest): Observable<Node> {
+        const url = this.root + `/hierarchy/${hierarchyId}/node/${nodeId}`;
+        return this.http.patch<Node>(url, node);
+    }
 
     exportHierarchy(hierarchyId: string): Observable<HierarchyRequest> {
         const url = this.root + `/hierarchy/${hierarchyId}/export` ;
