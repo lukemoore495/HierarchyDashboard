@@ -30,7 +30,7 @@ jobs:
         pip install pyinstaller
       working-directory: ./frontend
     - name: build
-      run: pyinstaller --onefile app.py
+      run: pyinstaller --onefile --hidden-import Flask app.py
       working-directory: ./backend
     - name: Save dist artifact
       uses: actions/upload-artifact@v2
