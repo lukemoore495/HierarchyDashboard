@@ -19,13 +19,33 @@
 
     .card-content{
         display: flex;
-        align-items: center;
-        flex-direction: row;
+        flex-direction: column;
 
-        .measurement-node-delete{
-            margin-left: 1.5rem;
-            border-radius: 50px;
-            background-color: white;
+        .card-row{
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+
+            .measurement-node-delete{
+                margin-left: 0.4rem;
+                border-radius: 50px;
+                background-color: white;
+            }
+
+            .text{
+                margin-left: 1rem;
+            }
+        }
+    }
+
+    .action-container{
+        display: flex;
+        align-items: left;
+        margin-left: 1rem;
+        margin-bottom: 0.25rem;
+
+        button{
+            min-width: unset !important;
         }
     }
 }
@@ -37,8 +57,4 @@
 .svg{
     position: absolute;
     z-index: -1;
-}
-
-.text{
-    margin-left: 1rem;
 }
