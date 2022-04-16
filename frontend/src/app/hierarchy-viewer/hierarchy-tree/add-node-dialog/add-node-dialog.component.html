@@ -22,7 +22,7 @@
             <div class="row">
                 <mat-form-field appearance="fill" class="point-x" [hideRequiredMarker]="!form.isMeasurement">
                     <mat-label>X1 (Measure)</mat-label>
-                    <input #x1="ngModel" matInput [(ngModel)]="form.point1.x" name="x1" type="number"[required]="form.isMeasurement" [disabled]="!form.isMeasurement"/>
+                    <input #x1="ngModel" matInput [(ngModel)]="form.point1.x" name="x1" type="number" [required]="form.isMeasurement" [disabled]="!form.isMeasurement"/>
                     <mat-error appearance="fill"
                         *ngIf="(x1.invalid && (x1.dirty || x1.touched) && x1.errors?.['required'])">
                     X1 is required.
@@ -30,17 +30,21 @@
                 </mat-form-field>
                 <mat-form-field appearance="fill" [hideRequiredMarker]="!form.isMeasurement">
                     <mat-label>Y1 (Value)</mat-label>
-                    <input #y1="ngModel" matInput [(ngModel)]="form.point1.y" name="y1" [required]="form.isMeasurement" [disabled]="!form.isMeasurement"/>
+                    <input #y1="ngModel" matInput [(ngModel)]="form.point1.y" name="y1" type="number" [required]="form.isMeasurement" [disabled]="!form.isMeasurement" min="0" max="1"/>
                     <mat-error appearance="fill"
                         *ngIf="(y1.invalid && (y1.dirty || y1.touched) && y1.errors?.['required'])">
                     Y1 is required.
+                    </mat-error>
+                    <mat-error appearance="fill"
+                        *ngIf="(y1.invalid && (y1.dirty || y1.touched) && (y1.errors?.['min'] || y1.errors?.['max'])) && !y2.errors?.['required']">
+                        Values must be between 1-0.
                     </mat-error>
                 </mat-form-field>
             </div>
             <div class="row">
                 <mat-form-field appearance="fill" class="point-x" [hideRequiredMarker]="!form.isMeasurement">
                     <mat-label>X2 (Measure)</mat-label>
-                    <input #x2="ngModel" matInput [(ngModel)]="form.point2.x" name="x2" [required]="form.isMeasurement" [disabled]="!form.isMeasurement"/>
+                    <input #x2="ngModel" matInput [(ngModel)]="form.point2.x" name="x2" type="number" [required]="form.isMeasurement" [disabled]="!form.isMeasurement"/>
                     <mat-error appearance="fill"
                         *ngIf="(x2.invalid && (x2.dirty || x2.touched) && x2.errors?.['required'])">
                         X2 is required.
@@ -48,10 +52,14 @@
                 </mat-form-field>
                 <mat-form-field appearance="fill" [hideRequiredMarker]="!form.isMeasurement">
                     <mat-label>Y2 (Value)</mat-label>
-                    <input #y2="ngModel" matInput [(ngModel)]="form.point2.y"  name="y2" [required]="form.isMeasurement" [disabled]="!form.isMeasurement"/>
+                    <input #y2="ngModel" matInput [(ngModel)]="form.point2.y"  name="y2" type="number" [required]="form.isMeasurement" [disabled]="!form.isMeasurement" min="0" max="1"/>
                     <mat-error appearance="fill"
                         *ngIf="(y2.invalid && (y2.dirty || y2.touched) && y2.errors?.['required'])">
                         Y2 is required.
+                    </mat-error>
+                    <mat-error appearance="fill"
+                        *ngIf="(y2.invalid && (y2.dirty || y2.touched) && (y2.errors?.['min'] || y2.errors?.['max'])) && !y2.errors?.['required']">
+                        Values must be between 1-0.
                     </mat-error>
                 </mat-form-field>
             </div>

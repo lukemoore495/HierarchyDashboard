@@ -33,7 +33,7 @@ export enum MeasurementType {
     Number = 'Number',
     Percentage = 'Percentage',
     Boolean = 'Boolean',
-    Discrete = 'Discrete'
+    //Discrete = 'Discrete'
 }
 
 export interface Category {
