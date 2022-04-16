@@ -31,7 +31,7 @@ jobs:
         pip install -r ../backend/requirements.txt
       working-directory: ./frontend
     - name: build
-      run: pyinstaller --onefile --hidden-import flask app.py
+      run: pyinstaller --onefile --name=app.exe app.py
       working-directory: ./backend
     - name: Save dist artifact
       uses: actions/upload-artifact@v2
