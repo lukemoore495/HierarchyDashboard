@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [windows-latest]
     steps:
     - uses: actions/checkout@v3
       with:
@@ -30,7 +30,7 @@ jobs:
         pip install pyinstaller
       working-directory: ./frontend
     - name: build
-      run: pyinstaller --onefile --name=app.exe app.py
+      run: pyinstaller --onefile app.py
       working-directory: ./backend
     - name: Save dist artifact
       uses: actions/upload-artifact@v2
