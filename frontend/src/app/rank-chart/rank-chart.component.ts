@@ -83,7 +83,7 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
     rankAlternatives(alternatives: Alternative[]): Rank[] {
         const findRankValue = (alternative: Alternative): RankValue[] => {
             const values: RankValue[] = [];
-            alternative.measurements.forEach(measurement => {
+            alternative.values.forEach(measurement => {
                 values.push({
                     value: measurement.globalValue ?? 0,
                     name: this.findMeasurementName(measurement.nodeId)

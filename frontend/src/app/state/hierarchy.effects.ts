@@ -62,7 +62,7 @@ export class HierarchyEffects {
         return this.actions$
             .pipe(
                 ofType(HierarchyActions.createNode),
-                mergeMap(action => this.hierarchyService.createNode(action.hierarchyId, action.parentId, action.node)
+                concatMap(action => this.hierarchyService.createNode(action.hierarchyId, action.parentId, action.node)
                     .pipe(
                         map(node => HierarchyActions.createNodeSuccess({parentId: action.parentId, node: node})),
                         catchError(error => of(HierarchyActions.createNodeFailure({error})))
@@ -74,10 +74,54 @@ export class HierarchyEffects {
         return this.actions$
             .pipe(
                 ofType(HierarchyActions.deleteNode),
-                mergeMap(action => this.hierarchyService.deleteNode(action.hierarchyId, action.nodeId)
+                concatMap(action => this.hierarchyService.deleteNode(action.hierarchyId, action.nodeId)
                     .pipe(
                         map(_ => HierarchyActions.deleteNodeSuccess({nodeId: action.nodeId})),
                         catchError(error => of(HierarchyActions.deleteNodeFailure({error})))
+                    )
+                )
+            );
+    });
+    updateAlternativeMeasure$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.updateAlternativeMeasure),
+                concatMap(action => this.hierarchyService.updateAlternativeMeasure(action.hierarchyId, action.alternativeId, action.nodeId, action.measure)
+                    .pipe(
+                        map(_ => HierarchyActions.updateAlternativeMeasureSuccess(
+                            {hierarchyId: action.hierarchyId, alternativeId: action.alternativeId, nodeId: action.nodeId, measure: action.measure})),
+                        catchError(error => of(HierarchyActions.updateAlternativeMeasureFailure({error})))
+                    )
+                )
+            );
+    });
+    createAlternative$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.createAlternative),
+                concatMap(action => this.hierarchyService.createAlternative(action.createHierarchyAlternative)
+                    .pipe(
+                        map(alternativeResponse => HierarchyActions.createAlternativeSuccess(
+                            { 
+                                hierarchyAlternative: {
+                                    hierarchyId: alternativeResponse.hierarchyId, 
+                                    alternative: alternativeResponse 
+                                }
+                            })),
+                        catchError(error => of(HierarchyActions.createAlternativeFailure({ error })))
+                    )
+                )
+            );
+    });
+
+    deleteAlternative$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.deleteAlternative),
+                concatMap(action => this.hierarchyService.deleteAlternative(action.hierarchyAlternative)
+                    .pipe(
+                        map(_ => HierarchyActions.deleteAlternativeSuccess({ hierarchyAlternative: action.hierarchyAlternative })),
+                        catchError(error => of(HierarchyActions.deleteAlternativeFailure({ error })))
                     )
                 )
             );

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
-import { BehaviorSubject, debounceTime, map, Observable, Subscription, take, tap } from 'rxjs';
+import { BehaviorSubject, debounceTime, map, Observable, Subscription, take } from 'rxjs';
 import { Value, MeasurementDefinition, MeasurementType, Node } from '../../../Hierarchy';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Output } from '@angular/core';
@@ -19,7 +19,7 @@ import { HierarchyState } from '../../../state/hierarchy.reducer';
 export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() measurementNode: Node | null = null;
     @Input() parentIsSelected?: Observable<boolean>;
-    @Input() isTopLevel = false;
+    @Input() isSinglePanel = false;
     @Output() measurementResultEvent: EventEmitter<Value[]>;
     @Output() childNodeOpened: EventEmitter<void>;
     @Output() closed: EventEmitter<void>;
@@ -35,7 +35,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     constructor(private fb: FormBuilder, private store: Store<HierarchyState>) { 
         const sub = this.store.select(getSelectedAlternative)
             .pipe(
-                map(alternative => alternative?.measurements)
+                map(alternative => alternative?.values)
             )
             .subscribe(measurements => {
                 if(this.alternativeMeasurements.length !== 0){
@@ -126,7 +126,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     }
 
     ngAfterViewInit(){
-        if(this.isTopLevel) {
+        if(this.isSinglePanel) {
             //A hack to work with change detection in afterViewInit. Couldn't find another solution.
             setTimeout(() => {
                 this.selectFirstMeasurement();

@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Alternative, Hierarchy, HierarchyListItem, ValueFunction, Node, MeasurementType } from './Hierarchy';
-import { Observable, of } from 'rxjs';
-import { SensitivityAnalysisReport } from './sensitivity-analysis/SensitivityAnalysis';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { CreateAlternativeResponse, CreateHierarchyAlternative, HierarchyAlternative } from './alternatives/AlternativeForm';
+import { Alternative, Hierarchy, HierarchyListItem, MeasurementType, Node, ValueFunction } from './Hierarchy';
+import { SensitivityAnalysisReport } from './sensitivity-analysis/SensitivityAnalysis';
 import { SwingWeight } from './weights/swing-weight/SwingWeight';
 
 export interface HierarchyRequest {
@@ -22,12 +23,12 @@ export interface NodeRequest {
 
 export interface AlternativeRequest {
     name: string;
-    measurements: MeasurementRequest[];
+    value: ValueRequest[];
 }
 
-export interface MeasurementRequest {
+export interface ValueRequest {
     nodeId: string;
-    measure?: number;
+    measure: number;
 }
 
 export interface MeasurementDefinitionRequest {
@@ -54,7 +55,7 @@ export interface PairComparison {
 })
 export class HierarchyService {
     //Use localhost:5000 for desktop and /api for browser mode
-      root = 'http://localhost:5000';
+    root = 'http://localhost:5000';
     //root = 'http://localhost:4200/api';
 
     constructor(private http: HttpClient) { }
@@ -79,6 +80,20 @@ export class HierarchyService {
         return this.http.delete<string>(url);
     }
 
+    createAlternative(createAlternative: CreateHierarchyAlternative): Observable<CreateAlternativeResponse> {
+        const url = this.root + '/hierarchy/' + createAlternative.hierarchyId + '/alternative';
+        const request = {
+            name: createAlternative.name,
+            values: []
+        };
+        return this.http.post<CreateAlternativeResponse>(url, request);
+    }
+
+    deleteAlternative(deleteAlternative: HierarchyAlternative): Observable<string> {
+        const url = this.root + '/hierarchy/' + deleteAlternative.hierarchyId + '/alternative/' + deleteAlternative.alternative.id;
+        return this.http.delete<string>(url);
+    }
+
     createNode(hierarchyId: string, parentId: string, node: NodeRequest): Observable<Node> {
         const url = this.root + `/hierarchy/${hierarchyId}/node/${parentId}`;
         return this.http.post<Node>(url, node);
@@ -99,11 +114,11 @@ export class HierarchyService {
         return this.http.get<HierarchyRequest>(url);
     }
 
-    // createAlternative(hierarchyId: string, alternative: AlternativeRequest): Alternative {}
-
-    // deleteAlternative(hierarchyId: string, alternativeId: string: string {}
-
-    // updateAlternativeMeasure(hierarchyId: string, alternativeId: string, nodeId: string, measurement: number): Alternative {}
+    updateAlternativeMeasure(hierarchyId: string, alternativeId: string, nodeId: string, measure: number): Observable<string> {
+        const url = this.root + `/hierarchy/${hierarchyId}/alternative/${alternativeId}/node/${nodeId}` ;
+        const measureUpdate = {'measure': measure};
+        return this.http.patch<string>(url, measureUpdate);
+    }
 
     // getValueFunctionPoint(hierarchyId: string, nodeId: string, xValue: number): Point{}
 
@@ -115,7 +130,7 @@ export class HierarchyService {
 
     // editSwingWeightMatrix(hierarchyId: string, nodeId: string, swingValues: number[]): Node {}
 
-    getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport>{
+    getFakeSensitivityAnalysis(nodeNames: string[]): Observable<SensitivityAnalysisReport> {
         return of(this.getFakeSensitivityAnalysisData(nodeNames));
     }
 

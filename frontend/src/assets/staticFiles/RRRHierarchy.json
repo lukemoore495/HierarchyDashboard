@@ -29,7 +29,7 @@
                                     {
                                         "id": "359",
                                         "name": "Number of Terrorist Attacks",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -73,7 +73,7 @@
                                     {
                                         "id": "360",
                                         "name": "Percentage of People",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Percentage",
@@ -117,7 +117,7 @@
                                     {
                                         "id": "361",
                                         "name": "Women Vote",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Boolean",
@@ -169,7 +169,7 @@
                                     {
                                         "id": "362",
                                         "name": "Number of People",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -213,7 +213,7 @@
                                     {
                                         "id": "363",
                                         "name": "Percentage of Support",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Percentage",
@@ -257,7 +257,7 @@
                                     {
                                         "id": "364",
                                         "name": "Optimistic Outlook",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Boolean",
@@ -309,7 +309,7 @@
                                     {
                                         "id": "365",
                                         "name": "International Trainers",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -353,7 +353,7 @@
                                     {
                                         "id": "366",
                                         "name": "Spending Budget",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -397,7 +397,7 @@
                                     {
                                         "id": "367",
                                         "name": "Badal",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Boolean",
@@ -457,7 +457,7 @@
                                     {
                                         "id": "368",
                                         "name": "Constitution",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -501,7 +501,7 @@
                                     {
                                         "id": "369",
                                         "name": "Faith in Courts",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Percentage",
@@ -545,7 +545,7 @@
                                     {
                                         "id": "370",
                                         "name": "Resolution Time",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -597,7 +597,7 @@
                                     {
                                         "id": "371",
                                         "name": "Comprehensive Plan",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Boolean",
@@ -641,7 +641,7 @@
                                     {
                                         "id": "372",
                                         "name": "Opinion Poll",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Percentage",
@@ -685,7 +685,7 @@
                                     {
                                         "id": "373",
                                         "name": "Crime Rate",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -737,7 +737,7 @@
                                     {
                                         "id": "374",
                                         "name": "Prison Capacity",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -781,7 +781,7 @@
                                     {
                                         "id": "375",
                                         "name": "Manning Level",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -833,7 +833,7 @@
                                     {
                                         "id": "376",
                                         "name": "Accountability Laws",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -877,7 +877,7 @@
                                     {
                                         "id": "377",
                                         "name": "Accountabilty Courts",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -937,7 +937,7 @@
                                     {
                                         "id": "378",
                                         "name": "Official Policy",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -987,7 +987,7 @@
                                             {
                                                 "id": "399",
                                                 "name": "Fertilizer Imports",
-                                                "weight": null,
+                                                "weight": 0,
                                                 "icon": null,
                                                 "measurementDefinition": {
                                                     "measurementType": "Number",
@@ -1031,7 +1031,7 @@
                                             {
                                                 "id": "400",
                                                 "name": "Agriculture Exports",
-                                                "weight": null,
+                                                "weight": 0,
                                                 "icon": null,
                                                 "measurementDefinition": {
                                                     "measurementType": "Number",
@@ -1077,7 +1077,7 @@
                                     {
                                         "id": "381",
                                         "name": "GDP Growth",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Percentage",
@@ -1129,7 +1129,7 @@
                                     {
                                         "id": "382",
                                         "name": "Opium production by area (hectares)",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -1173,7 +1173,7 @@
                                     {
                                         "id": "383",
                                         "name": "Child labor 12-14 yrs",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -1225,7 +1225,7 @@
                                     {
                                         "id": "384",
                                         "name": "Foreign Debt (Percentage of GDP)",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Percentage",
@@ -1269,7 +1269,7 @@
                                     {
                                         "id": "385",
                                         "name": "Foreign Aid in USD (Billions)",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -1329,7 +1329,7 @@
                                     {
                                         "id": "386",
                                         "name": "Curriculum",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -1373,7 +1373,7 @@
                                     {
                                         "id": "387",
                                         "name": "Percentage of Child labor",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -1425,7 +1425,7 @@
                                     {
                                         "id": "388",
                                         "name": "Percentage Enrollment Boys Rural Areas",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Percentage",
@@ -1461,7 +1461,7 @@
                                     {
                                         "id": "389",
                                         "name": "Percentage Enrollment (Girls in Rural Areas)",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Percentage",
@@ -1505,7 +1505,7 @@
                                     {
                                         "id": "390",
                                         "name": "Vocational Training per Thousand",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -1541,7 +1541,7 @@
                                     {
                                         "id": "391",
                                         "name": "Number of Universities",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -1585,7 +1585,7 @@
                                     {
                                         "id": "392",
                                         "name": "Student Teacher Ratio",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -1645,7 +1645,7 @@
                                     {
                                         "id": "393",
                                         "name": "Availibity of Clean Water (Percentage)",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Percentage",
@@ -1689,7 +1689,7 @@
                                     {
                                         "id": "394",
                                         "name": "Percentage of People Below Poverty Line",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Percentage",
@@ -1733,7 +1733,7 @@
                                     {
                                         "id": "395",
                                         "name": "Number of IDPs (Millions)",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -1785,7 +1785,7 @@
                                     {
                                         "id": "396",
                                         "name": "Doctors/1000",
-                                        "weight": null,
+                                        "weight": 0,
                                         "icon": null,
                                         "measurementDefinition": {
                                             "measurementType": "Number",
@@ -1835,7 +1835,7 @@
                                             {
                                                 "id": "401",
                                                 "name": "Percentage with access to electricity",
-                                                "weight": null,
+                                                "weight": 0,
                                                 "icon": null,
                                                 "measurementDefinition": {
                                                     "measurementType": "Percentage",
@@ -1879,7 +1879,7 @@
                                             {
                                                 "id": "402",
                                                 "name": "Percentage of Access to Mobiles",
-                                                "weight": null,
+                                                "weight": 0,
                                                 "icon": null,
                                                 "measurementDefinition": {
                                                     "measurementType": "Percentage",
@@ -1926,7 +1926,7 @@
         {
             "id": "1",
             "name": "2006",
-            "measurements": [
+            "values": [
                 {
                     "nodeId": "57",
                     "measure": 13,
@@ -3212,7 +3212,7 @@
         {
             "id": "2",
             "name": "2007",
-            "measurements": [
+            "values": [
                 {
                     "nodeId": "57",
                     "measure": 13,
