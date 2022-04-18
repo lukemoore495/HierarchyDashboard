@@ -181,11 +181,37 @@ def create_node(hierarchy_id, parent_id):
     return jsonify(parent.to_dict()), 201
     
 
-#TODO: Patch Node
+#TODO: Improve Patch. Talk to Luke about how this route will be used.
 @app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
-def patch_node(hierarchy_id, parent_id):
-    pass
+def patch_node(hierarchy_id, node_id):
+    data = request.get_json()
 
+    node = Node.query.filter_by(id=node_id, hierarchy_id=hierarchy_id)
+
+    if not node:
+        abort(404, description="Resource not found")
+
+    hierarchy = node.hierarchy
+    parent = node.parent
+
+    if 'name' in data:
+        node.name = data['name']
+    if 'icon' in data:
+        node.icon = data['icon']
+    if 'measurementDefinition' in data:
+        m_data = data['measurement_definition']
+        if 'measurementType' in m_data:
+            node.measurement_type = m_data['measurementType']
+        if 'VFType' in m_data:
+            node.vf_type = m_data['VFType']
+        if 'referencePoints' in m_data:
+            pass
+
+
+    parent.refresh_weights()
+    hierarchy.refresh_alternatives()
+    db.session.commit()
+    
 
 @app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['DELETE'])
 def delete_node(hierarchy_id, node_id):
@@ -285,7 +311,7 @@ def direct_assessment(hierarchy_id, parent_id):
     # Get data (new weights)
     # [{"nodeId":1},"weight":.2},...]
     # Get nodes on the same level (children of parent)
-    
+
 
     # If there aren't enough weights for each child
         # Return error
