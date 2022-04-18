@@ -7,6 +7,7 @@ import sys
 
 from models.hierarchy import Hierarchy, Node
 from models.alternative import Alternative, Value
+from models.reference import Reference
 from models.shared import db # Allows the models to be split out into separate files.
 
 
@@ -186,7 +187,8 @@ def create_node(hierarchy_id, parent_id):
 def patch_node(hierarchy_id, node_id):
     data = request.get_json()
 
-    node = Node.query.filter_by(id=node_id, hierarchy_id=hierarchy_id)
+    node = Node.query.filter_by(id=node_id, hierarchy_id=hierarchy_id).first()
+    references = Reference.query.filter_by(node_id=node.id)
 
     if not node:
         abort(404, description="Resource not found")
@@ -194,22 +196,34 @@ def patch_node(hierarchy_id, node_id):
     hierarchy = node.hierarchy
     parent = node.parent
 
+    # All Nodes
     if 'name' in data:
         node.name = data['name']
     if 'icon' in data:
         node.icon = data['icon']
+    
+
+    # Measurement Node
     if 'measurementDefinition' in data:
-        m_data = data['measurement_definition']
+        m_data = data['measurementDefinition']
         if 'measurementType' in m_data:
             node.measurement_type = m_data['measurementType']
         if 'VFType' in m_data:
             node.vf_type = m_data['VFType']
-        if 'referencePoints' in m_data:
-            pass
+        # An issue for a dreamlike future.
+        if node.vf_type == "Linear":
+            if 'referencePoints' in m_data:
+                ref_data = m_data['referencePoints']
+                refs = [ref for ref in node.references]
+                for i in range(2):
+                    refs[i].x = ref_data[i]['x']
+                    refs[i].y = ref_data[i]['y']
 
     parent.refresh_weights()
     hierarchy.refresh_alternatives()
     db.session.commit()
+
+    return jsonify(node.to_dict()), 201
     
 
 @app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['DELETE'])
