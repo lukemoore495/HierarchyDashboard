@@ -67,6 +67,7 @@ class Node(db.Model):
     # For Measurements
     measurement_type = db.Column(db.String())
     value_function = db.Column(db.String)
+    vf_type = db.Column(db.String)
 
     # Child Nodes, can be measurements or sub-objectives
     children = db.relationship(
@@ -81,7 +82,7 @@ class Node(db.Model):
         backref=db.backref("measurement")
     )
 
-    def __init__(self, name, parent=None, icon=None, local_weight=None, measurement_type=None, value_function=None):
+    def __init__(self, name, parent=None, icon=None, local_weight=None, measurement_type=None, value_function=None, vf_type=None):
         """
         Parameters
         ----------
@@ -126,6 +127,7 @@ class Node(db.Model):
         # For Measurements
         self.measurement_type=measurement_type
         self.value_function=value_function
+        self.vf_type=vf_type
 
     def __repr__(self):
         """Return a string representation of a node."""
@@ -183,7 +185,8 @@ class Node(db.Model):
         if self.measurement_type:
             node_dict['measurementDefinition'] = {
                 'measurementType': self.measurement_type,
-                'valueFunction': self.value_function
+                'valueFunction': self.value_function,
+                'VFType': self.vf_type,
             }
 
         # Create and append list of child nodes
@@ -216,6 +219,7 @@ class Node(db.Model):
         local_weight = 0
         measurement_type = None
         value_function = None
+        vf_type = None
 
         if 'icon' in data:
             icon = data['icon']
@@ -227,6 +231,8 @@ class Node(db.Model):
                 measurement_type = data['measurementDefinition']['measurementType']
             if 'valueFunction' in data['measurementDefinition']:
                 value_function = data['measurementDefinition']['valueFunction']
+            if 'VFType' in data['measurementDefinition']:
+                vf_type = data['measurementDefinition']['VFType']
                 
         # Create child node
         new_node = Node(
@@ -236,6 +242,7 @@ class Node(db.Model):
             local_weight=local_weight,
             measurement_type=measurement_type,
             value_function=value_function,
+            vf_type=vf_type,
         )
 
         # Check for child nodes in children and measurments
@@ -280,7 +287,7 @@ class Node(db.Model):
         if measure is None:
             return 0
         # TODO: Switch to vfType
-        if self.measurement_type == "Linear":
+        if self.vf_type == "Linear":
             numbers = []
             
             for word in self.value_function.split():
