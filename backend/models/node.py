@@ -87,8 +87,6 @@ class Node(db.Model):
         backref=db.backref("measurement"),
     )
 
-
-
     def __init__(self, name, parent=None, icon=None, local_weight=None, measurement_type=None, vf_type=None):
         """
         Parameters
@@ -194,6 +192,30 @@ class Node(db.Model):
                 'VFType': self.vf_type,
                 'referencePoints': [ref.to_dict() for ref in self.references]
             }
+
+            if self.vf_type == "Linear":
+                references = [ref.to_tuple() for ref in self.references]
+                x1 = references[0][0]
+                x2 = references[1][0]
+
+                node_dict['measurementDefinition']['valueFunctionData'] = []
+
+                if x1 > x2:
+                    temp = x1
+                    x1 = x2
+                    x2 = temp
+                
+                domain = x2 - x1
+                increment = domain / 10
+
+                for i in range(11):
+                    x = i * increment
+                    y = self.normalize(x)
+
+                    node_dict['measurementDefinition']['valueFunctionData'].append({
+                        'x': round(x, 3),
+                        'y': round(y, 3),
+                    })
 
         # Create and append list of child nodes
         children_list = []
