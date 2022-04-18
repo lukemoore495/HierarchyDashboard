@@ -196,16 +196,10 @@ class Node(db.Model):
             # TODO: Move this somewhere else? These points should maybe saved on the backend.
             # TODO: Should probably be based off the range from 0.0 to 1.0
             if self.vf_type == "Linear":
-                references = [ref.to_tuple() for ref in self.references]
-                x1 = references[0][0]
-                x2 = references[1][0]
+                data_points = []
 
-                node_dict['measurementDefinition']['valueFunctionData'] = []
-
-                if x1 > x2:
-                    temp = x1
-                    x1 = x2
-                    x2 = temp
+                x1 = self.normalize(0.0, True)
+                x2 = self.normalize(1.0, True)
                 
                 domain = x2 - x1
                 increment = domain / 10
@@ -214,10 +208,12 @@ class Node(db.Model):
                     x = i * increment
                     y = self.normalize(x)
 
-                    node_dict['measurementDefinition']['valueFunctionData'].append({
+                    data_points.append({
                         'x': round(x, 3),
                         'y': round(y, 3),
                     })
+                
+                node_dict['measurementDefinition']['valueFunctionData'] = data_points
 
         # Create and append list of child nodes
         children_list = []
@@ -314,7 +310,7 @@ class Node(db.Model):
     def get_measurements(cls, hierarchy_id):
         return cls.query.filter(cls.measurement_type != None, cls.hierarchy_id == hierarchy_id)
 
-    def normalize(self, measure):
+    def normalize(self, measure, inverse=False):
         # TODO: Add a cap to reference points, y must be between 0 and 1
         # If you enter in an x that after normalization > 1
         # Return 1
@@ -343,10 +339,13 @@ class Node(db.Model):
             m = ((y2 - y1) / (x2 - x1))
             b = ((x2 * y1) - (x1 * y2)) / (x2 - x1)
             # Linear function equation
-            result = (m * measure) + b
+            if not inverse:
+                result = (m * measure) + b
+            else:
+                result = (measure - b) / m
 
             return result
-        
+
         return 0
     
     def refresh_weights(self):
