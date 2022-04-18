@@ -193,6 +193,8 @@ class Node(db.Model):
                 'referencePoints': [ref.to_dict() for ref in self.references]
             }
 
+            # TODO: Move this somewhere else? These points should maybe saved on the backend.
+            # TODO: Should probably be based off the range from 0.0 to 1.0
             if self.vf_type == "Linear":
                 references = [ref.to_tuple() for ref in self.references]
                 x1 = references[0][0]
