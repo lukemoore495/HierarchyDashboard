@@ -222,7 +222,7 @@ class Node(db.Model):
         # Check for optional parameters
         # TODO: Weight isn't optional. Work with Frontend.
         icon = None
-        local_weight = 0
+        local_weight = 1
         measurement_type = None
         vf_type = None
         references=None
