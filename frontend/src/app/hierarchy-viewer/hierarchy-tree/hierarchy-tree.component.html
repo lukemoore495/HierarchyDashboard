@@ -14,7 +14,7 @@
                 <mat-card-content>
                     <div class="card-content">
                         <div class="card-row">
-                            <div *ngIf="node?.weight" class="text">
+                            <div *ngIf="node?.weight || node?.weight === 0" class="text">
                                 Weight: {{node.weight}}
                             </div>
                             <button class="measurement-node-delete" *ngIf="node.measurementNode" mat-button (click)="openEditNodeDialog(node.id)">Edit</button>

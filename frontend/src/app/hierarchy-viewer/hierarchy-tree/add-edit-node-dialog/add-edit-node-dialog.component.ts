@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { MeasurementType, Node } from '../../../Hierarchy';
+import { MeasurementType, Node, VFType } from '../../../Hierarchy';
 import { MeasurementDefinitionRequest, NodeRequest } from '../../../hierarchy.service';
 import { createNode, createNodeSuccess, patchNode, patchNodeSuccess } from '../../../state/hierarchy.actions';
 import { HierarchyState } from '../../../state/hierarchy.reducer';
@@ -43,10 +43,10 @@ export class AddEditNodeDialogComponent implements OnDestroy{
         if(this.existingNode){
             let point1: PointForm = {x: null, y: null};
             let point2: PointForm = {x: null, y: null};
-            if(this.existingNode.measurementDefinition?.linearReferencePoints 
-                && this.existingNode.measurementDefinition?.linearReferencePoints.length >= 2){
-                point1 = this.existingNode.measurementDefinition.linearReferencePoints[0];
-                point2 = this.existingNode.measurementDefinition.linearReferencePoints[1];
+            if(this.existingNode.measurementDefinition?.referencePoints 
+                && this.existingNode.measurementDefinition?.referencePoints.length >= 2){
+                point1 = this.existingNode.measurementDefinition.referencePoints[0];
+                point2 = this.existingNode.measurementDefinition.referencePoints[1];
             }
 
             return {
@@ -70,19 +70,22 @@ export class AddEditNodeDialogComponent implements OnDestroy{
     onSubmit() {
         this.loading = true;
         const referencePoints = 
-            this.form.point1.x && this.form.point1.y && this.form.point2.x && this.form.point2.y
+            this.form.point1.x !== null
+            && this.form.point1.y !== null
+            && this.form.point2.x !== null
+            && this.form.point2.y !== null
                 ? [this.form.point1 as Point, this.form.point2 as Point]
                 : [];
                 
         const measurementDefinition: MeasurementDefinitionRequest | undefined = 
             this.form.isMeasurement && this.form.measurementType ? {
                 measurementType: this.form.measurementType,
-                linearReferencePoints: referencePoints
+                referencePoints: referencePoints,
+                VFType: VFType[VFType.Linear]
             } : undefined;
 
         const newNode: NodeRequest = {
             name: this.form.name,
-            weight: 0,
             children: [],
             icon: null,
             measurementDefinition: measurementDefinition

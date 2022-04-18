@@ -23,9 +23,9 @@ export interface Node {
 
 export interface MeasurementDefinition {
     measurementType: string | null;
-    valueFunctionType?: ValueFunctionType;
+    valueFunctionType?: VFType;
     valueFunctionData?: Point[];
-    linearReferencePoints?: Point[];
+    referencePoints?: Point[];
     categories?: Category[];
 }
 
@@ -42,7 +42,7 @@ export interface Category {
     value: number;
 }
 
-export enum ValueFunctionType {
+export enum VFType {
     Linear,
     Categorical
 }
