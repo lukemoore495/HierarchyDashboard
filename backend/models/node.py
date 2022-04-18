@@ -1,6 +1,6 @@
-import this
 from .shared import db # Allows the models to be split out into separate files.
 
+from utilities.weighting_techniques import balance_weights
 
 class Node(db.Model):
     """
@@ -301,3 +301,18 @@ class Node(db.Model):
             return result
         
         return 0
+    
+    def refresh_weights(self):
+        if self.parent:
+            self.global_weight = self.local_weight * self.parent.global_weight
+
+        weights = []
+        if self.children:
+            for child in self.children:
+                weights.append(child.local_weight)
+            
+            balanced_weights = balance_weights(weights)
+            for child in self.children:
+                child.local_weight = balanced_weights.pop(0)
+                child.refresh_weights()
+

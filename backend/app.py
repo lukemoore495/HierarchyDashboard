@@ -74,6 +74,8 @@ def create_hierarchy():
     if None in alternatives:
         abort(204, description="Problem with Alternatives")
 
+    root.refresh_weights()
+    hierarchy.refresh_alternatives()
     db.session.add(hierarchy)
     db.session.commit()
 
@@ -169,6 +171,11 @@ def create_node(hierarchy_id, parent_id):
 
                 db.session.add(new_value)
 
+    # Should automatically balance weights as nodes are created.
+    parent.refresh_weights()
+    # global_value will redo calculations with balanced weights.
+    for alt in alternatives:
+        alt.refresh_values()
     db.session.commit()
 
     return jsonify(parent.to_dict()), 201
@@ -176,7 +183,7 @@ def create_node(hierarchy_id, parent_id):
 
 #TODO: Patch Node
 @app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
-def update_node(hierarchy_id, parent_id):
+def patch_node(hierarchy_id, parent_id):
     pass
 
 

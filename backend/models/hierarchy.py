@@ -141,3 +141,8 @@ class Hierarchy(db.Model):
     # Some helper functions
     def get_measurements(self):
         return Node.get_measurements(hierarchy_id=self.id)
+    
+    def refresh_alternatives(self):
+        for alternative in self.alternatives:
+            for value in alternative.values:
+                value.refresh_global_value()

@@ -91,4 +91,8 @@ class Alternative(db.Model):
             new_alternatives.append(Alternative.create(measurements, alternative))
         
         return new_alternatives
+
+    def refresh_values(self):
+        for value in self.values:
+            value.refresh_global_value()
     
