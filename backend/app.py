@@ -310,21 +310,21 @@ def direct_assessment(hierarchy_id, parent_id):
     # Get data (new weights)
     data = request.get_json()
 
-    parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id)
+    parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id).first()
     children = [child for child in parent.children]
     child_ids = [child.id for child in children]
 
     # Check that the children to change are a subset of the children of the parent
-    if not all(key in child_ids for key in data.keys()):
+    if not all(int(key) in child_ids for key in data.keys()):
         abort(404, description="Resource not found")
 
     for key in data:
         for child in children:
-            if child.id == key:
+            if child.id == int(key):
                 child.local_weight = data[key]['weight']
 
     # Refresh all local and global weights for the subtree
-    parent.referesh_weights()
+    parent.refresh_weights()
     db.session.commit()
 
     return jsonify(parent.to_dict()), 201
