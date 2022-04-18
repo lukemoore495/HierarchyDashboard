@@ -199,6 +199,11 @@ class Node(db.Model):
 
                 x1 = self.normalize(0.0, True)
                 x2 = self.normalize(1.0, True)
+
+                if x1 > x2:
+                    temp = x2
+                    x2 = x1
+                    x1 = temp
                 
                 domain = x2 - x1
                 increment = domain / 10
@@ -325,7 +330,7 @@ class Node(db.Model):
 
             # Swap if point_2's x should come first
             if point_1[0] > point_2[0]:
-                temp = point_1
+                temp = point_2
                 point_2 = point_1
                 point_1 = temp
 
