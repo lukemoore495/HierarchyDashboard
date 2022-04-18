@@ -166,13 +166,8 @@ export const HierarchyReducer = createReducer<HierarchyState>(
             return {...state};
         }
 
-        const value = alternative.values.find(x => x.nodeId == action.nodeId);
-        if(!value){
-            return {...state};
-        }
-
-        const values = alternative.values.filter(x => x.nodeId !== action.nodeId);
-        values.push({...value, measure: action.measure});
+        const values = alternative.values.filter(x => x.nodeId !== action.value.nodeId);
+        values.push(action.value);
 
         const alternatives = [...state.selectedHierarchy.alternatives]
             .filter(x => x.id !== action.alternativeId);
