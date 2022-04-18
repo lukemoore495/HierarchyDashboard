@@ -3,7 +3,7 @@ import { Component, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { first, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { MeasurementType, Node, VFType } from '../../../Hierarchy';
 import { MeasurementDefinitionRequest, NodeRequest } from '../../../hierarchy.service';
 import { createNode, createNodeSuccess, patchNode, patchNodeSuccess } from '../../../state/hierarchy.actions';
