@@ -207,7 +207,6 @@ def patch_node(hierarchy_id, node_id):
         if 'referencePoints' in m_data:
             pass
 
-
     parent.refresh_weights()
     hierarchy.refresh_alternatives()
     db.session.commit()
@@ -309,16 +308,26 @@ def change_weight(hierarchy_id, node_id):
 @app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/weights/directAssessment", methods=['PATCH'])
 def direct_assessment(hierarchy_id, parent_id):
     # Get data (new weights)
-    # [{"nodeId":1},"weight":.2},...]
-    # Get nodes on the same level (children of parent)
+    data = request.get_json()
 
+    parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id)
+    children = [child for child in parent.children]
+    child_ids = [child.id for child in children]
 
-    # If there aren't enough weights for each child
-        # Return error
+    # Check that the children to change are a subset of the children of the parent
+    if not all(key in child_ids for key in data.keys()):
+        abort(404, description="Resource not found")
 
-    # Check each weight
-    # Rebalance??
-    pass
+    for key in data:
+        for child in children:
+            if child.id == key:
+                child.local_weight = data[key]['weight']
+
+    # Refresh all local and global weights for the subtree
+    parent.referesh_weights()
+    db.session.commit()
+
+    return jsonify(parent.to_dict()), 201
 
 
 # TODO: Pair Wise
