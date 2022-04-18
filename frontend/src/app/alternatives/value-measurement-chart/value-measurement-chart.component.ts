@@ -46,7 +46,10 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
 
                 if(value[1]?.measurementDefinition?.valueFunctionData){
                     this.chartNewValue(value[0], value[1]?.measurementDefinition?.valueFunctionData);
+                } else {
+                    this.clearChartData();
                 }
+
                 if(value[1]?.name){
                     this.updateLabel(value[1].name);
                 }
@@ -79,7 +82,9 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
         }
 
         let pointIndex: number | null = null;
-        if(value.measure && value.localValue){
+        if(value.measure !== null 
+            && value.localValue !== null 
+            && value.localValue !== undefined){
             pointIndex = insertValuePoint(value.measure, value.localValue);
         }
 

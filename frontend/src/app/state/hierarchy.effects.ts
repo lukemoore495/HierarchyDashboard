@@ -100,8 +100,8 @@ export class HierarchyEffects {
                 ofType(HierarchyActions.updateAlternativeMeasure),
                 concatMap(action => this.hierarchyService.updateAlternativeMeasure(action.hierarchyId, action.alternativeId, action.nodeId, action.measure)
                     .pipe(
-                        map(_ => HierarchyActions.updateAlternativeMeasureSuccess(
-                            {hierarchyId: action.hierarchyId, alternativeId: action.alternativeId, nodeId: action.nodeId, measure: action.measure})),
+                        map(value => HierarchyActions.updateAlternativeMeasureSuccess(
+                            {hierarchyId: action.hierarchyId, alternativeId: action.alternativeId, value: value})),
                         catchError(error => of(HierarchyActions.updateAlternativeMeasureFailure({error})))
                     )
                 )

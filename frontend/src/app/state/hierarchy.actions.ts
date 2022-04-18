@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { CreateHierarchyAlternative, HierarchyAlternative } from '../alternatives/AlternativeForm';
-import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
+import { Hierarchy, HierarchyListItem, Node, Value } from '../Hierarchy';
 import { HierarchyRequest, NodeRequest } from '../hierarchy.service';
 
 export const createHierarchy = createAction(
@@ -124,7 +124,7 @@ export const updateAlternativeMeasure = createAction(
 
 export const updateAlternativeMeasureSuccess = createAction(
     '[Alternatives API] Update Alternative Measure Success',
-    props<{hierarchyId: string, alternativeId: string, nodeId: string, measure: number}>()
+    props<{hierarchyId: string, alternativeId: string, value: Value}>()
 );
 
 export const updateAlternativeMeasureFailure = createAction(

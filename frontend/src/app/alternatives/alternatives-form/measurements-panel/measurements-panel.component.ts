@@ -90,7 +90,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                         }
                         measurements.push({
                             nodeId: id,
-                            measure: measure
+                            measure: Number(measure)
                         });
                     }
                     return measurements;
