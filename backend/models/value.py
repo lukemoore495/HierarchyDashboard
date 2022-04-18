@@ -34,4 +34,7 @@ class Value(db.Model):
             alt_dict['id'] = str(self.id)
 
         return alt_dict
+
+    def refresh_global_value(self):
+        self.global_value = self.measurement.normalize(self.measure) * self.measurement.global_weight
     

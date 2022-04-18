@@ -231,6 +231,7 @@ def get_alternative(hierarchy_id, alternative_id):
 
     return alternative.to_dict(), 200
 
+
 @app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>", methods=['DELETE'])
 def delete_alternative(hierarchy_id, alternative_id):
     alternative = Alternative.query.filter_by(id=alternative_id, hierarchy_id=hierarchy_id).first()
@@ -253,8 +254,8 @@ def patch_value(hierarchy_id, alternative_id, node_id):
         abort(404, description="Resource not found")
 
     # Change individual measure in the value table
-    if "measure" in data:
-        value.measure=data["measure"]
+    value.measure=data["measure"]
+    value.refresh_global_value()
 
     db.session.commit()
 
