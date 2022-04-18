@@ -325,6 +325,7 @@ def direct_assessment(hierarchy_id, parent_id):
 
     # Refresh all local and global weights for the subtree
     parent.refresh_weights()
+    parent.hierarchy.refresh_alternatives()
     db.session.commit()
 
     return jsonify(parent.to_dict()), 201
