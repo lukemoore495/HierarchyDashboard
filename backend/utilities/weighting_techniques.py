@@ -24,8 +24,13 @@
 def balance_weights(weights):
     total = sum(weights)
 
+    # Every weight is zero, nothing to balance
+    if total == 0:
+        return weights
+
     for i in range(len(weights)):
-        weights[i] = weights[i] / total
+        new_weight = weights[i] / total
+        weights[i] = round(new_weight, 3)
 
     return weights
 

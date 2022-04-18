@@ -200,7 +200,11 @@ def delete_node(hierarchy_id, node_id):
     if root_node == node:
         abort(405, description="Protected Resource")
 
+    parent = node.parent
     db.session.delete(node)
+    
+    parent.refresh_weights()
+    hierarchy.refresh_alternatives()
     db.session.commit()
 
     message = f"Node {node_id} Deleted"
