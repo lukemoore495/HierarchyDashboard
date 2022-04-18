@@ -199,13 +199,8 @@ class Node(db.Model):
 
                 x1 = self.normalize(0.0, True)
                 x2 = self.normalize(1.0, True)
-
-                if x1 > x2:
-                    temp = x2
-                    x2 = x1
-                    x1 = temp
                 
-                domain = x2 - x1
+                domain = abs(x2 - x1)
                 increment = domain / 10
 
                 for i in range(11):
