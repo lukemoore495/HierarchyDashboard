@@ -207,6 +207,10 @@ class Node(db.Model):
                     x = i * increment
                     y = self.normalize(x)
 
+                    if y > 1:
+                        y = 1
+                    if y < 0:
+                        y = 0
                     data_points.append({
                         'x': round(x, 3),
                         'y': round(y, 3),

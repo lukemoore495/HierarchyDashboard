@@ -80,7 +80,7 @@ class Alternative(db.Model):
                         if "localValue" in value:
                             new_value.local_value = value["localValue"]
                         if "globalValue" in value:
-                            new_value.global_value =  round(measurement.normalize(new_value.measure) * measurement.global_weight, 4)
+                            new_value.global_value =  measurement.normalize(new_value.measure) * measurement.global_weight
 
         return alternative
     

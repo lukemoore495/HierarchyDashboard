@@ -25,9 +25,14 @@ class Value(db.Model):
         alt_dict = {
             "nodeId": self.node_id,
             "measure": self.measure,
-            "localValue": self.local_value,
-            "globalValue": self.global_value
+            "localValue": round(self.local_value, 4),
+            "globalValue": round(self.global_value, 4),
         }
+
+        if self.local_value > 1:
+            alt_dict['localValue'] = 1
+        if self.local_value < 0:
+            alt_dict['localValue'] = 0
 
         if not export:
             alt_dict['id'] = str(self.id)
@@ -38,5 +43,5 @@ class Value(db.Model):
         self.local_value = self.measurement.normalize(self.measure)
 
         weighted_value = self.local_value * self.measurement.global_weight
-        self.global_value = round(weighted_value, 5)
+        self.global_value = weighted_value
     
