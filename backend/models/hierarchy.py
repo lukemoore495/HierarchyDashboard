@@ -144,5 +144,4 @@ class Hierarchy(db.Model):
     
     def refresh_alternatives(self):
         for alternative in self.alternatives:
-            for value in alternative.values:
-                value.refresh_global_value()
+            alternative.refresh_values()

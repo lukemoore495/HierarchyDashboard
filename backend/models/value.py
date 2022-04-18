@@ -35,7 +35,9 @@ class Value(db.Model):
 
         return alt_dict
 
-    def refresh_global_value(self):
-        weighted_value = self.measurement.normalize(self.measure) * self.measurement.global_weight
+    def refresh_value(self):
+        self.local_value = self.measurement.normalize(self.measure)
+
+        weighted_value = self.local_value * self.measurement.global_weight
         self.global_value = round(weighted_value, 5)
     

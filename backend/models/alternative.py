@@ -94,5 +94,5 @@ class Alternative(db.Model):
 
     def refresh_values(self):
         for value in self.values:
-            value.refresh_global_value()
+            value.refresh_value()
     

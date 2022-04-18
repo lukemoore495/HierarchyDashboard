@@ -264,7 +264,7 @@ def patch_value(hierarchy_id, alternative_id, node_id):
     # Change individual measure in the value table
     if "measure" in data:
         value.measure=data["measure"]
-        value.refresh_global_value()
+        value.refresh_value()
 
     db.session.commit()
 
