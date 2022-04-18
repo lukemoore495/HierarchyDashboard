@@ -1,6 +1,7 @@
 from .shared import db # Allows the models to be split out into separate files.
 
 from utilities.weighting_techniques import balance_weights
+from .reference import Reference
 
 class Node(db.Model):
     """
@@ -66,8 +67,12 @@ class Node(db.Model):
 
     # For Measurements
     measurement_type = db.Column(db.String())
-    value_function = db.Column(db.String)
     vf_type = db.Column(db.String)
+    references = db.relationship(
+        "Reference",
+        cascade = "all, delete",
+        backref=db.backref("measurement"),
+        )
 
     # Child Nodes, can be measurements or sub-objectives
     children = db.relationship(
@@ -79,10 +84,12 @@ class Node(db.Model):
     values = db.relationship(
         "Value",
         cascade="all, delete",
-        backref=db.backref("measurement")
+        backref=db.backref("measurement"),
     )
 
-    def __init__(self, name, parent=None, icon=None, local_weight=None, measurement_type=None, value_function=None, vf_type=None):
+
+
+    def __init__(self, name, parent=None, icon=None, local_weight=None, measurement_type=None, vf_type=None):
         """
         Parameters
         ----------
@@ -126,7 +133,6 @@ class Node(db.Model):
 
         # For Measurements
         self.measurement_type=measurement_type
-        self.value_function=value_function
         self.vf_type=vf_type
 
     def __repr__(self):
@@ -185,8 +191,8 @@ class Node(db.Model):
         if self.measurement_type:
             node_dict['measurementDefinition'] = {
                 'measurementType': self.measurement_type,
-                'valueFunction': self.value_function,
                 'VFType': self.vf_type,
+                'referencePoints': [ref.to_dict() for ref in self.references]
             }
 
         # Create and append list of child nodes
@@ -218,8 +224,8 @@ class Node(db.Model):
         icon = None
         local_weight = 0
         measurement_type = None
-        value_function = None
         vf_type = None
+        references=None
 
         if 'icon' in data:
             icon = data['icon']
@@ -227,12 +233,14 @@ class Node(db.Model):
             local_weight = data['weight']
 
         if 'measurementDefinition' in data:
-            if 'measurementType' in data['measurementDefinition']:
-                measurement_type = data['measurementDefinition']['measurementType']
-            if 'valueFunction' in data['measurementDefinition']:
-                value_function = data['measurementDefinition']['valueFunction']
-            if 'VFType' in data['measurementDefinition']:
-                vf_type = data['measurementDefinition']['VFType']
+            m_data = data['measurementDefinition']
+            if 'measurementType' in m_data:
+                measurement_type = m_data['measurementType']
+            if 'VFType' in m_data:
+                vf_type = m_data['VFType']
+            if 'referencePoints' in m_data:
+                references=m_data['referencePoints']
+
                 
         # Create child node
         new_node = Node(
@@ -241,9 +249,14 @@ class Node(db.Model):
             icon=icon,
             local_weight=local_weight,
             measurement_type=measurement_type,
-            value_function=value_function,
             vf_type=vf_type,
         )
+
+
+        # TODO: Error checking
+        if references:
+            for ref in references:
+                Reference(new_node, ref['x'], ref['y'])
 
         # Check for child nodes in children and measurments
         children = []
@@ -288,17 +301,20 @@ class Node(db.Model):
             return 0
         # TODO: Switch to vfType
         if self.vf_type == "Linear":
-            numbers = []
-            
-            for word in self.value_function.split():
-                if word.isdigit():
-                    numbers.append(float(word))
+            point_1 = self.references[0].to_tuple()
+            point_2 = self.references[1].to_tuple()
+
+            # Swap if point_2's x should come first
+            if point_1[0] > point_2[0]:
+                temp = point_1
+                point_2 = point_1
+                point_1 = temp
 
             # For sanity
-            x1 = numbers[0]
-            y1 = numbers[1]
-            x2 = numbers[2]
-            y2 = numbers[3]
+            x1 = point_1[0]
+            y1 = point_1[1]
+            x2 = point_2[0]
+            y2 = point_2[1]
 
             m = ((y2 - y1) / (x2 - x1))
             b = ((x2 * y1) - (x1 * y2)) / (x2 - x1)

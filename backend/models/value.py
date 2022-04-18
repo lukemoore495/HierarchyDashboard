@@ -1,4 +1,3 @@
-from glob import glob
 from .shared import db # Allows the models to be split out into separate files.
 
 class Value(db.Model):

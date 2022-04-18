@@ -285,6 +285,7 @@ def direct_assessment(hierarchy_id, parent_id):
     # Get data (new weights)
     # [{"nodeId":1},"weight":.2},...]
     # Get nodes on the same level (children of parent)
+    
 
     # If there aren't enough weights for each child
         # Return error
@@ -354,12 +355,6 @@ def rank_alternatives(hierarchy_id):
             rankings[value.alternative_id]["total"] += weighted_value
     
     return jsonify(rankings), 200
-
-
-# TODO: Adjust weights
-# Whenever you adjust weight
-# Return global values of each affected measurement.
-# Return parent node, children's global weight will be affected
 
 
 if __name__ == "__main__":
