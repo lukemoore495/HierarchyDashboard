@@ -345,10 +345,11 @@ def direct_assessment(hierarchy_id, parent_id):
     if not all(int(key) in child_ids for key in data.keys()):
         abort(404, description="Resource not found")
 
-    for key in data:
+    for obj in data:
+        node_id = obj["nodeId"]
         for child in children:
-            if child.id == int(key):
-                child.local_weight = data[key]['weight']
+            if child.id == int(node_id):
+                child.local_weight = obj['weight']
 
     # Refresh all local and global weights for the subtree
     parent.refresh_weights()
