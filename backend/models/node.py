@@ -282,9 +282,10 @@ class Node(db.Model):
                 if references:
                     if references[i]['x'] and references[i]['y']:
                         Reference(new_node, references[i]['x'], references[i]['y'])
-                        break
-
-                Reference(new_node, 0, 0)
+                    else:
+                        Reference(new_node, 0, 0)
+                else:
+                    Reference(new_node, 0, 0)
 
         # Check for child nodes in children and measurments
         children = []
