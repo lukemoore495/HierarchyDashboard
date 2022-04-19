@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Hierarchy, Value, Node } from '../../Hierarchy';
-import { getSelectedHierarchy } from '../../state';
+import { getSelectedAlternative, getSelectedHierarchy } from '../../state';
+import { updateAlternativeMeasure } from '../../state/hierarchy.actions';
 import { HierarchyState } from '../../state/hierarchy.reducer';
 
 @Component({
@@ -10,20 +11,83 @@ import { HierarchyState } from '../../state/hierarchy.reducer';
     templateUrl: './alternatives-form.component.html',
     styleUrls: ['./alternatives-form.component.scss']
 })
-export class AlternativesFormComponent implements OnInit {
+export class AlternativesFormComponent implements OnInit, OnDestroy {
     selectedHierarchy$?: Observable<Hierarchy | null | undefined>;
     measurementNodes: Node[] | null = null;
     currentMeasurements: Value[] = [];
+    hierarchyId: string | null = null;
+    alternativeId: string | null = null;
+    subscriptions: Subscription[] = [];
 
     constructor(private store: Store<HierarchyState>) { }
 
     ngOnInit(): void {
         this.selectedHierarchy$ = this.store.select(getSelectedHierarchy);
-        this.selectedHierarchy$.pipe(
-            map(hierarchy => hierarchy?.root),
-        ).subscribe(root => {
-            root ? this.measurementNodes = this.selectMeasurements(root) : this.measurementNodes = null;
+        const hierarchySub = this.selectedHierarchy$.subscribe(hierarchy => {
+            if(!hierarchy){
+                return;
+            }
+            this.hierarchyId = hierarchy.id;
+            hierarchy.root ? this.measurementNodes = this.selectMeasurements(hierarchy.root) : this.measurementNodes = null;
         });
+        const alternativeSub = this.store.select(getSelectedAlternative).subscribe(alternative => {
+            if(!alternative){
+                return;
+            }
+            this.alternativeId = alternative.id;
+        });
+        this.subscriptions.push(hierarchySub, alternativeSub);
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.forEach(sub => sub.unsubscribe());
+    }
+
+    includeTopLevelNodes(measurementNodes: Node[], node: Node): Node[] {
+        const combineIntoExistingPanel = (measurementNodes: Node[], node: Node, topLevelNodes: Node[]): Node[] => {
+            measurementNodes = measurementNodes.filter(x => x.id !== node.id);
+            const children = [...node.children];
+            const topLevel: Node = {
+                id: '',
+                icon: null,
+                weight: 0,
+                name: '',
+                children: topLevelNodes
+            };
+            children.unshift(topLevel);
+            measurementNodes.push({
+                ...node,
+                children: children
+            });
+            return measurementNodes;
+        };
+        const projectIntoNewPanel = (measurementNodes: Node[], node: Node, topLevelNodes: Node[]): Node[] => {
+            const children: Node = {
+                id: '',
+                icon: null,
+                weight: 0,
+                name: node.name,
+                children: topLevelNodes
+            };
+            const topLevel: Node = {
+                ...children,
+                name: 'Top Level',
+                children: [children]
+            };
+            measurementNodes.unshift(topLevel);
+            return measurementNodes;
+        };
+
+        const topLevelChildren = node.children.filter(x => x.measurementDefinition);
+        if(topLevelChildren.length === 0){
+            return measurementNodes;
+        }
+
+        const top = measurementNodes.find(x => x.id === node.id);
+        if(top){
+            return combineIntoExistingPanel(measurementNodes, top, topLevelChildren);
+        }
+        return projectIntoNewPanel(measurementNodes, node, topLevelChildren);
     }
 
     selectMeasurements(node: Node): Node[] {
@@ -47,7 +111,7 @@ export class AlternativesFormComponent implements OnInit {
 
         const measurementNodes : Node[] = [];
         measurementNodes.push(...findChildMeasurements(node));
-        return measurementNodes;
+        return this.includeTopLevelNodes(measurementNodes, node); 
     }
 
     hasMeasurementNode(node: Node): boolean {
@@ -55,8 +119,25 @@ export class AlternativesFormComponent implements OnInit {
     }
 
     saveMeasurements(newMeasurements : Value[]){
-        //replace this with an api call in the future
-        console.log(newMeasurements);
+        const hierarchyId = this.hierarchyId ?? null;
+        const alternativeId = this.alternativeId ?? null;
+        if(!hierarchyId || !alternativeId){
+            return;
+        }
+        newMeasurements.forEach(measurement => {
+            if(measurement.measure === null){
+                return;
+            }
+            this.store.dispatch(
+                updateAlternativeMeasure(
+                    {
+                        hierarchyId: hierarchyId, 
+                        alternativeId: alternativeId, 
+                        nodeId: measurement.nodeId, 
+                        measure: measurement.measure
+                    }
+                ));
+        });
     }
 
 }

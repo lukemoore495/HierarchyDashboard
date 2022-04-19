@@ -1,4 +1,5 @@
 import { createAction, props } from '@ngrx/store';
+import { CreateHierarchyAlternative, HierarchyAlternative } from '../alternatives/AlternativeForm';
 import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
 import { HierarchyRequest, NodeRequest } from '../hierarchy.service';
 
@@ -99,4 +100,49 @@ export const deleteNodeSuccess = createAction(
 export const deleteNodeFailure = createAction(
     '[Hierarchies API] Delete Node Failure',
     props<{error: string}>()
+);
+
+export const updateAlternativeMeasure = createAction(
+    '[Alternatives] Update Alternative Measure',
+    props<{hierarchyId: string, alternativeId: string, nodeId: string, measure: number}>()
+);
+
+export const updateAlternativeMeasureSuccess = createAction(
+    '[Alternatives API] Update Alternative Measure Success',
+    props<{hierarchyId: string, alternativeId: string, nodeId: string, measure: number}>()
+);
+
+export const updateAlternativeMeasureFailure = createAction(
+    '[Alternatives API] Update Alternative Measure Failure',
+    props<{error: string}>()
+);
+
+export const createAlternative = createAction(
+    '[Alternatives] Create Hierarchy',
+    props<{ createHierarchyAlternative: CreateHierarchyAlternative }>()
+);
+
+export const createAlternativeSuccess = createAction(
+    '[Alternatives API] Create Alternative Success',
+    props<{ hierarchyAlternative: HierarchyAlternative }>()
+);
+
+export const createAlternativeFailure = createAction(
+    '[Alternatives API] Create Alternative Failure',
+    props<{ error: string }>()
+);
+
+export const deleteAlternative = createAction(
+    '[Alternatives] Delete Alternative',
+    props<{ hierarchyAlternative: HierarchyAlternative }>()
+);
+
+export const deleteAlternativeSuccess = createAction(
+    '[Alternatives API] Delete Alternative Success',
+    props<{ hierarchyAlternative: HierarchyAlternative }>()
+);
+
+export const deleteAlternativeFailure = createAction(
+    '[Alternatives API] Delete Alternative Failure',
+    props<{ error: string }>()
 );

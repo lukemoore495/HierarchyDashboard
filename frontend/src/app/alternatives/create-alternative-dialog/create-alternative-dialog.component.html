@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>Create Hierarchy</h1>
+<h1 mat-dialog-title>Create Alternative</h1>
 <mat-dialog-content>
     <mat-form-field class="dialog-full-width" appearance="fill">
         <mat-label>Name</mat-label>
@@ -7,11 +7,6 @@
             *ngIf="(name.invalid && (name.dirty || name.touched) && name.errors?.['required'])">
             Name is required.
         </mat-error>
-    </mat-form-field>
-
-    <mat-form-field class="dialog-full-width" appearance="fill">
-        <mat-label>Description (optional)</mat-label>
-        <textarea matInput [(ngModel)]="form.description"></textarea>
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>

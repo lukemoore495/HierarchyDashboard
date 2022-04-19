@@ -1,7 +1,13 @@
 <form>
-    <mat-accordion *ngIf="measurementNodes">
+    <mat-accordion *ngIf="measurementNodes && alternativeId">
         <div *ngFor="let node of measurementNodes">
-            <app-measurements-panel [measurementNode]="node" (measurementResultEvent)="saveMeasurements($event)" [isTopLevel]="measurementNodes.length === 1"></app-measurements-panel>
+            <app-measurements-panel [measurementNode]="node" (measurementResultEvent)="saveMeasurements($event)" [isSinglePanel]="measurementNodes.length === 1"></app-measurements-panel>
         </div>
     </mat-accordion>
+    <div *ngIf="!measurementNodes" class="spinner-container">
+        <mat-spinner color="primary" diameter="70"></mat-spinner>
+    </div>
+    <div *ngIf="measurementNodes && !alternativeId" class="welcome">
+        <h1 class="text">No Alternatives Found</h1>
+    </div>
 </form>

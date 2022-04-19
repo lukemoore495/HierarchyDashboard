@@ -56,7 +56,7 @@ export enum ValueFunctionTypes {
 export interface Alternative {
     id: string;
     name: string;
-    measurements: Value[];
+    values: Value[];
 }
 
 export interface Value {
