@@ -35,7 +35,6 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     constructor(private fb: FormBuilder, private store: Store<HierarchyState>) { 
         this.store.select(getSelectedAlternative)
             .pipe(
-                take(1),
                 map(alternative => alternative?.values)
             )
             .subscribe(measurements => {
