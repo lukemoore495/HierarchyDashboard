@@ -202,7 +202,6 @@ def patch_node(hierarchy_id, node_id):
     if 'icon' in data:
         node.icon = data['icon']
     
-
     # Measurement Node
     if 'measurementDefinition' in data:
         m_data = data['measurementDefinition']
@@ -219,7 +218,12 @@ def patch_node(hierarchy_id, node_id):
                     refs[i].x = ref_data[i]['x']
                     refs[i].y = ref_data[i]['y']
 
-    parent.refresh_weights()
+    # Root node has no parent, but it should still refresh weights.
+    if parent:
+        parent.refresh_weights()
+    else:
+        node.refresh_weights()
+
     hierarchy.refresh_alternatives()
     db.session.commit()
 
