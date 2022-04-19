@@ -28,7 +28,10 @@ export class AlternativesFormComponent implements OnInit, OnDestroy {
                 return;
             }
             this.hierarchyId = hierarchy.id;
-            hierarchy.root ? this.measurementNodes = this.selectMeasurements(hierarchy.root) : this.measurementNodes = null;
+            const newMeasurementNodes = hierarchy.root ? this.selectMeasurements(hierarchy.root) : null;
+            if(newMeasurementNodes?.length !== this.measurementNodes?.length){
+                this.measurementNodes = newMeasurementNodes;
+            }
         });
         const alternativeSub = this.store.select(getSelectedAlternative).subscribe(alternative => {
             if(!alternative){

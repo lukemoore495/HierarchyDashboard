@@ -167,4 +167,11 @@ export class AddEditNodeDialogComponent implements OnDestroy{
         }   
         return '';  
     }
+
+    setBooleanValue(measurementType: MeasurementType | null){
+        if(measurementType === MeasurementType.Boolean){
+            this.form.point1.x = 0;
+            this.form.point2.x = 1;
+        }  
+    }
 }

@@ -5,7 +5,7 @@ import { getSelectedMeasurement, getSelectedMeasurementNode } from '../../state'
 import { HierarchyState } from '../../state/hierarchy.reducer';
 import { BaseChartDirective } from 'ng2-charts';
 import { AfterViewInit } from '@angular/core';
-import { Point, Value } from '../../Hierarchy';
+import { MeasurementType, Point, Value } from '../../Hierarchy';
 import { combineLatest } from 'rxjs';
 
 @Component({
@@ -44,9 +44,23 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
                     return;
                 }
 
-                if(value[1]?.measurementDefinition?.valueFunctionData){
+                if(value[1]?.measurementDefinition?.valueFunctionData 
+                    && !(value[1].measurementDefinition.measurementType === MeasurementType.Boolean)){
                     this.chartNewValue(value[0], value[1]?.measurementDefinition?.valueFunctionData);
-                } else {
+                } 
+
+                //If Boolean measurementType we will just plot the referencePoints. This should be
+                //modeled as a categorical value function later on.
+                if(value[1]?.measurementDefinition?.measurementType === MeasurementType.Boolean
+                    && (value[1]?.measurementDefinition?.valueFunctionData 
+                        || value[1]?.measurementDefinition?.referencePoints)){
+                    const points = value[1].measurementDefinition.referencePoints 
+                    ?? value[1].measurementDefinition.valueFunctionData 
+                    ?? [];
+                    this.chartNewValue(value[0], points);
+                }
+
+                if(!value[1]?.measurementDefinition?.valueFunctionData){
                     this.clearChartData();
                 }
 
