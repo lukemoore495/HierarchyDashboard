@@ -338,13 +338,16 @@ def change_weight(hierarchy_id, node_id):
 def direct_assessment(hierarchy_id, parent_id):
     # Get data (new weights)
     data = request.get_json()
+    print(data)
+    print(data[0])
 
     parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id).first()
     children = [child for child in parent.children]
     child_ids = [child.id for child in children]
 
+    node_ids = [obj['nodeId'] for obj in data]
     # Check that the children to change are a subset of the children of the parent
-    if not all(int(key) in child_ids for key in data.keys()):
+    if not all(int(node_id) in child_ids for node_id in node_ids):
         abort(404, description="Resource not found")
 
     for obj in data:
