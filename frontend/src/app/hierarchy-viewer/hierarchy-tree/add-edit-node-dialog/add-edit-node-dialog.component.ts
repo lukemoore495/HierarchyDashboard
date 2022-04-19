@@ -22,6 +22,7 @@ export class AddEditNodeDialogComponent implements OnDestroy{
     subscriptions: Subscription[] = [];
     parentId: string | null;
     hierarchyId: string;
+    hideMeasurementDefinition = false;
     loading = false;
 
     constructor(public dialogRef: MatDialogRef<AddEditNodeDialogComponent>, 
@@ -33,6 +34,10 @@ export class AddEditNodeDialogComponent implements OnDestroy{
         this.hierarchyId = data.hierarchyId;
         this.form = this.getForm();
         this.measurementTypes = Object.keys(MeasurementType);
+
+        if(this.existingNode && !this.existingNode?.measurementDefinition){
+            this.hideMeasurementDefinition = true;
+        }
     }
     
     ngOnDestroy(): void {
@@ -53,8 +58,8 @@ export class AddEditNodeDialogComponent implements OnDestroy{
                 isMeasurement: this.existingNode.measurementDefinition ? true : false,
                 measurementType: this.existingNode.measurementDefinition?.measurementType as MeasurementType ?? null,
                 name: this.existingNode.name,
-                point1: point1 as PointForm,
-                point2: point2 as PointForm
+                point1: {x: point1.x, y: point1.y},
+                point2: {x: point2.x, y: point2.y}
             };
         }
         
