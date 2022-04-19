@@ -277,13 +277,14 @@ class Node(db.Model):
 
 
         # TODO: Error checking
-        if references:
-            if vf_type == "Linear":
-                for i in range(2):
+        if vf_type == "Linear":
+            for i in range(2):
+                if references:
                     if references[i]['x'] and references[i]['y']:
                         Reference(new_node, references['x'], references['y'])
-                    else:
-                        Reference(new_node, 0, 0)
+                        break
+                    
+                Reference(new_node, 0, 0)
 
         # Check for child nodes in children and measurments
         children = []
