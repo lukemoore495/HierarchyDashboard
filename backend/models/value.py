@@ -25,14 +25,16 @@ class Value(db.Model):
         alt_dict = {
             "nodeId": str(self.node_id),
             "measure": self.measure,
-            "localValue": round(self.local_value, 4),
-            "globalValue": round(self.global_value, 4),
         }
 
-        if self.local_value > 1:
-            alt_dict['localValue'] = 1
-        if self.local_value < 0:
-            alt_dict['localValue'] = 0
+        if isinstance(self.local_value, float):
+            if self.local_value > 1:
+                alt_dict['localValue'] = 1
+            if self.local_value < 0:
+                alt_dict['localValue'] = 0
+            else:
+                alt_dict["localValue"] = round(self.local_value, 4)
+                alt_dict["globalValue"] = round(self.global_value, 4)
 
         if not export:
             alt_dict['id'] = str(self.id)
