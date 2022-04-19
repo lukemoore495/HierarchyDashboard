@@ -3,7 +3,7 @@ import { Component, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { first, Subscription } from 'rxjs';
 import { MeasurementType, Node, VFType } from '../../../Hierarchy';
 import { MeasurementDefinitionRequest, NodeRequest } from '../../../hierarchy.service';
 import { createNode, createNodeSuccess, patchNode, patchNodeSuccess } from '../../../state/hierarchy.actions';
@@ -128,5 +128,43 @@ export class AddEditNodeDialogComponent implements OnDestroy{
         if(!this.form.isMeasurement){
             this.form.measurementType = null;
         }
+    }
+
+    getMinInput(measurementType: MeasurementType | null){
+        if(measurementType === MeasurementType.Percentage){
+            return 0;
+        } 
+        return null;    
+    }
+
+    getMaxInput(measurementType: MeasurementType | null){
+        if(measurementType === MeasurementType.Percentage){
+            return 100;
+        }   
+        return null;  
+    }
+
+    getInputType(measurementType: MeasurementType | null){
+        if(measurementType === MeasurementType.Boolean){
+            return 'text';
+        }   
+        return 'number';  
+    }
+
+    isBoolean(measurementType: MeasurementType | null){
+        if(measurementType === MeasurementType.Boolean){
+            return true;
+        }   
+        return false;  
+    }
+
+    getValue(measurementType: MeasurementType | null, firstInput: boolean){
+        if(measurementType === MeasurementType.Boolean && firstInput){
+            return 'True';
+        }   
+        if(measurementType === MeasurementType.Boolean){
+            return 'False';
+        }   
+        return '';  
     }
 }
