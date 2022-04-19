@@ -25,6 +25,8 @@ class Value(db.Model):
         alt_dict = {
             "nodeId": str(self.node_id),
             "measure": self.measure,
+            "localValue": self.local_value,
+            "globalValue": self.global_value,
         }
 
         if isinstance(self.local_value, float):
