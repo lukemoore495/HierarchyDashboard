@@ -15,6 +15,12 @@
     .point-x{
         margin-right: 1rem;
     }
+    .hidden{
+        display: block;
+        visibility: hidden;
+        width: 0;
+        height: 0;
+    }
 }
 
 .hidden{
