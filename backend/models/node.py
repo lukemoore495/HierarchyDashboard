@@ -280,7 +280,7 @@ class Node(db.Model):
         if vf_type == "Linear":
             for i in range(2):
                 if references:
-                    if references[i]['x'] == None or references[i]['y'] == None:
+                    if not references[i]['x'] == None and not references[i]['y'] == None:
                         Reference(new_node, references[i]['x'], references[i]['y'])
                     else:
                         Reference(new_node, 0, 0)

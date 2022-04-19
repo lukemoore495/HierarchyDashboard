@@ -222,7 +222,9 @@ def patch_node(hierarchy_id, node_id):
                         i += 1
                 else:
                     for i in range(2):
-                        if ref_data[i]['x'] == None or ref_data[i]['y'] == None:
+                        print(ref_data)
+                        if not ref_data[i]['x'] == None and not ref_data[i]['y'] == None:
+                            print(ref_data)
                             Reference(node, ref_data[i]['x'], ref_data[i]['y'])
                         else:
                             Reference(node, 0, 0)
