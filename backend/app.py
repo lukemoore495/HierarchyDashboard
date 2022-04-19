@@ -213,12 +213,13 @@ def patch_node(hierarchy_id, node_id):
         if node.vf_type == "Linear":
             if 'referencePoints' in m_data:
                 ref_data = m_data['referencePoints']
-                
+
                 i = 0
                 for ref in node.references:
                     ref.x = ref_data[i]['x']
                     ref.y = ref_data[i]['y']
                     i += 1
+                    
 
     # Root node has no parent, but it should still refresh weights.
     if parent:

@@ -278,8 +278,12 @@ class Node(db.Model):
 
         # TODO: Error checking
         if references:
-            for ref in references:
-                Reference(new_node, ref['x'], ref['y'])
+            if vf_type == "Linear":
+                for i in range(2):
+                    if references[i]['x'] and references[i]['y']:
+                        Reference(new_node, references['x'], references['y'])
+                    else:
+                        Reference(new_node, 0, 0)
 
         # Check for child nodes in children and measurments
         children = []
@@ -338,6 +342,11 @@ class Node(db.Model):
             y1 = point_1[1]
             x2 = point_2[0]
             y2 = point_2[1]
+
+            if x1 == x2: # invalid linear graph
+                return 0
+            if y1 == y2: # constant y = x
+                return y1
 
             m = ((y2 - y1) / (x2 - x1))
             b = ((x2 * y1) - (x1 * y2)) / (x2 - x1)
