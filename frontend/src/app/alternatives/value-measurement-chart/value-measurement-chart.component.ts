@@ -60,12 +60,15 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
     chartNewValue(value : Value, points: Point[]) {
 
         const insertValuePoint = (measure: number, value: number) : number => {
-            if(!xAxis.some(x => x === measure.toString())) {
+            const existingPoint = xAxis.some(x => x === measure.toString());
+            if(!existingPoint){
                 xAxis.push(measure.toString());
             }
             xAxis = xAxis.sort((first, second) => Number(first) - Number(second));
             const pointIndex = xAxis.indexOf(measure.toString());
-            yAxis = this.insert(yAxis, pointIndex, value);
+            if(!existingPoint){
+                yAxis = this.insert(yAxis, pointIndex, value);
+            }
             return pointIndex;
         };
 
@@ -131,9 +134,8 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
         this.lineChartData.datasets[0].label = label;
     }
 
-    insert(arr : any[], insertAt: number, value : any) : any[]{
-        const duplicateCount = arr.filter(x => x===value).length;
-        arr.splice(insertAt, duplicateCount, value);
+    insert(arr : number[], insertAt: number, value : number) : number[]{
+        arr.splice(insertAt, 0, value);
         return arr;
     }
 
