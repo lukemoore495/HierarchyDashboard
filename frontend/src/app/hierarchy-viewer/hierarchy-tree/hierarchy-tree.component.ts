@@ -84,10 +84,6 @@ export class HierarchyTreeComponent implements OnInit{
         };
     }
 
-    canBeWeighted(node: TreeNode){
-        return node.children.some(child => !child.measurementNode);
-    }
-
     sortNodesToLevels(hierarchy: Hierarchy): TreeNode[][] {
         const levels: TreeNode[][] = [];
         const addNodesToLevel = (node: TreeNode, currentLevel: number) => {
