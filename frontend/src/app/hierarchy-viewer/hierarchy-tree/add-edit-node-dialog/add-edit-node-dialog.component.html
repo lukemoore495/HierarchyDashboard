@@ -14,7 +14,7 @@
                 <mat-form-field>
                     <mat-label>Measurement Type</mat-label>
                     <mat-select #measurementType="ngModel" [(ngModel)]="form.measurementType" name="measurementType"
-                        [required]="form.isMeasurement" [disabled]="!form.isMeasurement">
+                        [required]="form.isMeasurement" [disabled]="!form.isMeasurement" (selectionChange)="setBooleanValue(form.measurementType)">
                         <mat-option *ngFor="let type of measurementTypes" [value]="type">{{type}}</mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -22,7 +22,8 @@
                     name="isMeasurement" (change)="setMeasurementType()">Measurement</mat-checkbox>
             </div>
             <div class="row">
-                <mat-form-field appearance="fill" class="point-x" [hideRequiredMarker]="!form.isMeasurement">
+
+                <mat-form-field appearance="fill" [ngClass]="{'point-x': !isBoolean(form.measurementType), 'hidden': isBoolean(form.measurementType)}" [hideRequiredMarker]="!form.isMeasurement">
                     <mat-label>X1 (Measure)</mat-label>
                     <input #x1="ngModel" matInput [(ngModel)]="form.point1.x" name="x1" type="number"
                         [required]="form.isMeasurement" [disabled]="!form.isMeasurement" [min]="getMinInput(form.measurementType)" [max]="getMaxInput(form.measurementType)"/>
@@ -35,6 +36,11 @@
                         Measures must be between {{getMinInput(form.measurementType)}}-{{getMaxInput(form.measurementType)}}.
                     </mat-error>
                 </mat-form-field>
+                <mat-form-field *ngIf="isBoolean(form.measurementType)" appearance="fill" class="point-x">
+                    <mat-label>X1 (Measure)</mat-label>
+                    <input matInput disabled value="False"/>
+                </mat-form-field>
+
                 <mat-form-field appearance="fill" [hideRequiredMarker]="!form.isMeasurement">
                     <mat-label>Y1 (Value)</mat-label>
                     <input #y1="ngModel" matInput [(ngModel)]="form.point1.y" name="y1" type="number"
@@ -48,9 +54,12 @@
                         Values must be between 1-0.
                     </mat-error>
                 </mat-form-field>
+
             </div>
             <div class="row">
-                <mat-form-field appearance="fill" class="point-x" [hideRequiredMarker]="!form.isMeasurement">
+
+                <mat-form-field appearance="fill" [ngClass]="{'point-x': !isBoolean(form.measurementType), 'hidden': isBoolean(form.measurementType)}"
+                class="point-x hidden" [hideRequiredMarker]="!form.isMeasurement">
                     <mat-label>X2 (Measure)</mat-label>
                     <input #x2="ngModel" matInput [(ngModel)]="form.point2.x" name="x2" type="number"
                         [required]="form.isMeasurement" [disabled]="!form.isMeasurement" [min]="getMinInput(form.measurementType)" [max]="getMaxInput(form.measurementType)"/>
@@ -63,6 +72,11 @@
                         Measures must be between {{getMinInput(form.measurementType)}}-{{getMaxInput(form.measurementType)}}.
                     </mat-error>
                 </mat-form-field>
+                <mat-form-field *ngIf="isBoolean(form.measurementType)" appearance="fill" class="point-x">
+                    <mat-label>X2 (Measure)</mat-label>
+                    <input matInput disabled value="True"/>
+                </mat-form-field>
+
                 <mat-form-field appearance="fill" [hideRequiredMarker]="!form.isMeasurement">
                     <mat-label>Y2 (Value)</mat-label>
                     <input #y2="ngModel" matInput [(ngModel)]="form.point2.y" name="y2" type="number"
@@ -76,6 +90,7 @@
                         Values must be between 1-0.
                     </mat-error>
                 </mat-form-field>
+
             </div>
         </div>
     </form>
