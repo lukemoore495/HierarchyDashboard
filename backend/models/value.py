@@ -29,14 +29,15 @@ class Value(db.Model):
             "globalValue": self.global_value,
         }
 
-        if isinstance(self.local_value, float):
+        if self.local_value is not None:
             if self.local_value > 1:
+                print("HERE")
                 alt_dict['localValue'] = 1
-            if self.local_value < 0:
+            elif self.local_value < 0:
                 alt_dict['localValue'] = 0
             else:
                 alt_dict["localValue"] = round(self.local_value, 4)
-                alt_dict["globalValue"] = round(self.global_value, 4)
+            alt_dict["globalValue"] = round(self.global_value, 4)
 
         if not export:
             alt_dict['id'] = str(self.id)
