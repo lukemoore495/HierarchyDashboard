@@ -46,7 +46,7 @@ class Value(db.Model):
     def refresh_value(self):
         self.local_value = self.measurement.normalize(self.measure)
         
-        value = 0
+        value = self.local_value
         if self.local_value < 0:
             value = 0
         elif self.local_value > 1:
