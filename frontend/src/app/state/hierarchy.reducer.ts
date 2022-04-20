@@ -246,6 +246,25 @@ export const HierarchyReducer = createReducer<HierarchyState>(
             error: action.error
         };
     }),
+    on(HierarchyActions.refreshAlternativesSuccess, (state, action): HierarchyState => {
+        if(!state.selectedHierarchy){
+            return {...state};
+        }
+
+        return {
+            ...state,
+            selectedHierarchy: {
+                ...state.selectedHierarchy, 
+                alternatives: action.alternatives
+            }
+        };
+    }),
+    on(HierarchyActions.retrieveHierarchiesFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
 );
 
 function replaceNode(node: Node, newNode: Node) : Node {
