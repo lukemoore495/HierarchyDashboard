@@ -6,6 +6,8 @@ let mainWindow;
 let backend;
 let development = !app.isPackaged;
 
+if (require('electron-squirrel-startup')) return app.quit();
+
 const rootPath = path.normalize(__dirname + '/..');
 backend = path.join(rootPath,'/dist/app.exe');
 
