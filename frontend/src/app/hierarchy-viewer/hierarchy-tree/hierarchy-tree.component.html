@@ -27,7 +27,7 @@
                         <button *ngIf="!node.measurementNode" mat-button (click)="openAddNodeDialog(node.id)">Add</button>
                         <button *ngIf="!node.measurementNode" mat-button (click)="openEditNodeDialog(node.id)">Edit</button>
                         <button *ngIf="!node.measurementNode && i !== 0" mat-button (click)="openDeleteNodeDialog(node.id)">Delete</button>
-                        <button *ngIf="node.children.length > 0"  
+                        <button *ngIf="node.children.length > 1"  
                             mat-button
                             matTooltip="Weights"
                             [routerLink]="['/weights', node.id]"

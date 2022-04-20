@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
+import { filter, of } from 'rxjs';
 import { catchError, concatMap, map, mergeMap } from 'rxjs/operators';
 import { HierarchyService } from '../hierarchy.service';
 import * as HierarchyActions from './hierarchy.actions';
@@ -64,7 +64,7 @@ export class HierarchyEffects {
                 ofType(HierarchyActions.createNode),
                 concatMap(action => this.hierarchyService.createNode(action.hierarchyId, action.parentId, action.node)
                     .pipe(
-                        map(node => HierarchyActions.createNodeSuccess({parentId: action.parentId, node: node})),
+                        map(node => HierarchyActions.createNodeSuccess({hierarchyId: action.hierarchyId, parentId: action.parentId, node: node})),
                         catchError(error => of(HierarchyActions.createNodeFailure({error})))
                     )
                 )
@@ -88,7 +88,7 @@ export class HierarchyEffects {
                 ofType(HierarchyActions.patchNode),
                 concatMap(action => this.hierarchyService.patchNode(action.hierarchyId, action.nodeId, action.node)
                     .pipe(
-                        map(node => HierarchyActions.patchNodeSuccess({nodeId: action.nodeId, node: node})),
+                        map(node => HierarchyActions.patchNodeSuccess({hierarchyId: action.hierarchyId, nodeId: action.nodeId, node: node})),
                         catchError(error => of(HierarchyActions.patchNodeFailure({error})))
                     )
                 )
@@ -125,7 +125,6 @@ export class HierarchyEffects {
                 )
             );
     });
-
     deleteAlternative$ = createEffect(() => {
         return this.actions$
             .pipe(
@@ -134,6 +133,19 @@ export class HierarchyEffects {
                     .pipe(
                         map(_ => HierarchyActions.deleteAlternativeSuccess({ hierarchyAlternative: action.hierarchyAlternative })),
                         catchError(error => of(HierarchyActions.deleteAlternativeFailure({ error })))
+                    )
+                )
+            );
+    });
+    refreshAlternatives$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.patchNodeSuccess, HierarchyActions.createNodeSuccess),
+                filter(action => action.node.measurementDefinition !== undefined),
+                concatMap(action => this.hierarchyService.getHierarchy(action.hierarchyId)
+                    .pipe(
+                        map(hierarchy => HierarchyActions.refreshAlternativesSuccess({ alternatives: hierarchy.alternatives })),
+                        catchError(error => of(HierarchyActions.refreshAlternativesFailure({ error })))
                     )
                 )
             );
