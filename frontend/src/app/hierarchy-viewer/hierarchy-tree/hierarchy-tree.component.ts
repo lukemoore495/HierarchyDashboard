@@ -2,10 +2,10 @@ import { Component, ElementRef, Input, QueryList, Renderer2, ViewChild, ViewChil
 import { Hierarchy, Node } from '../../Hierarchy';
 import { OnInit } from '@angular/core';
 import { TreeNode } from './TreeNode';
-import { AddNodeDialogComponent } from './add-node-dialog/add-node-dialog.component';
+import { AddEditNodeDialogComponent } from './add-edit-node-dialog/add-edit-node-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteNodeDialogComponent } from './delete-node-dialog/delete-node-dialog.component';
-import { CreateNodeData } from './add-node-dialog/CreateNode';
+import { NodeDialogData } from './add-edit-node-dialog/NodeDialog';
 import { DeleteNodeData } from './delete-node-dialog/DeleteNodeData';
 
 @Component({
@@ -17,11 +17,12 @@ export class HierarchyTreeComponent implements OnInit{
     @Input() hierarchy: Hierarchy | null = null;
     defaultId = '';
     hierarchyLevels: TreeNode[][] = [];
+    nodes: Node[] = [];
     elem: Element | null = null;
     relationships: string[] = [];
     viewBoxHeight = 20000;
     viewBoxWidth = 20000;
-    @ViewChildren('nodes') private nodes?: QueryList<ElementRef<HTMLDivElement>>;
+    @ViewChildren('nodes') private nodeElements?: QueryList<ElementRef<HTMLDivElement>>;
     @ViewChild('svg') svg?: ElementRef;
 
     constructor(private renderer: Renderer2, private dialog: MatDialog) {}
@@ -31,6 +32,7 @@ export class HierarchyTreeComponent implements OnInit{
             return;
         }
 
+        this.nodes = this.gatherNodes(this.hierarchy);
         this.hierarchyLevels = this.sortNodesToLevels(this.hierarchy);
         this.relationships = this.findRelationships(this.hierarchyLevels);
       
@@ -59,6 +61,16 @@ export class HierarchyTreeComponent implements OnInit{
         this.drawAllLineConnections(this.relationships);
     }
 
+    gatherNodes(hierarchy: Hierarchy){
+        const nodes: Node[] = [];
+        const getChildren = (node: Node) => {
+            nodes.push(node);
+            node.children.forEach(child => getChildren(child));
+        };
+        getChildren(hierarchy.root);
+        return nodes;
+    }
+
     nodeToTreeNode(node: Node): TreeNode {
         const children: TreeNode[] = [];
         children.push(...node.children.map(node => this.nodeToTreeNode(node)));
@@ -70,10 +82,6 @@ export class HierarchyTreeComponent implements OnInit{
             measurementNode: measurementDefinition !== null,
             children: children
         };
-    }
-
-    canBeWeighted(node: TreeNode){
-        return node.children.some(child => !child.measurementNode);
     }
 
     sortNodesToLevels(hierarchy: Hierarchy): TreeNode[][] {
@@ -115,7 +123,7 @@ export class HierarchyTreeComponent implements OnInit{
     }
 
     getNodeById(id: string): HTMLDivElement | null {
-        return this.nodes?.find(x => x.nativeElement.id === id)?.nativeElement ?? null;
+        return this.nodeElements?.find(x => x.nativeElement.id === id)?.nativeElement ?? null;
     }
 
     repositionChildren(childrenIds: string[], parentId: string) {
@@ -399,12 +407,39 @@ export class HierarchyTreeComponent implements OnInit{
         this.renderer.appendChild(this.svg?.nativeElement, line);
     }
 
-    openAddNodeDialog(nodeId: string) {
-        this.dialog.open(AddNodeDialogComponent, {data: { hierarchyId: this.hierarchy?.id, parentId: nodeId } as CreateNodeData});
+    openAddNodeDialog(parentId: string) {
+        this.dialog.open(AddEditNodeDialogComponent, 
+            {
+                data: { 
+                    hierarchyId: this.hierarchy?.id, 
+                    parentId: parentId
+                } as NodeDialogData
+            });
+    }
+
+    openEditNodeDialog(nodeId: string) {
+        const node = this.nodes.find(x => x.id === nodeId);
+        if(!node){
+            return;
+        }
+        
+        this.dialog.open(AddEditNodeDialogComponent, 
+            {
+                data: { 
+                    hierarchyId: this.hierarchy?.id, 
+                    existingNode: node
+                } as NodeDialogData
+            });
     }
 
     openDeleteNodeDialog(nodeId: string) {
-        this.dialog.open(DeleteNodeDialogComponent, {data: {hierarchyId: this.hierarchy?.id, nodeId: nodeId} as DeleteNodeData });
+        this.dialog.open(DeleteNodeDialogComponent, 
+            {
+                data: {
+                    hierarchyId: this.hierarchy?.id, 
+                    nodeId: nodeId
+                } as DeleteNodeData 
+            });
     }
 
 }

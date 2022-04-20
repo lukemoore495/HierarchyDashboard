@@ -5,7 +5,7 @@ import { getSelectedMeasurement, getSelectedMeasurementNode } from '../../state'
 import { HierarchyState } from '../../state/hierarchy.reducer';
 import { BaseChartDirective } from 'ng2-charts';
 import { AfterViewInit } from '@angular/core';
-import { Value } from '../../Hierarchy';
+import { MeasurementType, Point, Value } from '../../Hierarchy';
 import { combineLatest } from 'rxjs';
 
 @Component({
@@ -44,7 +44,26 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
                     return;
                 }
 
-                this.chartNewValue(value[0]);
+                if(value[1]?.measurementDefinition?.valueFunctionData 
+                    && !(value[1].measurementDefinition.measurementType === MeasurementType.Boolean)){
+                    this.chartNewValue(value[0], value[1]?.measurementDefinition?.valueFunctionData);
+                } 
+
+                //If Boolean measurementType we will just plot the referencePoints. This should be
+                //modeled as a categorical value function later on.
+                if(value[1]?.measurementDefinition?.measurementType === MeasurementType.Boolean
+                    && (value[1]?.measurementDefinition?.valueFunctionData 
+                        || value[1]?.measurementDefinition?.referencePoints)){
+                    const points = value[1].measurementDefinition.referencePoints 
+                    ?? value[1].measurementDefinition.valueFunctionData 
+                    ?? [];
+                    this.chartNewValue(value[0], points);
+                }
+
+                if(!value[1]?.measurementDefinition?.valueFunctionData){
+                    this.clearChartData();
+                }
+
                 if(value[1]?.name){
                     this.updateLabel(value[1].name);
                 }
@@ -52,31 +71,39 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
             });
     }
 
-    chartNewValue(value : Value) {
+    chartNewValue(value : Value, points: Point[]) {
 
         const insertValuePoint = (measure: number, value: number) : number => {
-            if(!xAxis.some(x => x === measure.toString())) {
+            const existingPoint = xAxis.some(x => x === measure.toString());
+            if(!existingPoint){
                 xAxis.push(measure.toString());
             }
             xAxis = xAxis.sort((first, second) => Number(first) - Number(second));
             const pointIndex = xAxis.indexOf(measure.toString());
-            yAxis = this.insert(yAxis, pointIndex, value);
+            if(!existingPoint){
+                yAxis = this.insert(yAxis, pointIndex, value);
+            }
             return pointIndex;
         };
 
-        if(!this.chart || !value.valueFunctionData || !value.measure || !value.localValue){
+        if(!this.chart){
             return;
         }
 
         let xAxis : string[] = [];
         let yAxis : number[] = [];
 
-        for(const point of value.valueFunctionData){
+        for(const point of points){
             xAxis.push(point.x.toString());
             yAxis.push(point.y);
         }
 
-        const pointIndex = insertValuePoint(value.measure, value.localValue);
+        let pointIndex: number | null = null;
+        if(value.measure !== null 
+            && value.localValue !== null 
+            && value.localValue !== undefined){
+            pointIndex = insertValuePoint(value.measure, value.localValue);
+        }
 
         this.setPointColors(xAxis.length, pointIndex);
 
@@ -103,7 +130,7 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
         this.lineChartData.datasets[0].data = [];
     }
 
-    setPointColors(chartLength: number, valuePointIndex: number){
+    setPointColors(chartLength: number, valuePointIndex: number | null){
         this.backgroundColors = [];
         this.hoverBorderColors = [];
         for(let i = 0; i < chartLength; i++){
@@ -121,9 +148,8 @@ export class ValueMeasurementChartComponent implements AfterViewInit {
         this.lineChartData.datasets[0].label = label;
     }
 
-    insert(arr : any[], insertAt: number, value : any) : any[]{
-        const duplicateCount = arr.filter(x => x===value).length;
-        arr.splice(insertAt, duplicateCount, value);
+    insert(arr : number[], insertAt: number, value : number) : number[]{
+        arr.splice(insertAt, 0, value);
         return arr;
     }
 
