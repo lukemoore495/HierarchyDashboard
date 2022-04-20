@@ -1,5 +1,5 @@
 import { createReducer, on } from '@ngrx/store';
-import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
+import { Alternative, Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
 import * as HierarchyActions from './hierarchy.actions';
 
 export interface HierarchyState {
@@ -127,10 +127,21 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         if(!state.selectedHierarchy){
             return {...state};
         }
-        const copyHierarchy: Hierarchy = {...state.selectedHierarchy};
+
+        const alternatives: Alternative[] = [];
+        state.selectedHierarchy.alternatives.forEach(alternative => {
+            const values = alternative.values.filter(value => value.nodeId !== action.nodeId);
+            alternatives.push({
+                ...alternative,
+                values: values
+            });
+        });
+
+
+        const hierarchy: Hierarchy = {...state.selectedHierarchy, alternatives: alternatives};
         return {
             ...state,
-            selectedHierarchy: removeNodeFromHierarchy(copyHierarchy, action.nodeId)
+            selectedHierarchy: replaceNodeInHierarchy(hierarchy, action.parentNode)
         };
     }),
     on(HierarchyActions.deleteNodeFailure, (state, action): HierarchyState => {
