@@ -37,7 +37,7 @@ function createWindow () {
         },
         autoHideMenuBar: true,
         show: false,
-        icon: 'src/assets/images/icon.ico'
+        icon: rootPath + '/dist/HierarchyDashboard/assets/images/icon.ico'
     });
 
     mainWindow.once('ready-to-show', () => {
