@@ -264,7 +264,7 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         return {
             ...state,
             selectedHierarchy: hierarchy,
-            selectedAlternativeId: alternatives[0].id ?? null
+            selectedAlternativeId: alternatives.length > 0 ? alternatives[0].id : null
         };
     }),
     on(HierarchyActions.deleteAlternativeFailure, (state, action): HierarchyState => {
