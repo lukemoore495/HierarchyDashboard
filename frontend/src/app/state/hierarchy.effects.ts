@@ -100,7 +100,7 @@ export class HierarchyEffects {
                 ofType(HierarchyActions.directAssessment),
                 concatMap(action => this.hierarchyService.directAssessment(action.hierarchyId, action.parentId, action.directAssessment)
                     .pipe(
-                        map(parentNode => HierarchyActions.updateNodeWeightsSuccess({parentNode})),
+                        map(parentNode => HierarchyActions.updateNodeWeightsSuccess({hierarchyId: action.hierarchyId, parentNode})),
                         catchError(error => of(HierarchyActions.updateNodeWeightsFailure({error})))
                     )
                 )
@@ -152,7 +152,7 @@ export class HierarchyEffects {
     refreshAlternatives$ = createEffect(() => {
         return this.actions$
             .pipe(
-                ofType(HierarchyActions.patchNodeSuccess, HierarchyActions.createNodeSuccess, HierarchyActions.updateWeightsSuccess),
+                ofType(HierarchyActions.patchNodeSuccess, HierarchyActions.createNodeSuccess, HierarchyActions.updateNodeWeightsSuccess),
                 concatMap(action => this.hierarchyService.getHierarchy(action.hierarchyId)
                     .pipe(
                         map(hierarchy => HierarchyActions.refreshAlternativesSuccess({ alternatives: hierarchy.alternatives })),

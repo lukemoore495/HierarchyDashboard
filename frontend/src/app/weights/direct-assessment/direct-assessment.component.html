@@ -4,12 +4,12 @@
         <mat-label>{{ node.name }}</mat-label>
         <input type="number" matInput [formControlName]="node.id" />
         <mat-error
-          *ngIf="getFormControl(node.id.toString())?.errors?.['required']">
+          *ngIf="getFormControl(node.id)?.errors?.['required']">
           Please enter a valid value
         </mat-error>
       </mat-form-field>
     <div class="save-button">
-      <button mat-raised-button color="accent">
+      <button mat-raised-button color="accent" [disabled]="form.invalid" (click)="onSubmit()">
         <mat-icon>save</mat-icon>
         Save
       </button>
