@@ -31,7 +31,6 @@ class Value(db.Model):
 
         if self.local_value is not None:
             if self.local_value > 1:
-                print("HERE")
                 alt_dict['localValue'] = 1
             elif self.local_value < 0:
                 alt_dict['localValue'] = 0
@@ -46,7 +45,14 @@ class Value(db.Model):
 
     def refresh_value(self):
         self.local_value = self.measurement.normalize(self.measure)
+        
+        value = 0
+        if self.local_value < 0:
+            value = 0
+        elif self.local_value > 1:
+            value = 1
+        
+        weighted_value = value * self.measurement.global_weight
 
-        weighted_value = self.local_value * self.measurement.global_weight
         self.global_value = weighted_value
     
