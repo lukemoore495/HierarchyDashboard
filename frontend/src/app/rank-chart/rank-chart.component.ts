@@ -100,7 +100,8 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
 
         const ranks: Rank[] = [];
         alternatives.forEach(alternative => {
-            const rankValues = findRankValue(alternative);
+            const rankValues = findRankValue(alternative)
+                .sort((a,b) => !a.name || !b.name? 0 : a.name.localeCompare(b.name) );
             const total = rankValues
                 .map(r => r.value)
                 .reduce((sum, next) => sum + next);
