@@ -1,11 +1,11 @@
 <mat-tab-group>
-  <mat-tab label="Pairwise Comparison">
+  <!-- <mat-tab label="Pairwise Comparison">
     <app-pairwise-comparison [node$]="node$"> </app-pairwise-comparison>
-  </mat-tab>
+  </mat-tab> -->
   <mat-tab label="Direct Assessment">
-    <app-direct-assessment [node$]="node$"> </app-direct-assessment>
+    <app-direct-assessment [node$]="node$" [hierarchyId]="hierarchyId"> </app-direct-assessment>
   </mat-tab>
-  <mat-tab label="Swing Weight">
+  <!-- <mat-tab label="Swing Weight">
     <app-swing-weight [node$]="node$"> </app-swing-weight>
-  </mat-tab>
+  </mat-tab> -->
 </mat-tab-group>

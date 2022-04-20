@@ -57,8 +57,9 @@ class Alternative(db.Model):
             measurement_ids.append(measurement.id)
         
         value_node_ids = []
-        for value in data["values"]:
-            value_node_ids.append(value['nodeId'])
+        if "values" in data:            
+            for value in data["values"]:
+                value_node_ids.append(value['nodeId'])
         
         # Fancy way to check if value_node_ids is a subset of measurement_ids
         if not all(value_node_id in measurement_ids for value_node_id in value_node_ids):
@@ -79,7 +80,7 @@ class Alternative(db.Model):
                         if "localValue" in value:
                             new_value.local_value = value["localValue"]
                         if "globalValue" in value:
-                            new_value.global_value = value["globalValue"]
+                            new_value.global_value =  measurement.normalize(new_value.measure) * measurement.global_weight
 
         return alternative
     
@@ -90,4 +91,8 @@ class Alternative(db.Model):
             new_alternatives.append(Alternative.create(measurements, alternative))
         
         return new_alternatives
+
+    def refresh_values(self):
+        for value in self.values:
+            value.refresh_value()
     

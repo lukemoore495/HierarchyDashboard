@@ -33,7 +33,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     alternativeChanged = false;
 
     constructor(private fb: FormBuilder, private store: Store<HierarchyState>) { 
-        const sub = this.store.select(getSelectedAlternative)
+        this.store.select(getSelectedAlternative)
             .pipe(
                 map(alternative => alternative?.values)
             )
@@ -44,7 +44,6 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                 this.alternativeMeasurements = measurements ?? []; 
                 this.setFormValues(this.alternativeMeasurements);
             });
-        this.subscriptions.push(sub);
     
         this.form = fb.group({});
         this.measurementResultEvent = new EventEmitter<Value[]>();
@@ -66,7 +65,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                 let measurementValue : number | boolean | null
                     = this.alternativeMeasurements.find(m => m.nodeId === measurementField.id)?.measure ?? null;
                 if(this.isNumberMeasurement(measurementField.measurementDefinition)){
-                    this.form.addControl(measurementField.id, this.fb.control(null, [Validators.pattern('^[0-9]*$')]));
+                    this.form.addControl(measurementField.id, this.fb.control(null, []));
                 } else if (this.isPercentageMeasurement(measurementField.measurementDefinition)) {
                     this.form.addControl(measurementField.id, this.fb.control(null, []));
                 } else if (this.isBooleanMeasurement(measurementField.measurementDefinition)) {
@@ -87,6 +86,9 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                         let measure = form[id];
                         if(this.isBooleanMeasurementUsingId(id)){
                             measure = this.convertBooleanToNumber(measure);
+                        }
+                        if(measure !== null){
+                            measure = Number(measure); 
                         }
                         measurements.push({
                             nodeId: id,

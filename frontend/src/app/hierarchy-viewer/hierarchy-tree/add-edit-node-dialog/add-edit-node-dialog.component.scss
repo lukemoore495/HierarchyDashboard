@@ -2,6 +2,7 @@
     display: flex;
     align-items: flex-start;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .row{
@@ -11,6 +12,16 @@
     .checkbox {
         margin-left: 2rem;
     }
+    .point-x{
+        margin-right: 1rem;
+    }
+}
+
+.hidden{
+    display: block;
+    visibility: hidden;
+    width: 0;
+    height: 0;
 }
 
 .spinner-container{
