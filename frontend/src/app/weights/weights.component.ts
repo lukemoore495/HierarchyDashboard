@@ -18,6 +18,7 @@ export class WeightsComponent implements OnInit, OnDestroy{
     nodes: Node[] = [];
     id: string | null = null;
     subscriptions: Subscription[] = [];
+    hierarchyId: string | null = null;
 
     constructor(private route: ActivatedRoute, private router: Router, private store: Store<HierarchyState>) {
         const sub = this.store.select(getSelectedHierarchy)
@@ -25,6 +26,7 @@ export class WeightsComponent implements OnInit, OnDestroy{
                 if (!hierarchy) {
                     return;
                 }
+                this.hierarchyId = hierarchy.id;
 
                 this.nodes = this.getAllNodes(hierarchy);
                 if (this.id) {

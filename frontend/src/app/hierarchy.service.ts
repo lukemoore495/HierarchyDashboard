@@ -38,7 +38,7 @@ export interface MeasurementDefinitionRequest {
     categories?: Category[];
 }
 
-export interface DirectAssessment {
+export interface DirectAssessmentRequest {
     nodeId: string;
     weight: number;
 }
@@ -122,7 +122,7 @@ export class HierarchyService {
         return this.http.patch<Value>(url, measureUpdate);
     }
 
-    directAssessment(hierarchyId: string, parentId: string, directAssessments: DirectAssessment[]): Observable<Node> {
+    directAssessment(hierarchyId: string, parentId: string, directAssessments: DirectAssessmentRequest[]): Observable<Node> {
         const url = this.root + `/hierarchy/${hierarchyId}/node/${parentId}/weights/directAssessment`;
         return this.http.patch<Node>(url, directAssessments);
     }

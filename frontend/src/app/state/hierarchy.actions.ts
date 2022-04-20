@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { CreateHierarchyAlternative, HierarchyAlternative } from '../alternatives/AlternativeForm';
 import { Alternative, Hierarchy, HierarchyListItem, Node, Value } from '../Hierarchy';
-import { DirectAssessment, HierarchyRequest, NodeRequest } from '../hierarchy.service';
+import { DirectAssessmentRequest, HierarchyRequest, NodeRequest } from '../hierarchy.service';
 
 export const createHierarchy = createAction(
     '[Hierarchies] Create Hierarchy',
@@ -118,12 +118,12 @@ export const patchNodeFailure = createAction(
 );
 export const directAssessment = createAction(
     '[Hierarchies] Direct Assessment',
-    props<{ hierarchyId: string, parentId: string, directAssessment: DirectAssessment[] }>()
+    props<{ hierarchyId: string, parentId: string, directAssessment: DirectAssessmentRequest[] }>()
 );
 
 export const updateNodeWeightsSuccess = createAction(
     '[Hierarchies API] Update Node Weights Success',
-    props<{ parentNode: Node }>()
+    props<{ hierarchyId: string, parentNode: Node }>()
 );
 
 export const updateNodeWeightsFailure = createAction(
