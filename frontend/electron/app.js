@@ -61,8 +61,8 @@ function createWindow () {
 app.on('ready', createWindow);
 
 app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin'){
-        const { exec } = require('child_process');
+    const { exec } = require('child_process');
+    if (process.platform == 'win32'){
         exec('taskkill /f /t /im app.exe', (err, stdout, stderr) => {
           if (err) {
             console.log(err)
@@ -71,8 +71,17 @@ app.on('window-all-closed', function () {
           console.log(`stdout: ${stdout}`);
           console.log(`stderr: ${stderr}`);
         });
-      app.quit();
+    } else {
+        exec('killall -9 app.exe', (err, stdout, stderr) => {
+          if (err) {
+            console.log(err)
+            return;
+          }
+          console.log(`stdout: ${stdout}`);
+          console.log(`stderr: ${stderr}`);
+        });
     }
+    app.quit();
 });
 
 app.on('activate', function () {
