@@ -30,6 +30,7 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
     hoverColorString = 'rgb(189, 189, 189)';
     measurementNodes: Node[] = [];
     subscriptions: Subscription[] = [];
+    hasData = false;
 
     constructor(private store: Store<HierarchyState>) {
         const selectedHierarchy$ = this.store.select(getSelectedHierarchy);
@@ -40,12 +41,17 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
                     if(hierarchy) {
                         this.measurementNodes = this.getAllMeasurementNodes(hierarchy);
                     }
+                    if(hierarchy && hierarchy?.alternatives?.length > 0){
+                        this.hasData = true;
+                        return;
+                    }
+                    this.hasData = false;
                 }),
                 map(hierarchy => hierarchy?.alternatives),
                 map(alternatives => alternatives ? this.rankAlternatives(alternatives): []),
             ).subscribe(ranks => {
                 this.updateRanking(ranks);
-            });          
+            });             
         this.subscriptions.push(sub); 
     }
 

@@ -2,10 +2,11 @@
 <div #accent class="mat-accent" style="display:none"></div>
 <div #hover class="mat-hover" style="display:none"></div>
 <div #hover class="mat-muted" style="display:none"></div>
-  <div #rankChart class="chart">
-    <canvas class="rank" baseChart [width]="width" [height]="height"
-      [data]="barChartData"
-      [options]="barChartOptions"
-      [type]="barChartType">
-    </canvas>
-  </div>
+<h1 *ngIf="!hasData" class="filler-text">No Ranks to Display</h1>
+<div #rankChart [ngClass]="{'chart': hasData, 'hidden': !hasData}">
+  <canvas class="rank" baseChart [width]="width" [height]="height"
+    [data]="barChartData"
+    [options]="barChartOptions"
+    [type]="barChartType">
+  </canvas>
+</div>

@@ -7,6 +7,20 @@
     margin-top: 2rem;
 }
 
+.hidden{
+    display: block;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+.filler-text {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 15%;
+  }
+
 //Used to change bar chart color based on material theme.
 //However, this requires AfterViewInit, which causes a delay
 //funky delay between the chart being made and the chart being
