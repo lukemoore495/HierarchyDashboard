@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Alternative, Hierarchy, HierarchyListItem, Node, MeasurementType, VFType, Point, Category, Value } from './Hierarchy';
 import { Observable, of } from 'rxjs';
 import { CreateAlternativeResponse, CreateHierarchyAlternative, HierarchyAlternative } from './alternatives/AlternativeForm';
-import { Alternative, Hierarchy, HierarchyListItem, MeasurementType, Node, ValueFunction } from './Hierarchy';
 import { SensitivityAnalysisReport } from './sensitivity-analysis/SensitivityAnalysis';
 import { SwingWeight } from './weights/swing-weight/SwingWeight';
 
@@ -15,7 +15,7 @@ export interface HierarchyRequest {
 
 export interface NodeRequest {
     name: string;
-    weight: number;
+    weight?: number;
     children: NodeRequest[];
     icon: string | null;
     measurementDefinition?: MeasurementDefinitionRequest;
@@ -33,10 +33,12 @@ export interface ValueRequest {
 
 export interface MeasurementDefinitionRequest {
     measurementType: MeasurementType;
-    valueFunction?: ValueFunction | null;
+    VFType?: string;
+    referencePoints?: Point[];
+    categories?: Category[];
 }
 
-export interface DirectAssessment {
+export interface DirectAssessmentRequest {
     nodeId: string;
     weight: number;
 }
@@ -99,30 +101,31 @@ export class HierarchyService {
         return this.http.post<Node>(url, node);
     }
 
-    deleteNode(hierarchyId: string, nodeId: string): Observable<string> {
+    deleteNode(hierarchyId: string, nodeId: string): Observable<Node> {
         const url = this.root + `/hierarchy/${hierarchyId}/node/${nodeId}`;
-        return this.http.delete<string>(url);
+        return this.http.delete<Node>(url);
     }
 
-    // patchNode(hierarchyId: string, nodeId: string, node: NodeRequest): Observable<Node> {
-    //     const url = this.root + `/hierarchy/${hierarchyId}/node/${nodeId}`;
-    //     return this.http.patch<Node>(url, node);
-    // }
+    patchNode(hierarchyId: string, nodeId: string, node: NodeRequest): Observable<Node> {
+        const url = this.root + `/hierarchy/${hierarchyId}/node/${nodeId}`;
+        return this.http.patch<Node>(url, node);
+    }
 
     exportHierarchy(hierarchyId: string): Observable<HierarchyRequest> {
         const url = this.root + `/hierarchy/${hierarchyId}/export` ;
         return this.http.get<HierarchyRequest>(url);
     }
 
-    updateAlternativeMeasure(hierarchyId: string, alternativeId: string, nodeId: string, measure: number): Observable<string> {
+    updateAlternativeMeasure(hierarchyId: string, alternativeId: string, nodeId: string, measure: number): Observable<Value> {
         const url = this.root + `/hierarchy/${hierarchyId}/alternative/${alternativeId}/node/${nodeId}` ;
         const measureUpdate = {'measure': measure};
-        return this.http.patch<string>(url, measureUpdate);
+        return this.http.patch<Value>(url, measureUpdate);
     }
 
-    // getValueFunctionPoint(hierarchyId: string, nodeId: string, xValue: number): Point{}
-
-    // directAssessment(hierarchyId: string, nodeId: string, directAssessments: DirectAssessment[]): Node {}
+    directAssessment(hierarchyId: string, parentId: string, directAssessments: DirectAssessmentRequest[]): Observable<Node> {
+        const url = this.root + `/hierarchy/${hierarchyId}/node/${parentId}/weights/directAssessment`;
+        return this.http.patch<Node>(url, directAssessments);
+    }
 
     // pairwiseComparison(hierarchyId: string, nodeId: string, pairwiseComparisons: PairwiseComparisons[]): Node {}
 

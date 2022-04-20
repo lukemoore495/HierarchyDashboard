@@ -7,7 +7,8 @@
     <div *ngIf="!measurementNodes" class="spinner-container">
         <mat-spinner color="primary" diameter="70"></mat-spinner>
     </div>
-    <div *ngIf="measurementNodes && !alternativeId" class="welcome">
-        <h1 class="text">No Alternatives Found</h1>
+    <div *ngIf="measurementNodes" class="filler-text">
+        <h1 *ngIf="!alternativeId">No Alternatives Found</h1>
+        <h1 *ngIf="measurementNodes.length === 0 && alternativeId">No Measurement Nodes</h1>
     </div>
 </form>

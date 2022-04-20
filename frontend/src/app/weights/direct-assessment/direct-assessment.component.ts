@@ -1,7 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { map, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { Node } from '../../Hierarchy';
+import { DirectAssessmentRequest } from '../../hierarchy.service';
+import { directAssessment } from '../../state/hierarchy.actions';
+import { HierarchyState } from '../../state/hierarchy.reducer';
 
 @Component({
     selector: 'app-direct-assessment',
@@ -10,12 +14,13 @@ import { Node } from '../../Hierarchy';
 })
 export class DirectAssessmentComponent implements OnInit {
     @Input() node$?: Observable<Node | null>;
+    @Input() hierarchyId: string | null = null;
     node: Node | null = null;
     children: Node[] = [];
     form: FormGroup;
     displayedColumns: string[] = ['name', 'weight'];
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, private store: Store<HierarchyState>) {
         this.form = fb.group({});
     }
 
@@ -28,14 +33,25 @@ export class DirectAssessmentComponent implements OnInit {
             .subscribe(node => {
                 this.node = node;
                 this.children = node?.children ?? [];
+                for (const child of this.children) {
+                    this.form.addControl(child.id, new FormControl(null, Validators.required));
+                }
             });
-
-        for (const child of this.children) {
-            this.form.addControl(child.id.toString(), new FormControl(0, Validators.required));
-        }
     }
 
     getFormControl(name: string): AbstractControl | null {
         return this.form?.get(name);
+    }
+
+    onSubmit(){
+        if(!this.hierarchyId || this.form.invalid || !this.node?.id){
+            return;
+        }
+        const directAssessmentRequest: DirectAssessmentRequest[] = [];
+        const fields = Object.entries(this.form.value);
+        fields.forEach(field => directAssessmentRequest.push({
+            nodeId: field[0], weight: Number(field[1])
+        }));
+        this.store.dispatch(directAssessment({hierarchyId: this.hierarchyId, parentId: this.node?.id, directAssessment: directAssessmentRequest}));
     }
 }

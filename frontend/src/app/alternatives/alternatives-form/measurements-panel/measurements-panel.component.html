@@ -22,7 +22,7 @@
                                 <mat-form-field *ngIf="isNumberMeasurement(measurement.measurementDefinition)" class="full-width"
                                     appearance="fill">
                                     <mat-label>{{measurement.name}}</mat-label>
-                                    <input matInput [formControlName]="measurement.id" class="form-control">
+                                    <input matInput [formControlName]="measurement.id" class="form-control" type="number">
                                     <mat-error *ngIf="getFormControl(measurement.id)?.errors?.['required']">
                                         This is required.
                                     </mat-error>

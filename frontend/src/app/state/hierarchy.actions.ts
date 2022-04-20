@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { CreateHierarchyAlternative, HierarchyAlternative } from '../alternatives/AlternativeForm';
-import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
-import { HierarchyRequest, NodeRequest } from '../hierarchy.service';
+import { Alternative, Hierarchy, HierarchyListItem, Node, Value } from '../Hierarchy';
+import { DirectAssessmentRequest, HierarchyRequest, NodeRequest } from '../hierarchy.service';
 
 export const createHierarchy = createAction(
     '[Hierarchies] Create Hierarchy',
@@ -79,7 +79,7 @@ export const createNode = createAction(
 
 export const createNodeSuccess = createAction(
     '[Hierarchies API] Create Node Success',
-    props<{parentId: string, node: Node}>()
+    props<{hierarchyId: string, parentId: string, node: Node}>()
 );
 
 export const createNodeFailure = createAction(
@@ -94,12 +94,41 @@ export const deleteNode = createAction(
 
 export const deleteNodeSuccess = createAction(
     '[Hierarchies API] Delete Node Success',
-    props<{nodeId: string}>()
+    props<{nodeId: string, parentNode: Node}>()
 );
 
 export const deleteNodeFailure = createAction(
     '[Hierarchies API] Delete Node Failure',
     props<{error: string}>()
+);
+
+export const patchNode = createAction(
+    '[Hierarchies] Patch Node',
+    props<{hierarchyId: string, nodeId: string, node: NodeRequest}>()
+);
+
+export const patchNodeSuccess = createAction(
+    '[Hierarchies API] Patch Node Success',
+    props<{hierarchyId: string, nodeId: string, node: Node}>()
+);
+
+export const patchNodeFailure = createAction(
+    '[Hierarchies API] Patch Node Failure',
+    props<{error: string}>()
+);
+export const directAssessment = createAction(
+    '[Hierarchies] Direct Assessment',
+    props<{ hierarchyId: string, parentId: string, directAssessment: DirectAssessmentRequest[] }>()
+);
+
+export const updateNodeWeightsSuccess = createAction(
+    '[Hierarchies API] Update Node Weights Success',
+    props<{ hierarchyId: string, parentNode: Node }>()
+);
+
+export const updateNodeWeightsFailure = createAction(
+    '[Hierarchies API] Update Node Weights Failure',
+    props<{ error: string }>()
 );
 
 export const updateAlternativeMeasure = createAction(
@@ -109,7 +138,7 @@ export const updateAlternativeMeasure = createAction(
 
 export const updateAlternativeMeasureSuccess = createAction(
     '[Alternatives API] Update Alternative Measure Success',
-    props<{hierarchyId: string, alternativeId: string, nodeId: string, measure: number}>()
+    props<{hierarchyId: string, alternativeId: string, value: Value}>()
 );
 
 export const updateAlternativeMeasureFailure = createAction(
@@ -144,5 +173,15 @@ export const deleteAlternativeSuccess = createAction(
 
 export const deleteAlternativeFailure = createAction(
     '[Alternatives API] Delete Alternative Failure',
+    props<{ error: string }>()
+);
+
+export const refreshAlternativesSuccess = createAction(
+    '[Alternatives API] Refresh Alternatives Success',
+    props<{ alternatives: Alternative[] }>()
+);
+
+export const refreshAlternativesFailure = createAction(
+    '[Alternatives API] Refresh Alternatives Failure',
     props<{ error: string }>()
 );
