@@ -59,6 +59,10 @@ function createWindow () {
     });
 }
 
+//Prevent gpu error for linux
+app.commandLine.appendSwitch('disable-gpu');
+app.commandLine.appendArgument('disable-gpu');
+
 app.on('ready', createWindow);
 
 app.on('window-all-closed', function () {
