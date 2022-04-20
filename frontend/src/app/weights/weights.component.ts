@@ -31,6 +31,7 @@ export class WeightsComponent implements OnInit, OnDestroy{
                 this.nodes = this.getAllNodes(hierarchy);
                 if (this.id) {
                     const newNode = this.getNodeById(this.id);
+                    console.log(this.nodes)
                     this.node$.next(newNode);
                 }
             });
@@ -46,6 +47,7 @@ export class WeightsComponent implements OnInit, OnDestroy{
         this.id = id;
         if (this.nodes.length > 0) {
             const newNode = this.getNodeById(this.id);
+            console.log(newNode)
             this.node$.next(newNode);
         }
     }
@@ -56,10 +58,10 @@ export class WeightsComponent implements OnInit, OnDestroy{
 
     getAllNodes(hierarchy: Hierarchy): Node[] {
         const getNodes = (node: Node): Node[] => {
-            const currentNode: Node[] = [];
-            node.children.forEach(child => currentNode.push(...getNodes(child)));
-            currentNode.push(...node.children);
-            return currentNode;
+            const currentNodes: Node[] = [];
+            currentNodes.push(node);
+            node.children.forEach(child => currentNodes.push(...getNodes(child)));
+            return currentNodes;
         };
 
         const allNodes: Node[] = [];
