@@ -203,8 +203,13 @@ class Node(db.Model):
                 domain = abs(x2 - x1)
                 increment = domain / 10
 
+                if x1 > x2:
+                    x_base = x2
+                else:
+                    x_base = x1
+
                 for i in range(11):
-                    x = i * increment
+                    x = x_base + i * increment
                     y = self.normalize(x)
 
                     if y > 1:
@@ -350,13 +355,13 @@ class Node(db.Model):
             if y1 == y2: # constant y = x
                 return y1
 
-            m = ((y2 - y1) / (x2 - x1))
-            b = ((x2 * y1) - (x1 * y2)) / (x2 - x1)
+            m = ((y2 - y1) / (x2 - x1)) # slope, rise / run
+            b = y1 - (m * x1) # y = m * x + b, solve for b
             # Linear function equation
             if not inverse:
                 result = (m * measure) + b
             else:
-                result = (measure - b) / m
+                result = (measure - b) / m # y = mx + b, solve for x
 
             return result
 
