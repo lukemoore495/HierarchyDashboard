@@ -167,6 +167,22 @@ export const HierarchyReducer = createReducer<HierarchyState>(
             error: action.error
         };
     }),
+    on(HierarchyActions.updateNodeWeightsSuccess, (state, action): HierarchyState => {
+        if(!state.selectedHierarchy){
+            return {...state};
+        }
+        
+        return {
+            ...state,
+            selectedHierarchy: replaceNodeInHierarchy(state.selectedHierarchy, action.parentNode)
+        };
+    }),
+    on(HierarchyActions.updateNodeWeightsFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
     on(HierarchyActions.updateAlternativeMeasureSuccess, (state, action): HierarchyState => {
         if(!state.selectedHierarchy || action.hierarchyId != state.selectedHierarchy.id){
             return {...state};

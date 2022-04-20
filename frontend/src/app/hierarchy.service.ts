@@ -122,9 +122,10 @@ export class HierarchyService {
         return this.http.patch<Value>(url, measureUpdate);
     }
 
-    // getValueFunctionPoint(hierarchyId: string, nodeId: string, xValue: number): Point{}
-
-    // directAssessment(hierarchyId: string, nodeId: string, directAssessments: DirectAssessment[]): Node {}
+    directAssessment(hierarchyId: string, parentId: string, directAssessments: DirectAssessment[]): Observable<Node> {
+        const url = this.root + `/hierarchy/${hierarchyId}/node/${parentId}/weights/directAssessment`;
+        return this.http.patch<Node>(url, directAssessments);
+    }
 
     // pairwiseComparison(hierarchyId: string, nodeId: string, pairwiseComparisons: PairwiseComparisons[]): Node {}
 
