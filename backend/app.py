@@ -261,8 +261,7 @@ def delete_node(hierarchy_id, node_id):
     hierarchy.refresh_alternatives()
     db.session.commit()
 
-    message = f"Node {node_id} Deleted"
-    return jsonify({"message": message}), 200
+    return jsonify(parent.to_dict()), 200
 
 
 # ALTERNATIVES
