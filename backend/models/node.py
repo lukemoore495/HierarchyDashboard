@@ -280,7 +280,6 @@ class Node(db.Model):
             vf_type=vf_type,
         )
 
-
         # TODO: Error checking
         if vf_type == "Linear":
             for i in range(2):
