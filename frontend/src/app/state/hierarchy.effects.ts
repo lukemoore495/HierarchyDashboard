@@ -94,6 +94,18 @@ export class HierarchyEffects {
                 )
             );
     });
+    directAssessment$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.directAssessment),
+                concatMap(action => this.hierarchyService.directAssessment(action.hierarchyId, action.parentId, action.directAssessment)
+                    .pipe(
+                        map(parentNode => HierarchyActions.updateNodeWeightsSuccess({parentNode})),
+                        catchError(error => of(HierarchyActions.updateNodeWeightsFailure({error})))
+                    )
+                )
+            );
+    });
     updateAlternativeMeasure$ = createEffect(() => {
         return this.actions$
             .pipe(
@@ -140,7 +152,7 @@ export class HierarchyEffects {
     refreshAlternatives$ = createEffect(() => {
         return this.actions$
             .pipe(
-                ofType(HierarchyActions.patchNodeSuccess, HierarchyActions.createNodeSuccess),
+                ofType(HierarchyActions.patchNodeSuccess, HierarchyActions.createNodeSuccess, HierarchyActions.updateWeightsSuccess),
                 concatMap(action => this.hierarchyService.getHierarchy(action.hierarchyId)
                     .pipe(
                         map(hierarchy => HierarchyActions.refreshAlternativesSuccess({ alternatives: hierarchy.alternatives })),
