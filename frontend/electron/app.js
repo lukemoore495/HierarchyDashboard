@@ -36,7 +36,8 @@ function createWindow () {
             nodeIntegration: true
         },
         autoHideMenuBar: true,
-        show: false
+        show: false,
+        icon: 'src/assets/images/icon.ico'
     });
 
     mainWindow.once('ready-to-show', () => {
