@@ -1,5 +1,7 @@
 from .shared import db # Allows the models to be split out into separate files.
 
+from utilities.weighting_techniques import balance_weights
+from .reference import Reference
 
 class Node(db.Model):
     """
@@ -24,8 +26,10 @@ class Node(db.Model):
         The name of the node.
     icon : str
         String to store the icon the frontend uses for the node.
-    weight : float
-        Floating point value representing weight
+    local_weight : float
+        Floating point value representing the local weight
+    global_weight : float
+        Floating point value representing the global weight
     measurement_type : str
         String representing the measurement's type.
     value_function : str
@@ -58,11 +62,17 @@ class Node(db.Model):
     # Data Fields
     name = db.Column(db.String(), nullable=False)
     icon = db.Column(db.String())
-    weight = db.Column(db.Float)
+    local_weight = db.Column(db.Float)
+    global_weight = db.Column(db.Float)
 
     # For Measurements
     measurement_type = db.Column(db.String())
-    value_function = db.Column(db.String)
+    vf_type = db.Column(db.String)
+    references = db.relationship(
+        "Reference",
+        cascade = "all, delete",
+        backref=db.backref("measurement"),
+        )
 
     # Child Nodes, can be measurements or sub-objectives
     children = db.relationship(
@@ -74,10 +84,10 @@ class Node(db.Model):
     values = db.relationship(
         "Value",
         cascade="all, delete",
-        backref=db.backref("measurement")
+        backref=db.backref("measurement"),
     )
 
-    def __init__(self, name, parent=None, icon=None, weight=None, measurement_type=None, value_function=None):
+    def __init__(self, name, parent=None, icon=None, local_weight=None, measurement_type=None, vf_type=None):
         """
         Parameters
         ----------
@@ -89,8 +99,8 @@ class Node(db.Model):
         icon : str, optional
             String to store the icon the frontend uses for the node.
             (default is None)
-        weight : float, optional
-            Floating point value representing weight
+        local_weight : float, optional
+            Floating point value representing the local weight of the node
             (default is None)
         measurement_type : str, optional
             String representing the type of measurement.
@@ -106,17 +116,22 @@ class Node(db.Model):
         # If it's accessed after self.parent=parent, it fails.
         if parent:
             self.hierarchy = parent.hierarchy
+            # TODO: Make this less weird??
+            self.global_weight=parent.global_weight * local_weight
+        else:
+            self.global_weight=1
+            local_weight=1
         # Identifiers
         self.parent=parent
 
         # Data Fields
         self.name=name
-        self.weight=weight
+        self.local_weight=local_weight
         self.icon=icon
 
         # For Measurements
         self.measurement_type=measurement_type
-        self.value_function=value_function
+        self.vf_type=vf_type
 
     def __repr__(self):
         """Return a string representation of a node."""
@@ -163,7 +178,7 @@ class Node(db.Model):
         # Fields renamed according to Frontend
         node_dict = {
             'name': self.name,
-            'weight': self.weight,
+            'weight': self.local_weight,
             'icon': self.icon,
         }
 
@@ -174,8 +189,39 @@ class Node(db.Model):
         if self.measurement_type:
             node_dict['measurementDefinition'] = {
                 'measurementType': self.measurement_type,
-                'valueFunction': self.value_function
+                'VFType': self.vf_type,
+                'referencePoints': [ref.to_dict() for ref in self.references]
             }
+
+            # TODO: Move this somewhere else? These points should maybe saved on the backend.
+            if self.vf_type == "Linear":
+                data_points = []
+
+                x1 = self.normalize(0.0, True)
+                x2 = self.normalize(1.0, True)
+                
+                domain = abs(x2 - x1)
+                increment = domain / 10
+
+                if x1 > x2:
+                    x_base = x2
+                else:
+                    x_base = x1
+
+                for i in range(11):
+                    x = x_base + i * increment
+                    y = self.normalize(x)
+
+                    if y > 1:
+                        y = 1
+                    if y < 0:
+                        y = 0
+                    data_points.append({
+                        'x': round(x, 3),
+                        'y': round(y, 3),
+                    })
+                
+                node_dict['measurementDefinition']['valueFunctionData'] = data_points
 
         # Create and append list of child nodes
         children_list = []
@@ -204,30 +250,47 @@ class Node(db.Model):
         # Check for optional parameters
         # TODO: Weight isn't optional. Work with Frontend.
         icon = None
-        weight = None
+        local_weight = 1
         measurement_type = None
-        value_function = None
+        vf_type = None
+        references=None
 
         if 'icon' in data:
             icon = data['icon']
         if 'weight' in data:
-            weight = data['weight']
+            local_weight = data['weight']
 
         if 'measurementDefinition' in data:
-            if 'measurementType' in data['measurementDefinition']:
-                measurement_type = data['measurementDefinition']['measurementType']
-            if 'valueFunction' in data['measurementDefinition']:
-                value_function = data['measurementDefinition']['valueFunction']
+            m_data = data['measurementDefinition']
+            if 'measurementType' in m_data:
+                measurement_type = m_data['measurementType']
+            if 'VFType' in m_data:
+                vf_type = m_data['VFType']
+            if 'referencePoints' in m_data:
+                references=m_data['referencePoints']
+
                 
         # Create child node
         new_node = Node(
             name=data['name'],
             parent=self,
             icon=icon,
-            weight=weight,
+            local_weight=local_weight,
             measurement_type=measurement_type,
-            value_function=value_function,
+            vf_type=vf_type,
         )
+
+
+        # TODO: Error checking
+        if vf_type == "Linear":
+            for i in range(2):
+                if references:
+                    if not references[i]['x'] == None and not references[i]['y'] == None:
+                        Reference(new_node, references[i]['x'], references[i]['y'])
+                    else:
+                        Reference(new_node, 0, 0)
+                else:
+                    Reference(new_node, 0, 0)
 
         # Check for child nodes in children and measurments
         children = []
@@ -256,6 +319,65 @@ class Node(db.Model):
         for node in nodes_lst:
             self.create(node)
 
+    # Utility Functions
     @classmethod
     def get_measurements(cls, hierarchy_id):
         return cls.query.filter(cls.measurement_type != None, cls.hierarchy_id == hierarchy_id)
+
+    def normalize(self, measure, inverse=False):
+        # TODO: Add a cap to reference points, y must be between 0 and 1
+        # If you enter in an x that after normalization > 1
+        # Return 1
+        # If < 1
+        # Return 0
+
+        if measure is None:
+            return 0
+        # TODO: Switch to vfType
+        if self.vf_type == "Linear":
+            point_1 = self.references[0].to_tuple()
+            point_2 = self.references[1].to_tuple()
+
+            # Swap if point_2's x should come first
+            if point_1[0] > point_2[0]:
+                temp = point_2
+                point_2 = point_1
+                point_1 = temp
+
+            # For sanity
+            x1 = point_1[0]
+            y1 = point_1[1]
+            x2 = point_2[0]
+            y2 = point_2[1]
+
+            if x1 == x2: # invalid linear graph
+                return 0
+            if y1 == y2: # constant y = x
+                return y1
+
+            m = ((y2 - y1) / (x2 - x1)) # slope, rise / run
+            b = y1 - (m * x1) # y = m * x + b, solve for b
+            # Linear function equation
+            if not inverse:
+                result = (m * measure) + b
+            else:
+                result = (measure - b) / m # y = mx + b, solve for x
+
+            return result
+
+        return 0
+    
+    def refresh_weights(self):
+        if self.parent:
+            self.global_weight = self.local_weight * self.parent.global_weight
+
+        weights = []
+        if self.children:
+            for child in self.children:
+                weights.append(child.local_weight)
+            
+            balanced_weights = balance_weights(weights)
+            for child in self.children:
+                child.local_weight = balanced_weights.pop(0)
+                child.refresh_weights()
+

@@ -1,4 +1,3 @@
-from glob import glob
 from .shared import db # Allows the models to be split out into separate files.
 
 class Value(db.Model):
@@ -18,6 +17,7 @@ class Value(db.Model):
 
         # Data fields
         self.measure=measure
+        # Refresh global_value (weighted_value from rank_alternatives) each time the data changes.
         self.local_value=local_value
         self.global_value=global_value
 
@@ -26,11 +26,27 @@ class Value(db.Model):
             "nodeId": str(self.node_id),
             "measure": self.measure,
             "localValue": self.local_value,
-            "globalValue": self.global_value
+            "globalValue": self.global_value,
         }
+
+        if self.local_value is not None:
+            if self.local_value > 1:
+                print("HERE")
+                alt_dict['localValue'] = 1
+            elif self.local_value < 0:
+                alt_dict['localValue'] = 0
+            else:
+                alt_dict["localValue"] = round(self.local_value, 4)
+            alt_dict["globalValue"] = round(self.global_value, 4)
 
         if not export:
             alt_dict['id'] = str(self.id)
 
         return alt_dict
+
+    def refresh_value(self):
+        self.local_value = self.measurement.normalize(self.measure)
+
+        weighted_value = self.local_value * self.measurement.global_weight
+        self.global_value = weighted_value
     

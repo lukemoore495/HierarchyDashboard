@@ -1,6 +1,6 @@
-from models.alternative import Alternative
 from .shared import db # Allows the models to be split out into separate files.
 from .node import Node
+from .alternative import Alternative
 
 class Hierarchy(db.Model):
     """
@@ -141,3 +141,7 @@ class Hierarchy(db.Model):
     # Some helper functions
     def get_measurements(self):
         return Node.get_measurements(hierarchy_id=self.id)
+    
+    def refresh_alternatives(self):
+        for alternative in self.alternatives:
+            alternative.refresh_values()
