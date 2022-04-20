@@ -5,9 +5,20 @@ const path = require('path');
 let mainWindow;
 let backend;
 let development = !app.isPackaged;
+let iconType;
+
+if (require('electron-squirrel-startup')) return app.quit();
 
 const rootPath = path.normalize(__dirname + '/..');
 backend = path.join(rootPath,'/dist/app.exe');
+
+if(process.platform == 'win32'){
+    iconType = '.ico'
+} else if(process.platform == 'darwin'){
+    iconType = 'icns'
+} else {
+    iconType = '.png'
+}
 
 var execfile = require('child_process').execFile;
 execfile(
@@ -37,7 +48,7 @@ function createWindow () {
         },
         autoHideMenuBar: true,
         show: false,
-        icon: 'src/assets/images/icon.ico'
+        icon: rootPath + '/dist/HierarchyDashboard/assets/images/icon' + iconType
     });
 
     mainWindow.once('ready-to-show', () => {
@@ -58,6 +69,10 @@ function createWindow () {
         mainWindow = null;
     });
 }
+
+//Prevent gpu error for linux
+app.commandLine.appendSwitch('disable-gpu');
+app.commandLine.appendArgument('disable-gpu');
 
 app.on('ready', createWindow);
 
