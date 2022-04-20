@@ -26,6 +26,7 @@ jobs:
       run: |
         npm ci
         pip install pyinstaller
+        pip install -r ../backend/requirements.txt
       working-directory: ./frontend
     - name: publish
       env:
