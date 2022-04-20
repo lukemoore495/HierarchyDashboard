@@ -35,6 +35,7 @@ export class AlternativesFormComponent implements OnInit, OnDestroy {
         });
         const alternativeSub = this.store.select(getSelectedAlternative).subscribe(alternative => {
             if(!alternative){
+                this.alternativeId = null;
                 return;
             }
             this.alternativeId = alternative.id;
