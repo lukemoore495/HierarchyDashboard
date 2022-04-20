@@ -87,9 +87,12 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                         if(this.isBooleanMeasurementUsingId(id)){
                             measure = this.convertBooleanToNumber(measure);
                         }
+                        if(measure !== null){
+                            measure = Number(measure); 
+                        }
                         measurements.push({
                             nodeId: id,
-                            measure: Number(measure)
+                            measure: measure
                         });
                     }
                     return measurements;
