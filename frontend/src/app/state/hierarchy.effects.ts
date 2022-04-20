@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { filter, of } from 'rxjs';
+import { of } from 'rxjs';
 import { catchError, concatMap, map, mergeMap } from 'rxjs/operators';
 import { HierarchyService } from '../hierarchy.service';
 import * as HierarchyActions from './hierarchy.actions';
@@ -76,7 +76,7 @@ export class HierarchyEffects {
                 ofType(HierarchyActions.deleteNode),
                 concatMap(action => this.hierarchyService.deleteNode(action.hierarchyId, action.nodeId)
                     .pipe(
-                        map(_ => HierarchyActions.deleteNodeSuccess({nodeId: action.nodeId})),
+                        map(node => HierarchyActions.deleteNodeSuccess({nodeId: action.nodeId, parentNode: node})),
                         catchError(error => of(HierarchyActions.deleteNodeFailure({error})))
                     )
                 )
@@ -141,7 +141,6 @@ export class HierarchyEffects {
         return this.actions$
             .pipe(
                 ofType(HierarchyActions.patchNodeSuccess, HierarchyActions.createNodeSuccess),
-                filter(action => action.node.measurementDefinition !== undefined),
                 concatMap(action => this.hierarchyService.getHierarchy(action.hierarchyId)
                     .pipe(
                         map(hierarchy => HierarchyActions.refreshAlternativesSuccess({ alternatives: hierarchy.alternatives })),

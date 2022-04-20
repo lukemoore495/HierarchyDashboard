@@ -94,7 +94,7 @@ export const deleteNode = createAction(
 
 export const deleteNodeSuccess = createAction(
     '[Hierarchies API] Delete Node Success',
-    props<{nodeId: string}>()
+    props<{nodeId: string, parentNode: Node}>()
 );
 
 export const deleteNodeFailure = createAction(
