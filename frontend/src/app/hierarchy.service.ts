@@ -101,9 +101,9 @@ export class HierarchyService {
         return this.http.post<Node>(url, node);
     }
 
-    deleteNode(hierarchyId: string, nodeId: string): Observable<string> {
+    deleteNode(hierarchyId: string, nodeId: string): Observable<Node> {
         const url = this.root + `/hierarchy/${hierarchyId}/node/${nodeId}`;
-        return this.http.delete<string>(url);
+        return this.http.delete<Node>(url);
     }
 
     patchNode(hierarchyId: string, nodeId: string, node: NodeRequest): Observable<Node> {
