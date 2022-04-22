@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
-import { BehaviorSubject, debounceTime, map, Observable, Subscription, take, tap } from 'rxjs';
+import { BehaviorSubject, debounceTime, map, Observable, Subscription, take } from 'rxjs';
 import { Value, MeasurementDefinition, MeasurementType, Node } from '../../../Hierarchy';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Output } from '@angular/core';
@@ -19,7 +19,7 @@ import { HierarchyState } from '../../../state/hierarchy.reducer';
 export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() measurementNode: Node | null = null;
     @Input() parentIsSelected?: Observable<boolean>;
-    @Input() isTopLevel = false;
+    @Input() isSinglePanel = false;
     @Output() measurementResultEvent: EventEmitter<Value[]>;
     @Output() childNodeOpened: EventEmitter<void>;
     @Output() closed: EventEmitter<void>;
@@ -33,9 +33,9 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     alternativeChanged = false;
 
     constructor(private fb: FormBuilder, private store: Store<HierarchyState>) { 
-        const sub = this.store.select(getSelectedAlternative)
+        this.store.select(getSelectedAlternative)
             .pipe(
-                map(alternative => alternative?.measurements)
+                map(alternative => alternative?.values)
             )
             .subscribe(measurements => {
                 if(this.alternativeMeasurements.length !== 0){
@@ -44,7 +44,6 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                 this.alternativeMeasurements = measurements ?? []; 
                 this.setFormValues(this.alternativeMeasurements);
             });
-        this.subscriptions.push(sub);
     
         this.form = fb.group({});
         this.measurementResultEvent = new EventEmitter<Value[]>();
@@ -66,7 +65,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                 let measurementValue : number | boolean | null
                     = this.alternativeMeasurements.find(m => m.nodeId === measurementField.id)?.measure ?? null;
                 if(this.isNumberMeasurement(measurementField.measurementDefinition)){
-                    this.form.addControl(measurementField.id, this.fb.control(null, [Validators.pattern('^[0-9]*$')]));
+                    this.form.addControl(measurementField.id, this.fb.control(null, []));
                 } else if (this.isPercentageMeasurement(measurementField.measurementDefinition)) {
                     this.form.addControl(measurementField.id, this.fb.control(null, []));
                 } else if (this.isBooleanMeasurement(measurementField.measurementDefinition)) {
@@ -87,6 +86,9 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
                         let measure = form[id];
                         if(this.isBooleanMeasurementUsingId(id)){
                             measure = this.convertBooleanToNumber(measure);
+                        }
+                        if(measure !== null){
+                            measure = Number(measure); 
                         }
                         measurements.push({
                             nodeId: id,
@@ -126,7 +128,7 @@ export class MeasurementsPanelComponent implements OnInit, OnDestroy, AfterViewI
     }
 
     ngAfterViewInit(){
-        if(this.isTopLevel) {
+        if(this.isSinglePanel) {
             //A hack to work with change detection in afterViewInit. Couldn't find another solution.
             setTimeout(() => {
                 this.selectFirstMeasurement();

@@ -12,8 +12,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "package": "electron-forge package",
-    "make": "ng build --base-href ./ && electron-forge make",
-    "make-backend": "python -m PyInstaller -F ../backend/app.py",
+    "make": "pyinstaller --onefile --name=app.exe ../backend/app.py && ng build --base-href ./ && electron-forge make",
+    "make-backend": "python -m PyInstaller -F --name=app.exe ../backend/app.py",
     "publish": "pyinstaller --onefile --name=app.exe ../backend/app.py && ng build --base-href ./ && npx electron-forge publish"
   },
   "private": true,
@@ -70,9 +70,6 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {
-        "extraResource": "./dist/app.exe"
-      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",

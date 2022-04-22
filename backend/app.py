@@ -1,10 +1,13 @@
 from distutils.command.config import config
+from threading import local
 from flask import Flask, abort, jsonify, request
 from pathlib import Path
 import os
 import sys
 
 from models.hierarchy import Hierarchy, Node
+from models.alternative import Alternative, Value
+from models.reference import Reference
 from models.shared import db # Allows the models to be split out into separate files.
 
 
@@ -32,7 +35,8 @@ app.config["JSON_SORT_KEYS"] = False
 db.init_app(app)
 
 
-# routes
+### ROUTES ###
+# HIERARCHiES
 @app.route("/hierarchy", methods=['POST'])
 def create_hierarchy():
     # Get data from .json sent with request
@@ -53,7 +57,7 @@ def create_hierarchy():
     
     hierarchy.nodes.append(root)
    
-   # Parse nodes and create tree
+    # Parse nodes and create tree
     nodes_lst = data["root"]["children"]
     if nodes_lst:
         root.create_tree(nodes_lst)
@@ -62,49 +66,26 @@ def create_hierarchy():
     db.session.add(hierarchy)
     db.session.commit()
 
-    return hierarchy.to_dict(), 201
+    # Parse and create alternatives
+    alternatives = data["alternatives"]
+    new_alts = []
+    for alternative in alternatives:
+        new_alts.append(Alternative.create(hierarchy, alternative))
 
+    if None in alternatives:
+        abort(204, description="Problem with Alternatives")
 
-# Will never not have a root node. If you do, things are messed
-@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
-def create_node(hierarchy_id, parent_id):
-    data = request.get_json()
-
-    parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id).first()
-
-    if not parent:
-        abort(404, description="Resource not found")
-    
-    new_node = parent.create(data)
-
-    # Commit changes to DB
-    db.session.add(new_node)
+    root.refresh_weights()
+    hierarchy.refresh_alternatives()
+    db.session.add(hierarchy)
     db.session.commit()
 
-    return jsonify(parent.to_dict()), 201
-
-
-# TODO: Create Alternative
-@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
-def create_alternative(hierarchy_id, parent_id):
-    pass
-
-
-# TODO: Update Alternative Measure (the variable from the frontend)
-@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/alternative/<alternative_id>/measure", methods=['PATCH'])
-def update_measure(hierarchy_id, parent_id, alternative_id):
-    pass
-
-
-#TODO: Patch Node
-@app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
-def update_node(hierarchy_id, parent_id):
-    pass
+    return hierarchy.to_dict(), 201
 
 
 @app.route("/hierarchy/ascending_id", methods=['GET'])
 def get_all_hierarchies_ascending():
-    all_hierarchies = Hierarchy.get_list(get_nodes=False)
+    all_hierarchies = Hierarchy.get_list(get_nodes=False, get_alts=False)
 
     if not all_hierarchies:
         abort(404, description="Resource not found")
@@ -114,7 +95,7 @@ def get_all_hierarchies_ascending():
 
 @app.route("/hierarchy/descending_id", methods=['GET'])
 def get_all_hierarchies_descending():
-    all_hierarchies = Hierarchy.get_list(get_nodes=False)
+    all_hierarchies = Hierarchy.get_list(get_nodes=False, get_alts=False)
     all_hierarchies.reverse()
 
     if not all_hierarchies:
@@ -158,6 +139,107 @@ def delete_hierarchy(hierarchy_id):
     message = f"Hierarchy {hierarchy_id} Deleted"
     return jsonify({"message": message}), 200
 
+# NODES
+# Will never not have a root node. If you do, things are messed
+# TODO: Clean up the check between old and new measures. It works but it's sloppy.
+@app.route("/hierarchy/<hierarchy_id>/node/<parent_id>", methods=['POST'])
+def create_node(hierarchy_id, parent_id):
+    data = request.get_json()
+
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id).first()
+    old_measurements = hierarchy.get_measurements()
+    old_measurements = [r for r in old_measurements]
+
+    if not parent:
+        abort(404, description="Resource not found")
+    
+    new_node = parent.create(data)
+
+    # Commit changes to DB
+    db.session.add(new_node)
+    db.session.commit()
+
+    # Create new null values for new measurement nodes
+    updated_measurements = hierarchy.get_measurements()
+    updated_measurements = [r for r in updated_measurements]
+    alternatives = Alternative.query.filter_by(hierarchy_id=hierarchy_id)
+
+    for measure in updated_measurements:
+        if measure not in old_measurements:
+            for alt in alternatives:
+                new_value = Value(alt, measure)
+
+                db.session.add(new_value)
+
+    # Should automatically balance weights as nodes are created.
+    parent.refresh_weights()
+    # global_value will redo calculations with balanced weights.
+    for alt in alternatives:
+        alt.refresh_values()
+    db.session.commit()
+
+    return jsonify(parent.to_dict()), 201
+    
+
+#TODO: Improve Patch. Talk to Luke about how this route will be used.
+@app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
+def patch_node(hierarchy_id, node_id):
+    data = request.get_json()
+
+    node = Node.query.filter_by(id=node_id, hierarchy_id=hierarchy_id).first()
+    references = Reference.query.filter_by(node_id=node.id)
+
+    if not node:
+        abort(404, description="Resource not found")
+
+    hierarchy = node.hierarchy
+    parent = node.parent
+
+    # All Nodes
+    if 'name' in data:
+        node.name = data['name']
+    if 'icon' in data:
+        node.icon = data['icon']
+    
+    # Measurement Node
+    if 'measurementDefinition' in data:
+        m_data = data['measurementDefinition']
+        if 'measurementType' in m_data:
+            node.measurement_type = m_data['measurementType']
+        if 'VFType' in m_data:
+            node.vf_type = m_data['VFType']
+        # An issue for a dreamlike future.
+        if node.vf_type == "Linear":
+            if 'referencePoints' in m_data:
+                ref_data = m_data['referencePoints']
+
+                if node.references and len(node.references) == 2:
+                    i = 0
+                    for ref in node.references:
+                        ref.x = ref_data[i]['x']
+                        ref.y = ref_data[i]['y']
+                        i += 1
+                else:
+                    for i in range(2):
+                        print(ref_data)
+                        if not ref_data[i]['x'] == None and not ref_data[i]['y'] == None:
+                            print(ref_data)
+                            Reference(node, ref_data[i]['x'], ref_data[i]['y'])
+                        else:
+                            Reference(node, 0, 0)
+
+    # Root node has no parent, but it should still refresh weights.
+    if parent:
+        parent.refresh_weights()
+    else:
+        node.refresh_weights()
+
+    hierarchy.refresh_alternatives()
+    db.session.commit()
+
+    return jsonify(node.to_dict()), 201
+    
 
 @app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['DELETE'])
 def delete_node(hierarchy_id, node_id):
@@ -172,80 +254,77 @@ def delete_node(hierarchy_id, node_id):
     if root_node == node:
         abort(405, description="Protected Resource")
 
+    parent = node.parent
     db.session.delete(node)
+    
+    parent.refresh_weights()
+    hierarchy.refresh_alternatives()
     db.session.commit()
 
-    message = f"Node {node_id} Deleted"
-    return jsonify({"message": message}), 200
+    return jsonify(parent.to_dict()), 200
 
 
 # ALTERNATIVES
-
-# TODO: Create Alternative
 @app.route("/hierarchy/<hierarchy_id>/alternative", methods=['POST'])
-def create_alterntaive(hierarchy_id):
-    # Check Hierarchy
-    # Abort if it doesn't exist
-
-    # https://stackoverflow.com/questions/16093475/flask-sqlalchemy-querying-a-column-with-not-equals
-    # https://docs.sqlalchemy.org/en/14/core/sqlelement.html#sqlalchemy.sql.operators.ColumnOperators.isnot
-    measurements = Node.query.filter(Node.measurement_type != None).all()
-    # Read data
-    # {
-    #     "name": "Ford Fiesta",
-    #     "values": [
-    #         {
-    #             "nodeId": 12,
-    #             "measure": 12345,
-    #             "local_value": 43,
-    #             "global_value": 32,
-    #         },
-    #         {
-    #             "nodeId": 14,
-    #             "measure": 24,
-    #             "local_value": 64,
-    #             "global_value": 128,
-    #         }
-    #     ]
-    # }
+def create_alternative(hierarchy_id):
+    data = request.get_json()
     
-    # Create alternative
-    # Generate values with alternative_id
-        # Values must match up with measurement nodes
-        # Generate null values if a value is not provided for a measurement
-
-    pass
-
-
-# TODO: Get Alternative
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
-def get_alternative(hierarchy_id, alternative_id):
     hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
-    alternative = Node.query.filter_by(id=alternative_id).first()
+    
+    if not hierarchy:
+        abort(404, description="Resource not found")
 
-    # Return alternative.to_dict()
+    alternative = Alternative.create(hierarchy, data)
+
+    if not alternative:
+        abort(404, description="Resource not found")
+
+    db.session.add(alternative)
+    db.session.commit()
+
+    return alternative.to_dict(), 201
 
 
-# TODO: Delete Alternative
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>")
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>", methods=['GET'])
+def get_alternative(hierarchy_id, alternative_id):
+    alternative = Alternative.query.filter_by(id=alternative_id, hierarchy_id=hierarchy_id).first()
+    if not alternative:
+        abort(404, description="Resource not found")
+
+    return alternative.to_dict(), 200
+
+
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>", methods=['DELETE'])
 def delete_alternative(hierarchy_id, alternative_id):
-    pass
+    alternative = Alternative.query.filter_by(id=alternative_id, hierarchy_id=hierarchy_id).first()
+    if not alternative:
+        abort(404, description="Resource not found")
+
+    db.session.delete(alternative)
+    db.session.commit()
+
+    message = f"Alternative {alternative_id} Deleted"
+    return jsonify({"message": message}), 200
 
 
-# TODO: Patch Value
-@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/value/<value_id>")
-def patch_value(hierarchy_id, alternative_id, value_id):
-    # Check the hierarchy, alternative, and value exist
-        # Abort if they don't
+@app.route("/hierarchy/<hierarchy_id>/alternative/<alternative_id>/node/<node_id>", methods=['PATCH'])
+def patch_value(hierarchy_id, alternative_id, node_id):
+    data = request.get_json()
+    value = Value.query.filter_by(node_id=node_id, alternative_id=alternative_id).first()
+    if not value:
+        abort(404, description="Resource not found")
 
     # Change individual measure in the value table
-    # Local and global values are regenerated according to weighting functions
-    # that don't exist yet
-    pass
+    if "measure" in data:
+        value.measure=data["measure"]
+        value.refresh_value()
+
+    db.session.commit()
+
+    return value.to_dict(), 201
 
 
 # WEIGHTING
-
 # Weight changes are done using the weighting models. You aren't able to directly
 # change the weight of a node.
 @app.route("/hierarchy/<hierarchy_id>/node/<node_id>", methods=['PATCH'])
@@ -257,15 +336,31 @@ def change_weight(hierarchy_id, node_id):
 @app.route("/hierarchy/<hierarchy_id>/node/<parent_id>/weights/directAssessment", methods=['PATCH'])
 def direct_assessment(hierarchy_id, parent_id):
     # Get data (new weights)
-    # [{"nodeId":1},"weight":.2},...]
-    # Get nodes on the same level (children of parent)
+    data = request.get_json()
+    print(data)
+    print(data[0])
 
-    # If there aren't enough weights for each child
-        # Return error
+    parent = Node.query.filter_by(id=parent_id, hierarchy_id=hierarchy_id).first()
+    children = [child for child in parent.children]
+    child_ids = [child.id for child in children]
 
-    # Check each weight
-    # Rebalance??
-    pass
+    node_ids = [obj['nodeId'] for obj in data]
+    # Check that the children to change are a subset of the children of the parent
+    if not all(int(node_id) in child_ids for node_id in node_ids):
+        abort(404, description="Resource not found")
+
+    for obj in data:
+        node_id = obj["nodeId"]
+        for child in children:
+            if child.id == int(node_id):
+                child.local_weight = obj['weight']
+
+    # Refresh all local and global weights for the subtree
+    parent.refresh_weights()
+    parent.hierarchy.refresh_alternatives()
+    db.session.commit()
+
+    return jsonify(parent.to_dict()), 201
 
 
 # TODO: Pair Wise
@@ -302,6 +397,33 @@ def swing_weight(hierarchy_id, parent_id):
     # MVP: Direct Assessment using swing weight values
     # [{"nodeId":1},"swingWeight":.2},...]
     pass
+
+
+# RANKING
+@app.route("/hierarchy/<hierarchy_id>/alternative/ranking", methods=['GET'])
+def rank_alternatives(hierarchy_id):
+    hierarchy = Hierarchy.query.filter_by(id=hierarchy_id).first()
+    measurements = hierarchy.get_measurements()
+
+    # Generate a dictionary whose keys are alternative_ids
+    rankings = {}
+    for alt in hierarchy.alternatives:
+        rankings[alt.id] = {
+            "name": alt.name,
+            "total": 0,
+        }
+
+    # For each measurement, normalize and weight all values
+    for measurement in measurements:
+        for value in measurement.values:
+            weighted_value = measurement.normalize(value.measure) * measurement.global_weight
+
+            # Add the corrected value to the rankings dict under the correct alternative.
+            rankings[value.alternative_id][measurement.name] = weighted_value
+            rankings[value.alternative_id]["total"] += weighted_value
+    
+    return jsonify(rankings), 200
+
 
 if __name__ == "__main__":
     # Create the database if it doesn't exist

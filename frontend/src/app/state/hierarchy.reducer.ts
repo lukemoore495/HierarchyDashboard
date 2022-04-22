@@ -1,8 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
-import { Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
+import { Alternative, Hierarchy, HierarchyListItem, Node } from '../Hierarchy';
 import * as HierarchyActions from './hierarchy.actions';
-import RRRHierarchy from '../../assets/staticFiles/RRRHierarchy.json';
-import CarHierarchy from '../../assets/staticFiles/DemoExample.json';
 
 export interface HierarchyState {
     selectedHierarchy: Hierarchy | null;
@@ -31,16 +29,12 @@ export const HierarchyReducer = createReducer<HierarchyState>(
             name: action.hierarchy.name
         });
 
-        //Remove this once we have alternatives in the backend
-        const hierarchy = { ...action.hierarchy };
-        if (hierarchy.name === 'RRR Hierarchy') {
-            hierarchy.alternatives = (RRRHierarchy as Hierarchy).alternatives;
-        }
+        const alternatives = [...action.hierarchy.alternatives];
 
         return {
             ...state,
             Hierarchies: hierarchies,
-            selectedHierarchy: hierarchy
+            selectedHierarchy: {...action.hierarchy, alternatives: alternatives}
         };
     }),
     on(HierarchyActions.createHierarchyFailure, (state, action): HierarchyState => {
@@ -63,19 +57,12 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         };
     }),
     on(HierarchyActions.setSelectedHierarchySuccess, (state, action): HierarchyState => {
-        const hierarchy = { ...action.hierarchy };
+        const alternative = action.hierarchy.alternatives ? action.hierarchy.alternatives[0] : null;
+        const alternatives = [...action.hierarchy.alternatives];
 
-        //Remove this once we have alternatives in the backend
-        if (hierarchy.name === 'RRR Hierarchy') {
-            hierarchy.alternatives = (RRRHierarchy as Hierarchy).alternatives;
-        } else if (hierarchy.name === 'Best Car') {
-            hierarchy.alternatives = (CarHierarchy as Hierarchy).alternatives;
-        }
-
-        const alternative = hierarchy.alternatives ? hierarchy.alternatives[0] : null;
         return {
             ...state,
-            selectedHierarchy: hierarchy,
+            selectedHierarchy: {...action.hierarchy, alternatives},
             selectedAlternativeId: alternative ? alternative.id : null,
             selectedMeasurementId: null
         };
@@ -123,7 +110,8 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         if(!state.selectedHierarchy){
             return {...state};
         }
-        const copyHierarchy: Hierarchy = {...state.selectedHierarchy};
+        
+        const copyHierarchy: Hierarchy = { ...state.selectedHierarchy };
         return {
             ...state,
             selectedHierarchy: replaceNodeInHierarchy(copyHierarchy, action.node)
@@ -139,13 +127,166 @@ export const HierarchyReducer = createReducer<HierarchyState>(
         if(!state.selectedHierarchy){
             return {...state};
         }
-        const copyHierarchy: Hierarchy = {...state.selectedHierarchy};
+
+        const alternatives: Alternative[] = [];
+        state.selectedHierarchy.alternatives.forEach(alternative => {
+            const values = alternative.values.filter(value => value.nodeId !== action.nodeId);
+            alternatives.push({
+                ...alternative,
+                values: values
+            });
+        });
+
+
+        const hierarchy: Hierarchy = {...state.selectedHierarchy, alternatives: alternatives};
         return {
             ...state,
-            selectedHierarchy: removeNodeFromHierarchy(copyHierarchy, action.nodeId)
+            selectedHierarchy: replaceNodeInHierarchy(hierarchy, action.parentNode)
         };
     }),
     on(HierarchyActions.deleteNodeFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
+    on(HierarchyActions.patchNodeSuccess, (state, action): HierarchyState => {
+        if(!state.selectedHierarchy){
+            return {...state};
+        }
+        
+        const copyHierarchy: Hierarchy = { ...state.selectedHierarchy };
+        return {
+            ...state,
+            selectedHierarchy: replaceNodeInHierarchy(copyHierarchy, action.node)
+        };
+    }),
+    on(HierarchyActions.patchNodeFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
+    on(HierarchyActions.updateNodeWeightsSuccess, (state, action): HierarchyState => {
+        if(!state.selectedHierarchy){
+            return {...state};
+        }
+        
+        return {
+            ...state,
+            selectedHierarchy: replaceNodeInHierarchy(state.selectedHierarchy, action.parentNode)
+        };
+    }),
+    on(HierarchyActions.updateNodeWeightsFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
+    on(HierarchyActions.updateAlternativeMeasureSuccess, (state, action): HierarchyState => {
+        if(!state.selectedHierarchy || action.hierarchyId != state.selectedHierarchy.id){
+            return {...state};
+        }
+
+        const alternative = state.selectedHierarchy.alternatives.find(x => x.id === action.alternativeId);
+        if(!alternative){
+            return {...state};
+        }
+
+        const values = alternative.values.filter(x => x.nodeId !== action.value.nodeId);
+        values.push(action.value);
+
+        const alternatives = [...state.selectedHierarchy.alternatives]
+            .filter(x => x.id !== action.alternativeId);
+        alternatives.push({...alternative, values: values});
+
+        const copyHierarchy = {...state.selectedHierarchy, alternatives: alternatives};
+
+        return {
+            ...state,
+            selectedHierarchy: copyHierarchy
+        };
+    }),
+    on(HierarchyActions.updateAlternativeMeasureFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
+    on(HierarchyActions.createAlternativeSuccess, (state, action): HierarchyState => {
+        if(state.selectedHierarchy === null 
+            || state.selectedHierarchy.id !== action.hierarchyAlternative.hierarchyId){
+            return {
+                ...state,
+                selectedHierarchy: null,
+                selectedAlternativeId: null
+            };
+        }
+
+        const alternatives = [...state.selectedHierarchy.alternatives];
+        alternatives.push(action.hierarchyAlternative.alternative);
+
+        const hierarchy = {
+            ...state.selectedHierarchy,
+            alternatives: alternatives
+        };;
+        
+        return {
+            ...state,
+            selectedHierarchy: hierarchy,
+            selectedAlternativeId: action.hierarchyAlternative.alternative.id
+        };
+    }),
+    on(HierarchyActions.createAlternativeFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
+    on(HierarchyActions.deleteAlternativeSuccess, (state, action): HierarchyState => {
+        if(state.selectedHierarchy === null 
+            || state.selectedHierarchy.id !== action.hierarchyAlternative.hierarchyId){
+            return {
+                ...state,
+                selectedHierarchy: null,
+                selectedAlternativeId: null
+            };
+        }
+
+        const alternatives = state.selectedHierarchy.alternatives
+            .filter(x => x.id !== action.hierarchyAlternative.alternative.id);
+
+        const hierarchy = {
+            ...state.selectedHierarchy,
+            alternatives: alternatives
+        };
+        
+        return {
+            ...state,
+            selectedHierarchy: hierarchy,
+            selectedAlternativeId: alternatives.length > 0 ? alternatives[0].id : null
+        };
+    }),
+    on(HierarchyActions.deleteAlternativeFailure, (state, action): HierarchyState => {
+        return {
+            ...state,
+            error: action.error
+        };
+    }),
+    on(HierarchyActions.refreshAlternativesSuccess, (state, action): HierarchyState => {
+        if(!state.selectedHierarchy){
+            return {...state};
+        }
+
+        return {
+            ...state,
+            selectedHierarchy: {
+                ...state.selectedHierarchy, 
+                alternatives: action.alternatives
+            }
+        };
+    }),
+    on(HierarchyActions.retrieveHierarchiesFailure, (state, action): HierarchyState => {
         return {
             ...state,
             error: action.error

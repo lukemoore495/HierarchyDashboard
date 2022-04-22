@@ -23,40 +23,34 @@ export interface Node {
 
 export interface MeasurementDefinition {
     measurementType: string | null;
-    valueFunction?: ValueFunction;
+    valueFunctionType?: VFType;
     valueFunctionData?: Point[];
+    referencePoints?: Point[];
+    categories?: Category[];
 }
 
 export enum MeasurementType {
     Number = 'Number',
     Percentage = 'Percentage',
-    Boolean = 'Boolean'
-}
-
-export interface ValueFunction {
-    upperBound: number;
-    lowerBound: number;
-    rowCategories: Category[];
-    columnCategories: Category[];
-    type: ValueFunctionTypes;
+    Boolean = 'Boolean',
+    //Discrete = 'Discrete'
 }
 
 export interface Category {
     name: string;
+    measure: string;
     value: number;
 }
 
-export enum ValueFunctionTypes {
-    Increasing,
-    Decreasing,
-    OneDimension,
-    TwoDimension
+export enum VFType {
+    Linear,
+    Categorical
 }
 
 export interface Alternative {
     id: string;
     name: string;
-    measurements: Value[];
+    values: Value[];
 }
 
 export interface Value {
@@ -64,12 +58,6 @@ export interface Value {
     measure: number | null;
     localValue?: number | null;
     globalValue?: number | null;
-
-    //This will be removed later and is only here to
-    //preserve demoing the value function chart. 
-    //Value function data belongs to the MeasurementDefinition
-    //since all alternatives use it.
-    valueFunctionData?: Point[];
 }
 
 export interface Point{

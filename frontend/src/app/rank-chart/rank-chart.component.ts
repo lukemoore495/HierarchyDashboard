@@ -30,6 +30,7 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
     hoverColorString = 'rgb(189, 189, 189)';
     measurementNodes: Node[] = [];
     subscriptions: Subscription[] = [];
+    hasData = false;
 
     constructor(private store: Store<HierarchyState>) {
         const selectedHierarchy$ = this.store.select(getSelectedHierarchy);
@@ -40,12 +41,17 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
                     if(hierarchy) {
                         this.measurementNodes = this.getAllMeasurementNodes(hierarchy);
                     }
+                    if(hierarchy && hierarchy?.alternatives?.length > 0){
+                        this.hasData = true;
+                        return;
+                    }
+                    this.hasData = false;
                 }),
                 map(hierarchy => hierarchy?.alternatives),
                 map(alternatives => alternatives ? this.rankAlternatives(alternatives): []),
             ).subscribe(ranks => {
                 this.updateRanking(ranks);
-            });          
+            });             
         this.subscriptions.push(sub); 
     }
 
@@ -83,7 +89,7 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
     rankAlternatives(alternatives: Alternative[]): Rank[] {
         const findRankValue = (alternative: Alternative): RankValue[] => {
             const values: RankValue[] = [];
-            alternative.measurements.forEach(measurement => {
+            alternative.values.forEach(measurement => {
                 values.push({
                     value: measurement.globalValue ?? 0,
                     name: this.findMeasurementName(measurement.nodeId)
@@ -94,7 +100,8 @@ export class RankChartComponent implements AfterViewInit, OnDestroy {
 
         const ranks: Rank[] = [];
         alternatives.forEach(alternative => {
-            const rankValues = findRankValue(alternative);
+            const rankValues = findRankValue(alternative)
+                .sort((a,b) => !a.name || !b.name? 0 : a.name.localeCompare(b.name) );
             const total = rankValues
                 .map(r => r.value)
                 .reduce((sum, next) => sum + next);

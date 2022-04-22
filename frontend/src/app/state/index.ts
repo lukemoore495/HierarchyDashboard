@@ -39,7 +39,7 @@ export const getSelectedMeasurement = createSelector(
     getSelectedAlternative,
     getSelectedMeasurementId,
     (alternative, measurementId) => {
-        return measurementId ? alternative?.measurements?.find(x => x.nodeId === measurementId) ?? null : null;
+        return measurementId ? alternative?.values?.find(x => x.nodeId === measurementId) ?? null : null;
     }
 );
 

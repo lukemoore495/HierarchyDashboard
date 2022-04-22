@@ -62,9 +62,9 @@ export class HierarchyEffects {
         return this.actions$
             .pipe(
                 ofType(HierarchyActions.createNode),
-                mergeMap(action => this.hierarchyService.createNode(action.hierarchyId, action.parentId, action.node)
+                concatMap(action => this.hierarchyService.createNode(action.hierarchyId, action.parentId, action.node)
                     .pipe(
-                        map(node => HierarchyActions.createNodeSuccess({parentId: action.parentId, node: node})),
+                        map(node => HierarchyActions.createNodeSuccess({hierarchyId: action.hierarchyId, parentId: action.parentId, node: node})),
                         catchError(error => of(HierarchyActions.createNodeFailure({error})))
                     )
                 )
@@ -74,10 +74,89 @@ export class HierarchyEffects {
         return this.actions$
             .pipe(
                 ofType(HierarchyActions.deleteNode),
-                mergeMap(action => this.hierarchyService.deleteNode(action.hierarchyId, action.nodeId)
+                concatMap(action => this.hierarchyService.deleteNode(action.hierarchyId, action.nodeId)
                     .pipe(
-                        map(_ => HierarchyActions.deleteNodeSuccess({nodeId: action.nodeId})),
+                        map(node => HierarchyActions.deleteNodeSuccess({nodeId: action.nodeId, parentNode: node})),
                         catchError(error => of(HierarchyActions.deleteNodeFailure({error})))
+                    )
+                )
+            );
+    });
+    patchNode$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.patchNode),
+                concatMap(action => this.hierarchyService.patchNode(action.hierarchyId, action.nodeId, action.node)
+                    .pipe(
+                        map(node => HierarchyActions.patchNodeSuccess({hierarchyId: action.hierarchyId, nodeId: action.nodeId, node: node})),
+                        catchError(error => of(HierarchyActions.patchNodeFailure({error})))
+                    )
+                )
+            );
+    });
+    directAssessment$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.directAssessment),
+                concatMap(action => this.hierarchyService.directAssessment(action.hierarchyId, action.parentId, action.directAssessment)
+                    .pipe(
+                        map(parentNode => HierarchyActions.updateNodeWeightsSuccess({hierarchyId: action.hierarchyId, parentNode})),
+                        catchError(error => of(HierarchyActions.updateNodeWeightsFailure({error})))
+                    )
+                )
+            );
+    });
+    updateAlternativeMeasure$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.updateAlternativeMeasure),
+                concatMap(action => this.hierarchyService.updateAlternativeMeasure(action.hierarchyId, action.alternativeId, action.nodeId, action.measure)
+                    .pipe(
+                        map(value => HierarchyActions.updateAlternativeMeasureSuccess(
+                            {hierarchyId: action.hierarchyId, alternativeId: action.alternativeId, value: value})),
+                        catchError(error => of(HierarchyActions.updateAlternativeMeasureFailure({error})))
+                    )
+                )
+            );
+    });
+    createAlternative$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.createAlternative),
+                concatMap(action => this.hierarchyService.createAlternative(action.createHierarchyAlternative)
+                    .pipe(
+                        map(alternativeResponse => HierarchyActions.createAlternativeSuccess(
+                            { 
+                                hierarchyAlternative: {
+                                    hierarchyId: alternativeResponse.hierarchyId, 
+                                    alternative: alternativeResponse 
+                                }
+                            })),
+                        catchError(error => of(HierarchyActions.createAlternativeFailure({ error })))
+                    )
+                )
+            );
+    });
+    deleteAlternative$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.deleteAlternative),
+                concatMap(action => this.hierarchyService.deleteAlternative(action.hierarchyAlternative)
+                    .pipe(
+                        map(_ => HierarchyActions.deleteAlternativeSuccess({ hierarchyAlternative: action.hierarchyAlternative })),
+                        catchError(error => of(HierarchyActions.deleteAlternativeFailure({ error })))
+                    )
+                )
+            );
+    });
+    refreshAlternatives$ = createEffect(() => {
+        return this.actions$
+            .pipe(
+                ofType(HierarchyActions.patchNodeSuccess, HierarchyActions.createNodeSuccess, HierarchyActions.updateNodeWeightsSuccess),
+                concatMap(action => this.hierarchyService.getHierarchy(action.hierarchyId)
+                    .pipe(
+                        map(hierarchy => HierarchyActions.refreshAlternativesSuccess({ alternatives: hierarchy.alternatives })),
+                        catchError(error => of(HierarchyActions.refreshAlternativesFailure({ error })))
                     )
                 )
             );

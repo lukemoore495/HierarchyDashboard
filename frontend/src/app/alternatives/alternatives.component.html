@@ -10,7 +10,7 @@
         <mat-card-content class="dashboard-card-content">
           <div class="value-measurement">
             <app-value-measurement-chart width="400" height="400"></app-value-measurement-chart>
-        </div>
+          </div>
         </mat-card-content>
       </mat-card>
       <mat-card *ngIf="card.title===card2" class="dashboard-card scroll">
@@ -19,25 +19,23 @@
             {{card.title}}
           </mat-card-title>
           <mat-form-field>
-            <mat-select *ngIf="alternatives$ | async as alternatives" 
-              [value]="selectedAlternative?.id ?? ' '" 
-              (selectionChange) = "onSelectionchange($event)"
-              class="select">
-                <mat-option *ngFor= "let alternative of alternatives" [value]="alternative.id">
-                  {{alternative.name}}
-                </mat-option>
+            <mat-select *ngIf="alternatives$ | async as alternatives" [value]="selectedAlternative?.id ?? ' '"
+              (selectionChange)="onSelectionchange($event)" class="select">
+              <mat-option *ngFor="let alternative of alternatives" [value]="alternative.id">
+                {{alternative.name}}
+              </mat-option>
             </mat-select>
           </mat-form-field>
-          
+
           <button mat-icon-button [matMenuTriggerFor]="menu" class="button">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item>
+            <button mat-menu-item (click)="createAlternativeDialog()">
               <mat-icon>add</mat-icon>
               <span>New Alternative</span>
             </button>
-            <button mat-menu-item>
+            <button [disabled]="!selectedAlternative" mat-menu-item (click)="deleteAlternativeDialog()">
               <mat-icon>delete</mat-icon>
               <span>Delete Alternative</span>
             </button>
@@ -46,7 +44,7 @@
         <mat-card-content class="dashboard-card-content">
           <div>
             <app-alternatives-form></app-alternatives-form>
-        </div>
+          </div>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>

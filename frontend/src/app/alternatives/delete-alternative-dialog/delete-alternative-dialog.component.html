@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>
+    Delete Alternative
+</h1>
+<mat-dialog-content>
+    <p>Are you sure you want to delete {{form.alternative.name}}{{!form.alternative.name.includes('Alternative') ? '
+        Alternative' : null}}?</p>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="closeDialog()" cdkFocusInitial>Cancel</button>
+    <div *ngIf="loading" class="spinner-container">
+        <mat-spinner class="tree-loading" color="primary" diameter="30"></mat-spinner>
+    </div>
+    <button *ngIf="!loading" mat-button (click)="doAction()" color="warn">Delete</button>
+</mat-dialog-actions>

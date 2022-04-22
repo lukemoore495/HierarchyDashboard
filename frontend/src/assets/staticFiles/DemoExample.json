@@ -508,7 +508,7 @@
         {
             "id": "2",
             "name": "Accord",
-            "measurements": [
+            "values": [
                 {
                     "nodeId": "105",
                     "measure": 26605,

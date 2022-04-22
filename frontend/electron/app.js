@@ -5,12 +5,19 @@ const path = require('path');
 let mainWindow;
 let backend;
 let development = !app.isPackaged;
+let iconType;
+
+if (require('electron-squirrel-startup')) return app.quit();
 
 const rootPath = path.normalize(__dirname + '/..');
-if(development){
-    backend = path.join(rootPath,'/dist/app.exe');
+backend = path.join(rootPath,'/dist/app.exe');
+
+if(process.platform == 'win32'){
+    iconType = '.ico'
+} else if(process.platform == 'darwin'){
+    iconType = 'icns'
 } else {
-    backend = path.join(process.resourcesPath,'app.exe');
+    iconType = '.png'
 }
 
 var execfile = require('child_process').execFile;
@@ -40,7 +47,8 @@ function createWindow () {
             nodeIntegration: true
         },
         autoHideMenuBar: true,
-        show: false
+        show: false,
+        icon: rootPath + '/dist/HierarchyDashboard/assets/images/icon' + iconType
     });
 
     mainWindow.once('ready-to-show', () => {
@@ -62,11 +70,15 @@ function createWindow () {
     });
 }
 
+//Prevent gpu error for linux
+app.commandLine.appendSwitch('disable-gpu');
+app.commandLine.appendArgument('disable-gpu');
+
 app.on('ready', createWindow);
 
 app.on('window-all-closed', function () {
-    if (process.platform !== 'darwin'){
-        const { exec } = require('child_process');
+    const { exec } = require('child_process');
+    if (process.platform == 'win32'){
         exec('taskkill /f /t /im app.exe', (err, stdout, stderr) => {
           if (err) {
             console.log(err)
@@ -75,8 +87,17 @@ app.on('window-all-closed', function () {
           console.log(`stdout: ${stdout}`);
           console.log(`stderr: ${stderr}`);
         });
-      app.quit();
+    } else {
+        exec('killall -9 app.exe', (err, stdout, stderr) => {
+          if (err) {
+            console.log(err)
+            return;
+          }
+          console.log(`stdout: ${stdout}`);
+          console.log(`stderr: ${stderr}`);
+        });
     }
+    app.quit();
 });
 
 app.on('activate', function () {
