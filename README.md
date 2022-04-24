@@ -1,0 +1,3 @@
+# Hierarchy Dashboard 
+
+This is the Hierarchy Dashboard, which provies a user interface to creating, editing, and analyzing Value Focused Thinking models. This is compromised by a back end that controls the database and provides an API for creating, editing, and deleting hierarchies, and a front end that provides a responsive user interface for interfacing with the backend. For an in-depth guide on how to use the Hierarchy Dashboard, please read the user manual.
