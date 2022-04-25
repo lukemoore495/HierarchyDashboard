@@ -1,3 +1,15 @@
 # Hierarchy Dashboard 
 
-This is the Hierarchy Dashboard, which provies a user interface to creating, editing, and analyzing Value Focused Thinking models. This is compromised by a back end that controls the database and provides an API for creating, editing, and deleting hierarchies, and a front end that provides a responsive user interface for interfacing with the backend. For an in-depth guide on how to use the Hierarchy Dashboard, please read the user manual.
+Hierarchy Dashboard is a desktop app that provides a user-friendly way to create, edit, and analyze Value-Focused Thinking models.
+
+## Releases
+
+The [release](https://github.com/lukemoore495/HierarchyDashboard/releases) page has the latest builds so that you can download and run Hierarchy Dashboard on Windows, Mac, or Linux. 
+
+## User Manual
+
+Each release will include an up-to-date user manual. Check the manual for general information on Value-Focused-Thinking and how to use the app.
+
+## Development
+
+If you are interested in the source code start by checking out the ReadMe's for the '/backend' and '/frontend' folders. 
